@@ -1,0 +1,7 @@
+CLASE hola{
+publico enTEro suma(entero val1, entero val2){}
+entero h = 'd';
+entero b =23;
+publico entero k,j,l,m;
+privado entero l="fsfsdfds";
+}
