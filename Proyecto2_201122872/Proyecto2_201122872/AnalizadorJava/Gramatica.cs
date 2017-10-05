@@ -391,17 +391,6 @@ namespace Proyecto2_201122872.AnalizadorJava
 
 
 
-
-
-
-
-
-
-
-
-
-
-
            this.Root = LISTACLASES;
 
 

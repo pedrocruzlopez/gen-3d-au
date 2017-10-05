@@ -1,4 +1,5 @@
 ﻿using Proyecto2_201122872.AnalizadorJava;
+using Proyecto2_201122872.AnalizadorPython;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,16 +16,18 @@ namespace Proyecto2_201122872
     public partial class Form1 : Form
     {
         private Arbol analizador;
+        private ArbolPy analizador2;
 
         public Form1()
         {
             InitializeComponent();
             analizador = new Arbol();
+            analizador2 = new ArbolPy();
         }
 
 
-        private string getCadenaArchivo(){
-            StreamReader archivo = new StreamReader(@"C:\Users\Alina\Documents\Repositorios\CompiProyecto2\ArchivosEntrada\ejemplo1.txt");
+        private string getCadenaArchivo(String ruta){
+            StreamReader archivo = new StreamReader(ruta);
             string linea;
             string contenido = "";
             while ((linea = archivo.ReadLine()) != null)
@@ -40,7 +43,7 @@ namespace Proyecto2_201122872
 
         private void button1_Click(object sender, EventArgs e)
         {
-            String contenido = getCadenaArchivo();
+            String contenido = getCadenaArchivo(@"C:\Users\Alina\Documents\Repositorios\CompiProyecto2\ArchivosEntrada\ejemplo1.txt");
            // if (!contenido.Equals(""))
             //{
                 analizador.parse(contenido);
@@ -52,6 +55,17 @@ namespace Proyecto2_201122872
            // Console.WriteLine(Accion.Cadena);
            // Accion.Cadena = "";
           // /
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            String contenido = getCadenaArchivo(@"C:\Users\Alina\Documents\Repositorios\CompiProyecto2\ArchivosEntrada\ejemplo2.txt");
+            // if (!contenido.Equals(""))
+            //{
+            analizador2.parse(contenido);
+
+
+
         }
     }
 }

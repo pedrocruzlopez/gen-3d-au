@@ -60,7 +60,9 @@
     <Compile Include="AnalizadorJava\Arbol.cs" />
     <Compile Include="AnalizadorJava\Constantes.cs" />
     <Compile Include="AnalizadorJava\Gramatica.cs" />
+    <Compile Include="AnalizadorPython\AccionPy.cs" />
     <Compile Include="AnalizadorPython\AnalizadorPy.cs" />
+    <Compile Include="AnalizadorPython\ArbolPy.cs" />
     <Compile Include="DiagramaClases\Atributo.cs" />
     <Compile Include="DiagramaClases\Clase.cs" />
     <Compile Include="DiagramaClases\Funcion.cs" />
@@ -75,6 +77,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UML\Funcion.cs" />
+    <Compile Include="UML\variable.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -102,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Errores\" />
+    <Folder Include="Formularios\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
