@@ -12,6 +12,21 @@ namespace Proyecto2_201122872.UML
         private string nombre;
         private string tipo;
         private LinkedList<variable> parametros;
+        private string visibilidad;
+
+
+        public Funcion(string clase, string nombre, string tipo, LinkedList<variable> parametros, string visibilidad)
+        {
+            this.clase = clase;
+            this.nombre = nombre;
+            this.tipo = tipo;
+            this.parametros = parametros;
+            this.visibilidad = visibilidad;
+        }
+
+
+
+
 
         /*
          class Metodo:

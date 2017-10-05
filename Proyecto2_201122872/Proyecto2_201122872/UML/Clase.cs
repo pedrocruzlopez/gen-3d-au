@@ -6,7 +6,28 @@ using System.Threading.Tasks;
 
 namespace Proyecto2_201122872.UML
 {
-    class Clase
+    public class Clase
     {
+        private string nombre;
+        private LinkedList<Funcion> funciones;
+        private LinkedList<Atributo> atributos;
+        
+        
+
+
+        public Clase(String nombre)
+        {
+            this.nombre = nombre;
+        }
+
+
+
+        public String getNombre()
+        {
+            return this.nombre;
+        }
+
+
+
     }
 }

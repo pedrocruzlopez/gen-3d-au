@@ -24,3 +24,4 @@ C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyect
 C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\obj\Debug\Proyecto2_201122872.Properties.Resources.resources
 C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\obj\Debug\Proyecto2_201122872.csproj.GenerateResource.Cache
 C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\obj\Debug\Proyecto2_201122872.exe
+C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\obj\Debug\Proyecto2_201122872.Formularios.crearClase.resources

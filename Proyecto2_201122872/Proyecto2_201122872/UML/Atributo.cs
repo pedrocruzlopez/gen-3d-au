@@ -20,8 +20,10 @@ namespace Proyecto2_201122872.UML
             this.tipo = tipo;
         }
 
-
-
+        public string getNombre()
+        {
+            return this.nombre;
+        }
 
     }
 }

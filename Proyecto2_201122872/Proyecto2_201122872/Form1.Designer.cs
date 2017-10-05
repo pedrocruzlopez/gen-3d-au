@@ -97,6 +97,7 @@
             this.button2.TabIndex = 0;
             this.button2.Text = "Clase";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // panel1
             // 
@@ -127,6 +128,7 @@
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "CD3 - Combiner - UML -";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 

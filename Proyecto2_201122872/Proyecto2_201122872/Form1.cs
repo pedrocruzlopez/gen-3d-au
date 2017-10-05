@@ -1,5 +1,7 @@
 ﻿using Proyecto2_201122872.AnalizadorJava;
 using Proyecto2_201122872.AnalizadorPython;
+using Proyecto2_201122872.Formularios;
+using Proyecto2_201122872.UML;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,17 +15,25 @@ using System.Windows.Forms;
 
 namespace Proyecto2_201122872
 {
+    
     public partial class Form1 : Form
     {
         private Arbol analizador;
         private ArbolPy analizador2;
+        public static clasesDiagrama listaClases;
 
         public Form1()
         {
             InitializeComponent();
             analizador = new Arbol();
             analizador2 = new ArbolPy();
+             listaClases= new clasesDiagrama(); 
+            listaClases.insertar(new Clase("ejemplo1"));
+            listaClases.insertar(new Clase("ejemplo2"));
+
         }
+
+      
 
 
         private string getCadenaArchivo(String ruta){
@@ -65,6 +75,17 @@ namespace Proyecto2_201122872
             analizador2.parse(contenido);
 
 
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            crearClase nuevo = new crearClase();
+            nuevo.Show();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
 
         }
     }
