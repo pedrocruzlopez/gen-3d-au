@@ -60,7 +60,41 @@ namespace Proyecto2_201122872.AnalizadorJava
         public const string extraSi = "extra";
         public const string cuerposi = "cuerposi";
         public const string lextra = "lextra";
+        public const string instrucciones = "instrucciones";
+        public const string instruccion = "instruccion";
 
+        public const string declaracion = "declaracion";
+        public const string lposiciones = "lposiciones";
+        public const string lexpresiones = "lexpresiones";
+        public const string lfilas = "lfilas";
+        public const string asignacion = "asignacion";
+        public const string posicion = "posicion";
+        public const string fila = "fila";
+
+        public const string simb_arit = "simb_arit";
+        public const string simb_rel = "simb_rel";
+        public const string unario = "unario";
+        public const string id = "id";
+        public const string negativo = "negativo";
+        public const string relacional = "relacional";
+        public const string aritmetica = "aritmetica";
+
+        public const string  logica= "logica";
+        public const string llamada = "llamada";
+        public const string posvector = "posvector";
+        public const string listapuntos = "listapuntos";
+        public const string simb_log = "simb_log";
+        public const string masmas = "masmas";
+        public const string menosmenos = "menosmenos";
+
+        public const string asig_array = "asig_array";
+        public const string termino = "termino";
+        public const string retorno = "return";
+        public const string l_clases = "listaClases";
+
+
+            
+           
         
 
 

@@ -11,6 +11,6 @@ namespace Proyecto2_201122872.DiagramaClases
         private String visibilidad;
         private String tipo;
         private String nombre;
-        private 
+      
     }
 }

@@ -24,7 +24,7 @@ namespace Proyecto2_201122872
 
 
         private string getCadenaArchivo(){
-            StreamReader archivo = new StreamReader(@"C:\Users\Alina\Documents\Repositorios\Proyecto2\ArchivosEntrada\ejemplo1.txt");
+            StreamReader archivo = new StreamReader(@"C:\Users\Alina\Documents\Repositorios\CompiProyecto2\ArchivosEntrada\ejemplo1.txt");
             string linea;
             string contenido = "";
             while ((linea = archivo.ReadLine()) != null)
