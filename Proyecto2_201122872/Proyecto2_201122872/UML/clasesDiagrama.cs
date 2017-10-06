@@ -8,16 +8,18 @@ namespace Proyecto2_201122872.UML
 {
    public  class clasesDiagrama
     {
-        public LinkedList<Clase> listaClases;
+        public List<Clase> listaClases;
+        public Clase claseActual;
 
 
         public clasesDiagrama()
         {
-            this.listaClases = new LinkedList<Clase>();
+            this.claseActual = new Clase();
+            this.listaClases = new List<Clase>();
         }
 
 
-        private Boolean existe(String nombre)
+        private Boolean existeClase(String nombre)
         {
             foreach (Clase item in this.listaClases)
             {
@@ -29,14 +31,73 @@ namespace Proyecto2_201122872.UML
         }
 
 
-        public Boolean insertar(Clase nueva)
+        public Boolean insertarClase(Clase nueva)
         {
-            if(!existe(nueva.getNombre()))
+            if(!existeClase(nueva.getNombre()))
             {
-                this.listaClases.AddLast(nueva);
+                this.listaClases.Add(nueva);
                 return true;
             }
             return false;
+        }
+
+
+        public Boolean actualizarClase(Clase actualizar)
+        {
+            Clase temporal;
+            for (int i = 0; i < this.listaClases.Count; i++)
+            {
+                temporal = this.listaClases.ElementAt(i);
+                if (temporal.getNombre().ToUpper().Equals(actualizar.getNombre().ToUpper()))
+                {
+                    this.listaClases.RemoveAt(i);
+                    this.listaClases.Add(actualizar);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+
+        public Boolean seleccionarClaseActual(String nombreClase)
+        {
+            Clase temporal;
+            if(this.claseActual.getNombre()!=null)
+                actualizarClase(this.claseActual);
+
+            for (int i = 0; i < this.listaClases.Count; i++)
+            {
+                temporal = this.listaClases.ElementAt(i);
+                if (temporal.getNombre().ToUpper().Equals(nombreClase.ToUpper()))
+                {
+                    this.claseActual = temporal;
+                    return true;
+                }
+                
+            }
+
+            return false;
+        }
+
+
+
+
+        public int getSize()
+        {
+            return this.listaClases.Count;
+        }
+
+
+       
+
+
+       /*    Atributos    */
+
+        public Boolean addAtributoActual(Atributo atr)
+        {
+            return this.claseActual.addAtributo(atr);
         }
 
 

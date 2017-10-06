@@ -20,16 +20,16 @@ namespace Proyecto2_201122872
     {
         private Arbol analizador;
         private ArbolPy analizador2;
-        public static clasesDiagrama listaClases;
+        public static clasesDiagrama uml;
 
         public Form1()
         {
             InitializeComponent();
             analizador = new Arbol();
             analizador2 = new ArbolPy();
-             listaClases= new clasesDiagrama(); 
-            listaClases.insertar(new Clase("ejemplo1"));
-            listaClases.insertar(new Clase("ejemplo2"));
+             uml= new clasesDiagrama(); 
+            uml.insertarClase(new Clase("ejemplo1"));
+            uml.insertarClase(new Clase("ejemplo2"));
 
         }
 

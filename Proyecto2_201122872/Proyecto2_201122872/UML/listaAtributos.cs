@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace Proyecto2_201122872.UML
 {
-    class listaAtributos
+    public class listaAtributos
     {
-        private LinkedList<Atributo> atributos;
+        public List<Atributo> atributos;
+
+
+        public listaAtributos()
+        {
+            this.atributos = new List<Atributo>();
+        }
+
 
 
         private Boolean existe(String nombre)
@@ -27,7 +34,7 @@ namespace Proyecto2_201122872.UML
         public Boolean addAtributo(Atributo nuevo){
             
             if(!existe(nuevo.getNombre())){
-                this.atributos.AddLast(nuevo);
+                this.atributos.Add(nuevo);
                 return true;
             }else{
                 return false;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto2_201122872.UML
 {
-    class Atributo
+   public  class Atributo
     {
         private string visibilidad;
         private string nombre;
@@ -24,6 +24,27 @@ namespace Proyecto2_201122872.UML
         {
             return this.nombre;
         }
+
+        private string getValVisibilidad(){
+            switch (visibilidad.ToUpper())
+            {
+                case "PUBLICO":
+                    return "+";
+                case "PRIVADO":
+                    return "-";
+                case "PROTEGIDO":
+                    return "#";
+
+            }
+            return "";
+        }
+
+
+        public string getCadenaAtributo()
+        {
+            return getValVisibilidad() + " " + this.nombre + ":  " + this.tipo;
+        }
+
 
     }
 }

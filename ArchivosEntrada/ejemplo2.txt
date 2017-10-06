@@ -1,3 +1,4 @@
-publico funcion entero fun1[]	
+	publico funcion entero fun1[]
+	
 	entero hola
 	entero j

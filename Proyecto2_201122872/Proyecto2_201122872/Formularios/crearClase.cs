@@ -15,17 +15,12 @@ namespace Proyecto2_201122872.Formularios
 {
     public partial class crearClase : Form
     {
-        private listaAtributos atributos;
-        private LinkedList<Funcion> funciones;
-        private string nombreClase;
-        private string visibilidad;
+       
         
         
         private void iniciarValores()
         {
-            this.atributos = new listaAtributos();
-            this.funciones = new LinkedList<Funcion>();
-            this.nombreClase = "";
+            cargarAtributos();
             cargarClases();
             
         }
@@ -39,7 +34,54 @@ namespace Proyecto2_201122872.Formularios
         }
 
 
+        private void actualizarTiposAtributos()
+        {
+            comboBox2.Items.Clear();
+            comboBox2.Items.Add("entero");
+            comboBox2.Items.Add("decimal");
+            comboBox2.Items.Add("cadena");
+            comboBox2.Items.Add("char");
+            comboBox2.Items.Add("bool");
+            
+            for (int i = 0; i < Form1.uml.getSize(); i++)
+            {
+                comboBox2.Items.Add(Form1.uml.listaClases.ElementAt(i).getNombre());
+            }
 
+           
+
+
+        }
+
+        private void actualizarTiposFunciones()
+        {
+            comboBox4.Items.Clear();
+            comboBox4.Items.Add("entero");
+            comboBox4.Items.Add("decimal");
+            comboBox4.Items.Add("cadena");
+            comboBox4.Items.Add("char");
+            comboBox4.Items.Add("bool");
+            comboBox4.Items.Add("void");
+            for (int i = 0; i < Form1.uml.getSize(); i++)
+            {
+                comboBox4.Items.Add(Form1.uml.listaClases.ElementAt(i).getNombre());
+            }
+
+
+        }
+
+        private void cargarAtributos()
+        {
+            this.listBox1.Items.Clear();
+            string temp = "";
+            Atributo temporal;
+            for (int i = 0; i < Form1.uml.claseActual.sizeAtributos(); i++)
+            {
+                temporal = Form1.uml.claseActual.atributos.atributos.ElementAt(i);
+                listBox1.Items.Add(temporal.getCadenaAtributo());
+
+            }
+        }
         private void capturarAtributo()
         {
 
@@ -47,18 +89,23 @@ namespace Proyecto2_201122872.Formularios
             String tipo = this.comboBox2.Text;
             String nombre = this.textBox1.Text;
             Atributo atri = new Atributo(visibilidad, nombre, tipo);
-            bool res = this.atributos.addAtributo(atri);
+            bool res = Form1.uml.addAtributoActual(atri);
             if (!res)
             {
-                MessageBox.Show("Error", "Ya existe un atributo con el mismo nombre");
+                MessageBox.Show("Ya existe un atributo con el mismo nombre");
             }
-            
+            else
+            {
+                MessageBox.Show("Se ha creado con exito el atributo");
+            }
+
+            cargarAtributos();
         }
 
         private void cargarClases()
         {
             String nombreTemporal = "";
-            foreach (Clase item in Form1.listaClases.listaClases)
+            foreach (Clase item in Form1.uml.listaClases)
             {
                 nombreTemporal = item.getNombre();
                 comboBox3.Items.Add(nombreTemporal);
@@ -67,6 +114,31 @@ namespace Proyecto2_201122872.Formularios
 
         }
 
+
+
+        private void usarClase()
+        {
+            String nombreClase = this.comboBox3.Text;
+            bool res = Form1.uml.seleccionarClaseActual(nombreClase);
+            if (res)
+            {
+                MessageBox.Show("Se ha seleccionado la clase " + nombreClase + ", como actual con exito");
+                label5.Text = "Clase actual: " + nombreClase;
+
+            }
+            else
+            {
+                MessageBox.Show("Ha ocurrido un error");
+            }
+
+
+        }
+
+
+        private void actualizarClase()
+        {
+
+        }
 
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -91,21 +163,23 @@ namespace Proyecto2_201122872.Formularios
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            usarClase();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             String nuevaClase = textBox2.Text;
             Clase nueva = new Clase(nuevaClase);
-            Boolean v= Form1.listaClases.insertar(nueva);
+            Boolean v= Form1.uml.insertarClase(nueva);
             if (!v)
             {
                 MessageBox.Show("Ya existe una clase con el mismo nombre", "Error");
             }
             else
             {
-                MessageBox.Show("SE ha creado con exito la nueva clase");
+                MessageBox.Show("Se ha creado con exito la nueva clase");
+                actualizarTiposAtributos();
+                actualizarTiposFunciones();
             }
 
             comboBox3.Items.Clear();
