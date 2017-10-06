@@ -185,5 +185,11 @@ namespace Proyecto2_201122872.Formularios
             comboBox3.Items.Clear();
             cargarClases();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            textBox4.Text = "";
+
+        }
     }
 }
