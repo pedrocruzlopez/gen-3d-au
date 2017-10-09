@@ -10,12 +10,22 @@ namespace Proyecto2_201122872.UML
     {
         private string nombre;
         public listaAtributos atributos;
+        public listaFunciones funciones;
+
+
+        public Boolean esNula()
+        {
+            return (this.nombre==null);
+
+        }
 
 
 
         private void iniciarValores()
         {
+           
             this.atributos = new listaAtributos();
+            funciones = new listaFunciones();
         }
 
 
@@ -54,11 +64,29 @@ namespace Proyecto2_201122872.UML
         }
         /*------------- Funciones --------------------*/
 
+        public Boolean addFuncion(Funcion nueva)
+        {
+            return this.funciones.addFuncion(nueva);
+        }
+
 
 
 
         /*------------- RElaciones ----------------------*/
 
+
+
+
+
+        /*------------ Graphviz---------------------*/
+
+        public string getCadenaGraphivz()
+        {
+            //[shape=record,label="{ Estudiante |{+ atri1: int \n# atri2:string }| metodo1 \n metodo2 }"];
+
+            return "[shape=record,label=\"{ "+ nombre+"|{"+atributos.getCadenaGraphivz()+"}|{"+funciones.getCadenaGrapvhiz()+"}}\"];";
+
+        }
 
     }
 }

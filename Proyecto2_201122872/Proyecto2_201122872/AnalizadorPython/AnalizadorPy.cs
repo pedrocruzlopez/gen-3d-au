@@ -230,9 +230,9 @@ namespace Proyecto2_201122872.AnalizadorPython
 
 
             INSTRUCCION.Rule = DECLARACION + Eos;
-            INSTRUCCIONES.Rule = MakeStarRule(INSTRUCCIONES, INSTRUCCION);
+            INSTRUCCIONES.Rule = MakePlusRule(INSTRUCCIONES, INSTRUCCION);
             CUERPO.Rule = Indent + INSTRUCCIONES + Dedent;
-            FUNCION.Rule = VISIBILIDAD + ToTerm("funcion") + TIPO + identificador + "[" + "]" + CUERPO + Eos;
+            FUNCION.Rule = VISIBILIDAD + ToTerm("funcion") + TIPO + identificador + "[" + "]" + Eos + CUERPO;
 
 
 

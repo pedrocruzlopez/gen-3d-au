@@ -6,25 +6,76 @@ using System.Threading.Tasks;
 
 namespace Proyecto2_201122872.UML
 {
-    class Funcion
+    public class Funcion
     {
         private string clase;
         private string nombre;
         private string tipo;
-        private LinkedList<variable> parametros;
+        private ListaParametro parametros;
         private string visibilidad;
+        public string firma;
 
 
-        public Funcion(string clase, string nombre, string tipo, LinkedList<variable> parametros, string visibilidad)
+        public Funcion(string clase, string nombre, string tipo, ListaParametro parametros, string visibilidad)
         {
             this.clase = clase;
             this.nombre = nombre;
             this.tipo = tipo;
             this.parametros = parametros;
             this.visibilidad = visibilidad;
+            this.firma = generarFirma();
         }
 
 
+
+        private string generarFirma()
+        {
+            string retorno = tipo + "_" + nombre;
+            if (parametros.parametros.Count > 0)
+            {
+                retorno += "_" + this.parametros.getFirma();
+                return retorno;
+            }
+
+            return retorno;
+        }
+
+
+
+        public string getCadenaGraphivz()
+        {
+           return getVisibilidadGraphivz() + " " + this.nombre + "(" + this.parametros.getCadenaGraphivz() + "): " + tipo;
+
+
+        }
+
+
+        private string getVisibilidadGraphivz()
+        {
+            switch (this.visibilidad.ToUpper())
+            {
+                case "PUBLICO":
+                    {
+                        return "+";
+                    }
+
+                case "PRIVADO":
+                    {
+                        return "-";
+                    }
+
+                case "PROTEGIDO":
+                    {
+                        return "#";
+                    }
+
+            }
+            return "+";
+        }
+
+
+
+        
 
 
 

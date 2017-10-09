@@ -43,5 +43,27 @@ namespace Proyecto2_201122872.UML
         }
 
 
+        public string getCadenaGraphivz()
+        {
+
+            Atributo actual;
+            string cad = "";
+
+            for (int i = 0; i <atributos.Count; i++)
+            {
+                actual = atributos.ElementAt(i);
+                if (i == atributos.Count - 1)
+                {
+                    cad += actual.getCadenaAtributo();
+                }
+                else
+                {
+                    cad += actual.getCadenaAtributo() + "\\n";
+                }
+                
+            }
+            return cad;
+        }
+
     }
 }

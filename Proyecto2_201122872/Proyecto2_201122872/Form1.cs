@@ -21,15 +21,21 @@ namespace Proyecto2_201122872
         private Arbol analizador;
         private ArbolPy analizador2;
         public static clasesDiagrama uml;
+        public static Panel panel = new Panel();
 
         public Form1()
         {
             InitializeComponent();
             analizador = new Arbol();
             analizador2 = new ArbolPy();
-             uml= new clasesDiagrama(); 
-            uml.insertarClase(new Clase("ejemplo1"));
-            uml.insertarClase(new Clase("ejemplo2"));
+            uml= new clasesDiagrama();
+            panel.SetBounds(164, 41, 748, 659);
+            Color c = Color.White;
+            panel.BackColor = c;
+            panel.BackgroundImageLayout = ImageLayout.Center;
+            panel.Visible = true;
+            
+
 
         }
 
@@ -78,6 +84,24 @@ namespace Proyecto2_201122872
 
         }
 
+
+        public static void mostraImagen()
+        {
+            Image newImage = (Image)Image.FromFile(@"C:\\diagrama.jpg");
+            panel = new Panel();
+            panel.SetBounds(164, 41, 748, 659);
+            Color c = Color.White;
+            panel.BackColor = c;
+            panel.BackgroundImageLayout = ImageLayout.Center;
+            panel.BackgroundImage = newImage;
+            panel.Visible = true;
+            
+            
+
+
+        }
+
+
         private void button2_Click(object sender, EventArgs e)
         {
             crearClase nuevo = new crearClase();
@@ -87,6 +111,11 @@ namespace Proyecto2_201122872
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("\\n");
         }
     }
 }

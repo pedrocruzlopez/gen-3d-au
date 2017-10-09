@@ -67,12 +67,6 @@
     <Compile Include="AnalizadorPython\AccionPy.cs" />
     <Compile Include="AnalizadorPython\AnalizadorPy.cs" />
     <Compile Include="AnalizadorPython\ArbolPy.cs" />
-    <Compile Include="DiagramaClases\Atributo.cs" />
-    <Compile Include="DiagramaClases\Clase.cs" />
-    <Compile Include="DiagramaClases\Funcion.cs" />
-    <Compile Include="DiagramaClases\listaAtributos.cs" />
-    <Compile Include="DiagramaClases\listaParametros.cs" />
-    <Compile Include="DiagramaClases\Parametro.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,6 +86,8 @@
     <Compile Include="UML\clasesDiagrama.cs" />
     <Compile Include="UML\Funcion.cs" />
     <Compile Include="UML\listaAtributos.cs" />
+    <Compile Include="UML\listaFunciones.cs" />
+    <Compile Include="UML\ListaParametro.cs" />
     <Compile Include="UML\variable.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -107,6 +103,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -123,6 +120,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Errores\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\diagrama.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -90,8 +90,6 @@ namespace Proyecto2_201122872.UML
         }
 
 
-       
-
 
        /*    Atributos    */
 
@@ -99,6 +97,50 @@ namespace Proyecto2_201122872.UML
         {
             return this.claseActual.addAtributo(atr);
         }
+
+
+
+        private string getCadenaGraphiz()
+        {
+            string cadena = "digraph structs{\n node [shape= record];";
+            Clase actual;
+            for (int i = 0; i < this.listaClases.Count; i++)
+            {
+                actual = listaClases.ElementAt(i);
+                cadena += "struct" + i + actual.getCadenaGraphivz();
+
+            }
+            cadena += "\n}";
+
+            return cadena;
+
+        }
+
+
+        public void generarGrafo()
+        {
+            String path = @"C:\";
+            String arbolDerivacion = path + "diagrama.txt";
+            String texto = getCadenaGraphiz();
+            System.IO.File.WriteAllText(arbolDerivacion, texto);
+            Console.WriteLine(arbolDerivacion);
+            try
+            {
+                var command = string.Format("dot -Tjpg {0} -o {1}", "\"" + arbolDerivacion + "\"", "\"" + arbolDerivacion.Replace(".txt", ".jpg") + "\"");
+                var procStartInfo = new System.Diagnostics.ProcessStartInfo("cmd", "/C " + command);
+                var proc = new System.Diagnostics.Process();
+                proc.StartInfo = procStartInfo;
+                proc.Start();
+                proc.WaitForExit();
+
+
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine(x.ToString());
+            }
+        }
+
 
 
     }

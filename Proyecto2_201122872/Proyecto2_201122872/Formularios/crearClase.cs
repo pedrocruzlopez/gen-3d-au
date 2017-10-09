@@ -15,13 +15,17 @@ namespace Proyecto2_201122872.Formularios
 {
     public partial class crearClase : Form
     {
+
+        private ListaParametro lParametros;
        
         
         
         private void iniciarValores()
         {
+            lParametros = new ListaParametro();
             cargarAtributos();
             cargarClases();
+            actualizarTipos();
             
         }
 
@@ -34,7 +38,7 @@ namespace Proyecto2_201122872.Formularios
         }
 
 
-        private void actualizarTiposAtributos()
+        private void actualizarTipos()
         {
             comboBox2.Items.Clear();
             comboBox2.Items.Add("entero");
@@ -42,10 +46,25 @@ namespace Proyecto2_201122872.Formularios
             comboBox2.Items.Add("cadena");
             comboBox2.Items.Add("char");
             comboBox2.Items.Add("bool");
+            comboBox4.Items.Clear();
+            comboBox4.Items.Add("entero");
+            comboBox4.Items.Add("decimal");
+            comboBox4.Items.Add("cadena");
+            comboBox4.Items.Add("char");
+            comboBox4.Items.Add("bool");
+            comboBox4.Items.Add("Void");
+            comboBox6.Items.Clear();
+            comboBox6.Items.Add("entero");
+            comboBox6.Items.Add("decimal");
+            comboBox6.Items.Add("cadena");
+            comboBox6.Items.Add("char");
+            comboBox6.Items.Add("bool");
             
             for (int i = 0; i < Form1.uml.getSize(); i++)
             {
                 comboBox2.Items.Add(Form1.uml.listaClases.ElementAt(i).getNombre());
+                comboBox4.Items.Add(Form1.uml.listaClases.ElementAt(i).getNombre());
+                comboBox6.Items.Add(Form1.uml.listaClases.ElementAt(i).getNombre());
             }
 
            
@@ -53,22 +72,7 @@ namespace Proyecto2_201122872.Formularios
 
         }
 
-        private void actualizarTiposFunciones()
-        {
-            comboBox4.Items.Clear();
-            comboBox4.Items.Add("entero");
-            comboBox4.Items.Add("decimal");
-            comboBox4.Items.Add("cadena");
-            comboBox4.Items.Add("char");
-            comboBox4.Items.Add("bool");
-            comboBox4.Items.Add("void");
-            for (int i = 0; i < Form1.uml.getSize(); i++)
-            {
-                comboBox4.Items.Add(Form1.uml.listaClases.ElementAt(i).getNombre());
-            }
-
-
-        }
+     
 
         private void cargarAtributos()
         {
@@ -137,6 +141,7 @@ namespace Proyecto2_201122872.Formularios
 
         private void actualizarClase()
         {
+            Form1.uml.actualizarClase(Form1.uml.claseActual);
 
         }
 
@@ -153,7 +158,12 @@ namespace Proyecto2_201122872.Formularios
 
         private void button1_Click(object sender, EventArgs e)
         {
-            capturarAtributo();
+            if(!Form1.uml.claseActual.esNula())
+                capturarAtributo();
+            else
+            {
+                MessageBox.Show("Debe seleccionar una clase en la cual trabajar","Error");
+            }
         }
 
         private void tabPage1_Click(object sender, EventArgs e)
@@ -178,8 +188,7 @@ namespace Proyecto2_201122872.Formularios
             else
             {
                 MessageBox.Show("Se ha creado con exito la nueva clase");
-                actualizarTiposAtributos();
-                actualizarTiposFunciones();
+                actualizarTipos();
             }
 
             comboBox3.Items.Clear();
@@ -188,7 +197,69 @@ namespace Proyecto2_201122872.Formularios
 
         private void button4_Click(object sender, EventArgs e)
         {
+            string nombreVar = textBox4.Text;
+            string tipo = comboBox6.Text;
+            if (!this.lParametros.addParametro(new variable(nombreVar, tipo)))
+            {
+                MessageBox.Show("No se ha podido crear el parametro");
+            }
             textBox4.Text = "";
+            comboBox7.Items.Clear();
+            for (int i = 0; i < lParametros.parametros.Count; i++)
+            {
+                this.comboBox7.Items.Add(lParametros.parametros.ElementAt(i).getNombreTipoVar());    
+            }
+            
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if(!Form1.uml.claseActual.esNula()){
+                string nombreFun, visiFun, tipoFunc;
+                nombreFun = textBox3.Text;
+                visiFun = comboBox5.Text;
+                tipoFunc = comboBox4.Text;
+                comboBox7.Items.Clear();
+                Funcion nueva = new Funcion(Form1.uml.claseActual.getNombre(), nombreFun, tipoFunc, this.lParametros, visiFun);
+                if (Form1.uml.claseActual.addFuncion(nueva))
+                {
+                    MessageBox.Show("Funcion creada exitosamente");
+                }
+                else
+                {
+                    MessageBox.Show("La funcion no ha sido creada, existe una igual", "Error");
+                } 
+                textBox3.Text = "";
+                lParametros = new ListaParametro();
+
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar una clase actual", "Error");
+            }
+        }
+
+        private void crearClase_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            actualizarClase();
+            this.Close();
+            Form1.uml.generarGrafo();
+            Form1.mostraImagen();
+
+        }
+
+        private void tabPage3_Click(object sender, EventArgs e)
+        {
 
         }
     }
