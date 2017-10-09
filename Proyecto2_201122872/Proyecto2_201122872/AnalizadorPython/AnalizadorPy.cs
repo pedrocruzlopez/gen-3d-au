@@ -224,7 +224,7 @@ namespace Proyecto2_201122872.AnalizadorPython
 
 
 
-           // EXPRESION.Rule = MakePlusRule(EXPRESION, ToTerm("."), termino);
+           
 
             #endregion
 

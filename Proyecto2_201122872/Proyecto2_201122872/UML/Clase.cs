@@ -9,6 +9,7 @@ namespace Proyecto2_201122872.UML
     public class Clase
     {
         private string nombre;
+        private string herencia;
         public listaAtributos atributos;
         public listaFunciones funciones;
 
@@ -32,7 +33,7 @@ namespace Proyecto2_201122872.UML
         public Clase()
         {
             iniciarValores();
-
+            
         }
 
         public Clase(String nombre)
@@ -41,6 +42,12 @@ namespace Proyecto2_201122872.UML
             iniciarValores();
         }
 
+        public Clase(String nombre, String herencia)
+        {
+            this.nombre = nombre;
+            this.herencia = herencia;
+            iniciarValores();
+        }
 
 
         public String getNombre()
@@ -73,6 +80,13 @@ namespace Proyecto2_201122872.UML
 
 
         /*------------- RElaciones ----------------------*/
+
+
+
+
+
+
+        /*------- Traduccion a codigo ---------------*/
 
 
 

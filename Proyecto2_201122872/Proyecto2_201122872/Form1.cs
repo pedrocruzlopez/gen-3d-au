@@ -34,9 +34,7 @@ namespace Proyecto2_201122872
             panel.BackColor = c;
             panel.BackgroundImageLayout = ImageLayout.Center;
             panel.Visible = true;
-            
-
-
+            this.Controls.Add(panel);
         }
 
       
@@ -88,13 +86,9 @@ namespace Proyecto2_201122872
         public static void mostraImagen()
         {
             Image newImage = (Image)Image.FromFile(@"C:\\diagrama.jpg");
-            panel = new Panel();
-            panel.SetBounds(164, 41, 748, 659);
-            Color c = Color.White;
-            panel.BackColor = c;
-            panel.BackgroundImageLayout = ImageLayout.Center;
+           
             panel.BackgroundImage = newImage;
-            panel.Visible = true;
+      
             
             
 
