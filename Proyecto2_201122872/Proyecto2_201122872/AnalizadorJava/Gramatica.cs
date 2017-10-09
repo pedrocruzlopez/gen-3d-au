@@ -122,11 +122,26 @@ namespace Proyecto2_201122872.AnalizadorJava
             NonTerminal termino = new NonTerminal(Constantes.termino);
             NonTerminal RETORNO = new NonTerminal(Constantes.retorno);
             NonTerminal LISTACLASES = new NonTerminal(Constantes.l_clases);
-          
 
 
 
 
+            NonTerminal SUMA = new NonTerminal(Constantes.suma);
+            NonTerminal RESTA = new NonTerminal(Constantes.resta);
+            NonTerminal MULTIPLICACION= new NonTerminal(Constantes.multiplicacion);
+            NonTerminal DIVISION = new NonTerminal(Constantes.division);
+            NonTerminal POTENCIA = new NonTerminal(Constantes.potencia);
+            NonTerminal MENOR = new NonTerminal(Constantes.menor);
+            NonTerminal MENORIGUAL = new NonTerminal(Constantes.menorIgual);
+            NonTerminal MAYOR = new NonTerminal(Constantes.mayor);
+            NonTerminal MAYORIGUAL = new NonTerminal(Constantes.mayorIgual);
+            NonTerminal IGUALIGUAL = new NonTerminal(Constantes.igualIgual);
+            NonTerminal DISTINTOA = new NonTerminal(Constantes.distintoA);
+            NonTerminal XOR = new NonTerminal(Constantes.xorJava);
+            NonTerminal AND = new NonTerminal(Constantes.andJava);
+            NonTerminal NOT = new NonTerminal(Constantes.notJavaPython);
+            NonTerminal OR = new NonTerminal(Constantes.orJava);
+            
 
 
 
@@ -314,18 +329,68 @@ namespace Proyecto2_201122872.AnalizadorJava
 
             SIMB_LOG.Rule = ToTerm("||") | "??" | "&&";
 
-            ARITMETICA.Rule = EXPRESION + SIMB_ARIT + EXPRESION;
-            RELACIONAL.Rule = EXPRESION + SIMB_REL + EXPRESION;
-            LOGICA.Rule = EXPRESION + SIMB_LOG + EXPRESION;
+            ARITMETICA.Rule = SUMA
+                | RESTA
+                | MULTIPLICACION
+                | DIVISION
+                | POTENCIA;
+
+            RELACIONAL.Rule = MENOR
+                | MAYOR
+                | MENORIGUAL
+                | MAYORIGUAL
+                | DISTINTOA
+                | IGUALIGUAL;
+
+            LOGICA.Rule = XOR
+                | OR
+                | AND
+                | NOT;
 
 
+            /*
+              NonTerminal SUMA = new NonTerminal(Constantes.suma);
+           NonTerminal RESTA = new NonTerminal(Constantes.resta);
+           NonTerminal MULTIPLICACION= new NonTerminal(Constantes.multiplicacion);
+           NonTerminal DIVISION = new NonTerminal(Constantes.division);
+           NonTerminal POTENCIA = new NonTerminal(Constantes.potencia);
+           NonTerminal MENOR = new NonTerminal(Constantes.menor);
+           NonTerminal MENORIGUAL = new NonTerminal(Constantes.menorIgual);
+           NonTerminal MAYOR = new NonTerminal(Constantes.mayor);
+           NonTerminal MAYORIGUAL = new NonTerminal(Constantes.mayorIgual);
+           NonTerminal IGUALIGUAL = new NonTerminal(Constantes.igualIgual);
+           NonTerminal DISTINTOA = new NonTerminal(Constantes.distintoA);
+           NonTerminal XOR = new NonTerminal(Constantes.xorJava);
+           NonTerminal AND = new NonTerminal(Constantes.andJava);
+           NonTerminal NOT = new NonTerminal(Constantes.notJavaPython);
+           NonTerminal OR = new NonTerminal(Constantes.orJava);
+              
+             */
 
+
+            SUMA.Rule = EXPRESION + ToTerm(Constantes.suma) + EXPRESION;
+            RESTA.Rule = EXPRESION + ToTerm(Constantes.resta) + EXPRESION;
+            MULTIPLICACION.Rule = EXPRESION + ToTerm(Constantes.multiplicacion) + EXPRESION;
+            DIVISION.Rule = EXPRESION + ToTerm(Constantes.division) + EXPRESION;
+            POTENCIA.Rule = EXPRESION + ToTerm(Constantes.potencia) + EXPRESION;
+            MENOR.Rule = EXPRESION + ToTerm(Constantes.menor) + EXPRESION;
+            MENORIGUAL.Rule = EXPRESION + ToTerm(Constantes.menorIgual) + EXPRESION;
+            MAYOR.Rule = EXPRESION + ToTerm(Constantes.mayor) + EXPRESION;
+            MAYORIGUAL.Rule = EXPRESION + ToTerm(Constantes.mayorIgual) + EXPRESION;
+            IGUALIGUAL.Rule = EXPRESION + ToTerm(Constantes.igualIgual) + EXPRESION;
+            DISTINTOA.Rule = EXPRESION + ToTerm(Constantes.distintoA) + EXPRESION;
+            XOR.Rule = EXPRESION + ToTerm(Constantes.xorJava) + EXPRESION;
+            AND.Rule = EXPRESION + ToTerm(Constantes.andJava) + EXPRESION;
+            NOT.Rule = ToTerm(Constantes.notJavaPython) + EXPRESION;
+            OR.Rule = EXPRESION + ToTerm(Constantes.orJava) + EXPRESION;
 
 
             UNARIO.Rule = MAS_MAS
                 | MENOS_MENOS;
-            MAS_MAS.Rule = identificador + ToTerm("+") + "+";
-            MENOS_MENOS.Rule = identificador + ToTerm("-") + "-";
+
+            MAS_MAS.Rule = identificador + ToTerm(Constantes.masmas);
+
+            MENOS_MENOS.Rule = identificador + ToTerm(Constantes.menosmenos);
 
 
             NEGATIVO.Rule = ToTerm("-") + EXPRESION;
@@ -334,13 +399,13 @@ namespace Proyecto2_201122872.AnalizadorJava
                 | RELACIONAL
                 | LOGICA
                 | DECIMAL
-                |ENTERO
+                | ENTERO
                 | ID
                 | CADENA
                 | BOOLEANO
-                |CHAR
+                | CHAR
                 | LLAMADA
-                |POSVECTOR
+                | POSVECTOR
                 | UNARIO
                 | ToTerm("(") + EXPRESION + ")"
                 | NEGATIVO
@@ -384,16 +449,19 @@ namespace Proyecto2_201122872.AnalizadorJava
 
 
             MarkPunctuation(",", "(", ")", ";", "=", "@", "{","}","clase","[","]",Constantes.nuevo,".","si","sino",
-                "mientras","hacer","para","x","repetir","return","imprimir");
+                "mientras","hacer","para","x","repetir","return","imprimir",Constantes.masmas, Constantes.menosmenos,
+                Constantes.menor, Constantes.mayor, Constantes.menorIgual, Constantes.mayorIgual, Constantes.igualIgual, Constantes.distintoA,
+                Constantes.orJava, Constantes.andJava, Constantes.xorJava, Constantes.notJavaPython);
 
 
            
-           MarkTransient(L_ELEMENTOS, ELEMENTO,POSICION,EXPRESION,SIMB_ARIT,SIMB_LOG,SIMB_REL,DECLAPARA,termino, INSTRUCCION, INSTRUCCIONES);
+           MarkTransient(L_ELEMENTOS, ELEMENTO,POSICION,EXPRESION,SIMB_ARIT,SIMB_LOG,SIMB_REL,DECLAPARA,termino, INSTRUCCION, INSTRUCCIONES,
+               ARITMETICA,LOGICA,RELACIONAL,UNARIO);
 
 
 
 
-           this.Root = LISTACLASES;
+           this.Root = EXPRESION;
 
 
 

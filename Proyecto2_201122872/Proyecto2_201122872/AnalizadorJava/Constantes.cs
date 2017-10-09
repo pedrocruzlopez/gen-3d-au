@@ -84,16 +84,37 @@ namespace Proyecto2_201122872.AnalizadorJava
         public const string posvector = "posvector";
         public const string listapuntos = "listapuntos";
         public const string simb_log = "simb_log";
-        public const string masmas = "masmas";
-        public const string menosmenos = "menosmenos";
+        public const string masmas = "++";
+        public const string menosmenos = "--";
 
         public const string asig_array = "asig_array";
         public const string termino = "termino";
         public const string retorno = "return";
         public const string l_clases = "listaClases";
 
+        public const string suma = "+";
+        public const string resta = "-";
+        public const string multiplicacion = "*";
+        public const string division = "/";
+        public const string potencia = "^";
 
-            
+
+        public const string menor = "<";
+        public const string mayor = ">";
+        public const string igualIgual = "==";
+        public const string  menorIgual= "<=";
+        public const string mayorIgual = ">=";
+        public const string distintoA = "!=";
+
+        public const string orJava = "||";
+        public const string xorJava = "??";
+        public const string andJava = "&&";
+        public const string orPython = "OR";
+        public const string andPython = "AND";
+        public const string xorPython = "XOR";
+        public const string notJavaPython = "NOT";
+        
+    
            
         
 
