@@ -113,6 +113,8 @@ namespace Proyecto2_201122872.AnalizadorJava
         public const string andPython = "AND";
         public const string xorPython = "XOR";
         public const string notJavaPython = "NOT";
+
+        public const string instancia = "instancia";
         
     
            

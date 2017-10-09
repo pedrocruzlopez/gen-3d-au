@@ -141,7 +141,7 @@ namespace Proyecto2_201122872.AnalizadorJava
             NonTerminal AND = new NonTerminal(Constantes.andJava);
             NonTerminal NOT = new NonTerminal(Constantes.notJavaPython);
             NonTerminal OR = new NonTerminal(Constantes.orJava);
-            
+            NonTerminal INSTANCIA = new NonTerminal(Constantes.instancia);
 
 
 
@@ -291,15 +291,11 @@ namespace Proyecto2_201122872.AnalizadorJava
 
             DECLARACION.Rule = TIPO + identificador + ToTerm(";")
                 | TIPO + identificador + ToTerm("=") + EXPRESION + ";"
-                | TIPO + identificador + ToTerm("=") + Constantes.nuevo + identificador + "(" + ")" + ";"
-                | TIPO + identificador + ToTerm("=") + Constantes.nuevo + identificador + "(" + LEXPRESIONES + ")" + ";"
                 | TIPO + identificador + LPOSICIONES + ToTerm(";")
                 | TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";";
 
 
-            ASIGNACION.Rule = EXPRESION + ToTerm("=") + EXPRESION + ";"
-                | EXPRESION + ToTerm("=") + Constantes.nuevo + identificador + "(" + LEXPRESIONES + ")" + ";"
-                | EXPRESION + ToTerm("=") + Constantes.nuevo + identificador + "(" + ")" + ";";
+            ASIGNACION.Rule = EXPRESION + ToTerm("=") + EXPRESION + ";";
 
 
 
@@ -323,11 +319,7 @@ namespace Proyecto2_201122872.AnalizadorJava
 
             
 
-            SIMB_ARIT.Rule = ToTerm("+") | "-" | "*" | "/" | "^";
-
-            SIMB_REL.Rule = ToTerm("<") | ">" | "<=" | ">=" | "==" | "!=";
-
-            SIMB_LOG.Rule = ToTerm("||") | "??" | "&&";
+            
 
             ARITMETICA.Rule = SUMA
                 | RESTA
@@ -348,24 +340,7 @@ namespace Proyecto2_201122872.AnalizadorJava
                 | NOT;
 
 
-            /*
-              NonTerminal SUMA = new NonTerminal(Constantes.suma);
-           NonTerminal RESTA = new NonTerminal(Constantes.resta);
-           NonTerminal MULTIPLICACION= new NonTerminal(Constantes.multiplicacion);
-           NonTerminal DIVISION = new NonTerminal(Constantes.division);
-           NonTerminal POTENCIA = new NonTerminal(Constantes.potencia);
-           NonTerminal MENOR = new NonTerminal(Constantes.menor);
-           NonTerminal MENORIGUAL = new NonTerminal(Constantes.menorIgual);
-           NonTerminal MAYOR = new NonTerminal(Constantes.mayor);
-           NonTerminal MAYORIGUAL = new NonTerminal(Constantes.mayorIgual);
-           NonTerminal IGUALIGUAL = new NonTerminal(Constantes.igualIgual);
-           NonTerminal DISTINTOA = new NonTerminal(Constantes.distintoA);
-           NonTerminal XOR = new NonTerminal(Constantes.xorJava);
-           NonTerminal AND = new NonTerminal(Constantes.andJava);
-           NonTerminal NOT = new NonTerminal(Constantes.notJavaPython);
-           NonTerminal OR = new NonTerminal(Constantes.orJava);
-              
-             */
+         
 
 
             SUMA.Rule = EXPRESION + ToTerm(Constantes.suma) + EXPRESION;
@@ -383,7 +358,8 @@ namespace Proyecto2_201122872.AnalizadorJava
             AND.Rule = EXPRESION + ToTerm(Constantes.andJava) + EXPRESION;
             NOT.Rule = ToTerm(Constantes.notJavaPython) + EXPRESION;
             OR.Rule = EXPRESION + ToTerm(Constantes.orJava) + EXPRESION;
-
+            INSTANCIA.Rule = Constantes.nuevo + identificador + "(" + LEXPRESIONES + ")"
+                | Constantes.nuevo + identificador + "(" + ")";
 
             UNARIO.Rule = MAS_MAS
                 | MENOS_MENOS;
@@ -409,7 +385,8 @@ namespace Proyecto2_201122872.AnalizadorJava
                 | UNARIO
                 | ToTerm("(") + EXPRESION + ")"
                 | NEGATIVO
-                | "{" + LFILAS + "}";
+                | "{" + LFILAS + "}"
+                | INSTANCIA;
 
             LLAMADA.Rule = identificador + ToTerm("(") + LEXPRESIONES + ")"
                 | identificador + ToTerm("(") + ")";
@@ -461,7 +438,7 @@ namespace Proyecto2_201122872.AnalizadorJava
 
 
 
-           this.Root = EXPRESION;
+           this.Root = ASIGNACION;
 
 
 
