@@ -88,7 +88,26 @@ namespace Proyecto2_201122872.UML
 
         /*------- Traduccion a codigo ---------------*/
 
+        public string getCodigoJava()
+        {
+            string cad = "Clase " + this.nombre;
+            if (this.herencia != null || this.herencia != "")
+                cad += " " + this.herencia;
+            cad += " {\n"+ this.atributos.getCodigoJava()+"\n"+this.funciones.getCodigoJava()+"\n}";
+            return cad;
 
+        }
+
+
+
+        public string getCodigoPython()
+        {
+            string cad = "Clase "+ this.nombre+" [";
+            if (this.herencia != null || this.herencia != "")
+                cad += " " + this.herencia;
+            cad += " ]:\n"+ this.atributos.getCodigoPython()+"\n"+this.funciones.getCodigoPython();
+            return cad;
+        }
 
 
 
@@ -96,11 +115,13 @@ namespace Proyecto2_201122872.UML
 
         public string getCadenaGraphivz()
         {
-            //[shape=record,label="{ Estudiante |{+ atri1: int \n# atri2:string }| metodo1 \n metodo2 }"];
-
+           
             return "[shape=record,label=\"{ "+ nombre+"|{"+atributos.getCadenaGraphivz()+"}|{"+funciones.getCadenaGrapvhiz()+"}}\"];";
 
         }
+
+
+
 
     }
 }

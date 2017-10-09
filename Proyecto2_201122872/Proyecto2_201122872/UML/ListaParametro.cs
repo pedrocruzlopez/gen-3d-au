@@ -72,5 +72,29 @@ namespace Proyecto2_201122872.UML
             return cad;
         }
 
+
+        /*   traduccion a codigo */
+
+
+        public string getCodigoJavaPython()
+        {
+            string cad = "";
+            variable actual;
+            for (int i = 0; i <this.parametros.Count; i++)
+            {
+                actual = this.parametros.ElementAt(i);
+                if (i == parametros.Count - 1)
+                {
+                    cad += actual.getCodigoParametroJavaPython();
+                }
+                else
+                {
+                    cad += actual.getCodigoParametroJavaPython() + ", ";
+                }
+            }
+
+            return cad;
+        }
+
     }
 }

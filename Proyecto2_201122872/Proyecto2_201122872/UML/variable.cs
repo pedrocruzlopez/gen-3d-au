@@ -28,5 +28,15 @@ namespace Proyecto2_201122872.UML
         }
 
 
+       /*traduccion a codigo*/
+
+        public string getCodigoParametroJavaPython()
+        {
+
+            return this.tipo + " " + this.nombre;
+        }
+
+
+       
     }
 }

@@ -111,5 +111,22 @@ namespace Proyecto2_201122872
         {
             Console.WriteLine("\\n");
         }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            /*convertir a python*/
+            richTextBox1.Text = "";
+            richTextBox1.Text = uml.getCodigoPython();
+
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            /*convertir a java*/
+            richTextBox1.Text = "";
+            richTextBox1.Text = uml.getCodigoJava();
+
+
+        }
     }
 }

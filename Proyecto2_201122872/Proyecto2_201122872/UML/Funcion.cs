@@ -76,6 +76,33 @@ namespace Proyecto2_201122872.UML
 
 
         
+        /*traduccion a codio */
+
+        public string getCodigoJava()
+        {
+            string cad = "";
+
+            cad = this.visibilidad + " " + this.tipo + " " + this.nombre + "(" + this.parametros.getCodigoJavaPython() + " ){\n}";
+
+            return cad;
+        }
+
+        private string getTipoFunPython(){
+
+            if(this.tipo.ToUpper().Equals("VOID")){
+                return "metodo";
+            }else{
+                return "funcion";
+            }
+        }
+
+        public String getCodigoPython()
+        {
+            string cad = "";
+            cad = this.visibilidad + " " + getTipoFunPython() + " " + this.nombre + " [ " + this.parametros.getCodigoJavaPython() + "]:\n";
+            return cad;
+
+        }
 
 
 

@@ -46,5 +46,17 @@ namespace Proyecto2_201122872.UML
         }
 
 
+       /*------------- traduccion a codigo ------------------*/
+
+        public string getCodigoJava()
+        {
+            return this.visibilidad + " " + this.tipo + " " + this.nombre + " ;";
+        }
+
+
+        public string getCodigoPython()
+        {
+            return this.visibilidad + " " + this.tipo + " " + this.nombre + "\n";
+        }
     }
 }

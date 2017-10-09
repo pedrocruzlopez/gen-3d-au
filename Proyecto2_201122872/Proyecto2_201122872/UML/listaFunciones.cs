@@ -51,5 +51,32 @@ namespace Proyecto2_201122872.UML
 
         }
 
+
+
+        /*traduccion de codigo */
+
+
+        public string getCodigoJava()
+        {
+            string cad = "";
+            foreach (Funcion item in this.funciones)
+            {
+                cad += item.getCodigoJava() + "\n\n";
+            }
+
+            return cad;
+        }
+
+        public string getCodigoPython()
+        {
+            string cad = "";
+            foreach (Funcion item in this.funciones)
+            {
+                cad += "\t"+item.getCodigoPython();
+            }
+
+            return cad;
+        }
+
     }
 }
