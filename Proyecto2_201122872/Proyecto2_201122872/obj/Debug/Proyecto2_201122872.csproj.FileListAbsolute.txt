@@ -25,3 +25,4 @@ C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyect
 C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\bin\Debug\Irony.Interpreter.dll
 C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\bin\Debug\TabStrip.dll
 C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\obj\Debug\Proyecto2_201122872.csprojResolveAssemblyReference.cache
+C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\obj\Debug\Proyecto2_201122872.Formularios.Reportes.resources

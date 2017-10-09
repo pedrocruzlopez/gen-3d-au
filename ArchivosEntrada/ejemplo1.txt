@@ -1,4 +1,4 @@
- clase Deposito {
+clase Deposito fgfgf ffgfg {
 //Campos de la clase
 privado decimal diametro;
 privado decimal altura;
@@ -11,7 +11,7 @@ publico Deposito () {
 
 } //Cierre del constructor
  publico Deposito (decimal valor_diametro, decimal valor_altura, Cadena
-valor_idDeposito) {
+valor_idDeposito){
  si(valor_diametro > 0 && valor_altura > 0) {
  diametro = valor_diametro;
  altura = valor_altura;

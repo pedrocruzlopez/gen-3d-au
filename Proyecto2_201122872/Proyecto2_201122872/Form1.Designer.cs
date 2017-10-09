@@ -39,12 +39,20 @@
             this.button2 = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.uMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.depurarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.codigoCompartidoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reportesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tablaDeSimbolosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.erroresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gramaticasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -149,17 +157,6 @@
             this.toolStrip1.TabIndex = 4;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Lenguaje Tree",
-            "Lenguaje OLC++"});
-            this.comboBox1.Location = new System.Drawing.Point(927, 37);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(369, 21);
-            this.comboBox1.TabIndex = 5;
-            // 
             // toolStripButton1
             // 
             this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -178,13 +175,75 @@
             this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton2.Text = "toolStripButton2";
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Lenguaje Tree",
+            "Lenguaje OLC++"});
+            this.comboBox1.Location = new System.Drawing.Point(927, 37);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(369, 21);
+            this.comboBox1.TabIndex = 5;
+            // 
             // menuStrip1
             // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.uMLToolStripMenuItem,
+            this.depurarToolStripMenuItem,
+            this.codigoCompartidoToolStripMenuItem,
+            this.reportesToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1315, 24);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // uMLToolStripMenuItem
+            // 
+            this.uMLToolStripMenuItem.Name = "uMLToolStripMenuItem";
+            this.uMLToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.uMLToolStripMenuItem.Text = "UML";
+            // 
+            // depurarToolStripMenuItem
+            // 
+            this.depurarToolStripMenuItem.Name = "depurarToolStripMenuItem";
+            this.depurarToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.depurarToolStripMenuItem.Text = "Depurar";
+            // 
+            // codigoCompartidoToolStripMenuItem
+            // 
+            this.codigoCompartidoToolStripMenuItem.Name = "codigoCompartidoToolStripMenuItem";
+            this.codigoCompartidoToolStripMenuItem.Size = new System.Drawing.Size(125, 20);
+            this.codigoCompartidoToolStripMenuItem.Text = "Codigo Compartido";
+            // 
+            // reportesToolStripMenuItem
+            // 
+            this.reportesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tablaDeSimbolosToolStripMenuItem,
+            this.erroresToolStripMenuItem,
+            this.gramaticasToolStripMenuItem});
+            this.reportesToolStripMenuItem.Name = "reportesToolStripMenuItem";
+            this.reportesToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
+            this.reportesToolStripMenuItem.Text = "Reportes";
+            // 
+            // tablaDeSimbolosToolStripMenuItem
+            // 
+            this.tablaDeSimbolosToolStripMenuItem.Name = "tablaDeSimbolosToolStripMenuItem";
+            this.tablaDeSimbolosToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.tablaDeSimbolosToolStripMenuItem.Text = "Tabla de Simbolos";
+            // 
+            // erroresToolStripMenuItem
+            // 
+            this.erroresToolStripMenuItem.Name = "erroresToolStripMenuItem";
+            this.erroresToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.erroresToolStripMenuItem.Text = "Errores";
+            // 
+            // gramaticasToolStripMenuItem
+            // 
+            this.gramaticasToolStripMenuItem.Name = "gramaticasToolStripMenuItem";
+            this.gramaticasToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.gramaticasToolStripMenuItem.Text = "Gramaticas";
             // 
             // Form1
             // 
@@ -203,6 +262,8 @@
             this.groupBox1.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -224,6 +285,13 @@
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem uMLToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem depurarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem codigoCompartidoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem reportesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tablaDeSimbolosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem erroresToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gramaticasToolStripMenuItem;
     }
 }
 

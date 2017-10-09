@@ -142,6 +142,8 @@ namespace Proyecto2_201122872.AnalizadorJava
             CLASE.Rule = ToTerm(clase) + identificador + identificador + CUERPO_CLASE
               | ToTerm(clase) + identificador + CUERPO_CLASE;
 
+            INSTRUCCION.ErrorRule = SyntaxError + "}";
+            INSTRUCCION.ErrorRule = SyntaxError + ";";
 
             CUERPO_CLASE.Rule = ToTerm("{") + L_ELEMENTOS + ToTerm("}");
 
