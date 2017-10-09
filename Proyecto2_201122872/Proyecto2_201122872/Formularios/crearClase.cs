@@ -109,10 +109,12 @@ namespace Proyecto2_201122872.Formularios
         private void cargarClases()
         {
             String nombreTemporal = "";
+            comboBox8.Items.Add("Ninguna");
             foreach (Clase item in Form1.uml.listaClases)
             {
                 nombreTemporal = item.getNombre();
                 comboBox3.Items.Add(nombreTemporal);
+                comboBox8.Items.Add(nombreTemporal);
 
             }
 
@@ -179,7 +181,17 @@ namespace Proyecto2_201122872.Formularios
         private void button3_Click(object sender, EventArgs e)
         {
             String nuevaClase = textBox2.Text;
-            Clase nueva = new Clase(nuevaClase);
+            String herada = comboBox8.Text;
+            Clase nueva;
+            if (herada.Equals("Ninguna") || herada.Equals(""))
+            {
+                nueva = new Clase(nuevaClase);
+            }
+            else
+            {
+                nueva = new Clase(nuevaClase, herada);
+            }
+            
             Boolean v= Form1.uml.insertarClase(nueva);
             if (!v)
             {
@@ -192,6 +204,7 @@ namespace Proyecto2_201122872.Formularios
             }
 
             comboBox3.Items.Clear();
+            comboBox8.Items.Clear();
             cargarClases();
         }
 
