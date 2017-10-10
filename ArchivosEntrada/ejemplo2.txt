@@ -1,3 +1,1 @@
-publico funcion entero fun1[]	
-	entero hola
-	entero j
+gfgf[12][32][43432]

@@ -106,6 +106,9 @@ namespace Proyecto2_201122872.UML
 
 
 
+
+
+
         /*
          class Metodo:
   def __init__(self, clase, nombre, tipo, parametros):

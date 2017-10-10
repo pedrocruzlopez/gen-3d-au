@@ -115,7 +115,21 @@ namespace Proyecto2_201122872.AnalizadorJava
         public const string notJavaPython = "NOT";
 
         public const string instancia = "instancia";
-        
+        public const string metodo = "metodo";
+        public const string nuevoPython = "nuevo";
+
+
+        public const string continuar = "continuar";
+        public const string hasta = "hasta";
+        public const string loop = "loop";
+        public const string out_string = "out_string";
+        public const string parseint = "parseint";
+        public const string parsedouble = "parsedouble";
+        public const string inttostr = "inttostr";
+        public const string doubletostr = "doubletostr";
+        public const string doubletoint = "doubletoint";
+        public const string salir = "salir";
+
     
            
         

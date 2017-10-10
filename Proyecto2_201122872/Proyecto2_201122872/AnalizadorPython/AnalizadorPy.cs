@@ -16,6 +16,7 @@ namespace Proyecto2_201122872.AnalizadorPython
 
 
         public AnalizadorPy()
+            : base(caseSensitive: false)
         {
 
 
@@ -74,17 +75,12 @@ namespace Proyecto2_201122872.AnalizadorPython
             NonTerminal PRINCIPAL = new NonTerminal(Constantes.principal);
             NonTerminal CONSTRUCTOR = new NonTerminal(Constantes.constructor);
 
-            NonTerminal SI = new NonTerminal(Constantes.si);
-            NonTerminal EXTRA = new NonTerminal(Constantes.extraSi);
-            NonTerminal SINO = new NonTerminal(Constantes.sino);
-            NonTerminal CUERPOSI = new NonTerminal(Constantes.cuerposi);
-            NonTerminal L_EXTRAS = new NonTerminal(Constantes.lextra);
+            
 
-            NonTerminal MIENTRAS = new NonTerminal(Constantes.mientras);
-            NonTerminal REPETIR = new NonTerminal(Constantes.repetir);
-            NonTerminal HACER = new NonTerminal(Constantes.hacer);
-            NonTerminal X = new NonTerminal(Constantes.x);
-            NonTerminal PARA = new NonTerminal(Constantes.para);
+
+
+   
+           
             NonTerminal IMPRIMIR = new NonTerminal(Constantes.imprimir);
             NonTerminal DECLAPARA = new NonTerminal("DECLAPARA");
             NonTerminal INSTRUCCIONES = new NonTerminal(Constantes.instrucciones);
@@ -123,6 +119,39 @@ namespace Proyecto2_201122872.AnalizadorPython
             NonTerminal LISTACLASES = new NonTerminal(Constantes.l_clases);
 
 
+
+            NonTerminal SUMA = new NonTerminal(Constantes.suma);
+            NonTerminal RESTA = new NonTerminal(Constantes.resta);
+            NonTerminal MULTIPLICACION = new NonTerminal(Constantes.multiplicacion);
+            NonTerminal DIVISION = new NonTerminal(Constantes.division);
+            NonTerminal POTENCIA = new NonTerminal(Constantes.potencia);
+            NonTerminal MENOR = new NonTerminal(Constantes.menor);
+            NonTerminal MENORIGUAL = new NonTerminal(Constantes.menorIgual);
+            NonTerminal MAYOR = new NonTerminal(Constantes.mayor);
+            NonTerminal MAYORIGUAL = new NonTerminal(Constantes.mayorIgual);
+            NonTerminal IGUALIGUAL = new NonTerminal(Constantes.igualIgual);
+            NonTerminal DISTINTOA = new NonTerminal(Constantes.distintoA);
+            NonTerminal XOR = new NonTerminal(Constantes.xorJava);
+            NonTerminal AND = new NonTerminal(Constantes.andJava);
+            NonTerminal NOT = new NonTerminal(Constantes.notJavaPython);
+            NonTerminal OR = new NonTerminal(Constantes.orJava);
+            NonTerminal INSTANCIA = new NonTerminal(Constantes.instancia);
+            NonTerminal SALIR = new NonTerminal(Constantes.salir);
+            NonTerminal CONTINUAR = new NonTerminal(Constantes.continuar);
+
+            NonTerminal SI = new NonTerminal(Constantes.si);
+            NonTerminal EXTRA = new NonTerminal(Constantes.extraSi);
+            NonTerminal SINO = new NonTerminal(Constantes.sino);
+            NonTerminal CUERPOSI = new NonTerminal(Constantes.cuerposi);
+            NonTerminal L_EXTRAS = new NonTerminal(Constantes.lextra);
+
+            NonTerminal MIENTRAS = new NonTerminal(Constantes.mientras);
+            NonTerminal REPETIR = new NonTerminal(Constantes.repetir);
+            NonTerminal HACER = new NonTerminal(Constantes.hacer);
+            NonTerminal PARA = new NonTerminal(Constantes.para);
+            NonTerminal LOOP = new NonTerminal(Constantes.loop);
+
+
             #endregion
 
             VISIBILIDAD.Rule = ToTerm(visiPrivado)
@@ -148,7 +177,51 @@ namespace Proyecto2_201122872.AnalizadorPython
 
             LPOSICIONES.Rule = MakePlusRule(LPOSICIONES, POSICION);
 
+            FILA.Rule = ToTerm("{") + LEXPRESIONES + "}";
+
+            
+
+            LFILAS.Rule = MakePlusRule(LFILAS, ToTerm(","), FILA);
+
+
             ASIGNACION.Rule = EXPRESION + ToTerm("=") + ">" + EXPRESION;
+
+
+
+
+            INSTRUCCION.Rule = DECLARACION + Eos
+                | CONTINUAR + Eos
+                | SALIR + Eos
+                | MIENTRAS + Eos
+                | HACER
+                | REPETIR
+                | LOOP + Eos;
+
+
+            INSTRUCCIONES.Rule = MakePlusRule(INSTRUCCIONES, INSTRUCCION);
+
+            CUERPO.Rule = Indent + INSTRUCCIONES + Dedent;
+
+            FUNCION.Rule = VISIBILIDAD + ToTerm("funcion") + TIPO + identificador + "[" + "]" + Eos + CUERPO;
+
+
+
+
+            #region estructuras de control
+
+            CONTINUAR.Rule = ToTerm(Constantes.continuar);
+
+            SALIR.Rule = ToTerm(Constantes.salir);
+
+            MIENTRAS.Rule = ToTerm(Constantes.mientras) + EXPRESION + ":" + Eos + CUERPO;
+
+            HACER.Rule = ToTerm(Constantes.hacer) + ":" + Eos + CUERPO  + ToTerm(Constantes.mientras) + EXPRESION+ Eos;
+
+            REPETIR.Rule = ToTerm(Constantes.repetir) + ":" + Eos + CUERPO + ToTerm(Constantes.hasta) + EXPRESION + Eos;
+
+            LOOP.Rule = ToTerm(Constantes.loop) + ":" + Eos + CUERPO;
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 
 
 
@@ -156,15 +229,21 @@ namespace Proyecto2_201122872.AnalizadorPython
             
 
 
+
+            #endregion
+
+
+
+
+
+
+
+
+
             #region expresion
 
 
-            EXPRESION.Rule = DECIMAL
-                | ENTERO
-                | CADENA
-                | ID
-                | CHAR
-                | BOOLEANO;
+
 
             DECIMAL.Rule = numero;
             ENTERO.Rule = numero;
@@ -175,32 +254,60 @@ namespace Proyecto2_201122872.AnalizadorPython
                 | ToTerm(val_true);
 
 
+            ARITMETICA.Rule = SUMA
+                | RESTA
+                | MULTIPLICACION
+                | DIVISION
+                | POTENCIA;
 
-            SIMB_ARIT.Rule = ToTerm("+") | "-" | "*" | "/" | "^";
+            RELACIONAL.Rule = MENOR
+                | MAYOR
+                | MENORIGUAL
+                | MAYORIGUAL
+                | DISTINTOA
+                | IGUALIGUAL;
 
-            SIMB_REL.Rule = ToTerm("<") | ">" | "<=" | ">=" | "==" | "!=";
-
-            SIMB_LOG.Rule = ToTerm("||") | "??" | "&&";
-
-            ARITMETICA.Rule = EXPRESION + SIMB_ARIT + EXPRESION;
-            RELACIONAL.Rule = EXPRESION + SIMB_REL + EXPRESION;
-            LOGICA.Rule = EXPRESION + SIMB_LOG + EXPRESION;
+            LOGICA.Rule = XOR
+                | OR
+                | AND
+                | NOT;
 
 
 
 
+
+            SUMA.Rule = EXPRESION + ToTerm(Constantes.suma) + EXPRESION;
+            RESTA.Rule = EXPRESION + ToTerm(Constantes.resta) + EXPRESION;
+            MULTIPLICACION.Rule = EXPRESION + ToTerm(Constantes.multiplicacion) + EXPRESION;
+            DIVISION.Rule = EXPRESION + ToTerm(Constantes.division) + EXPRESION;
+            POTENCIA.Rule = EXPRESION + ToTerm(Constantes.potencia) + EXPRESION;
+            MENOR.Rule = EXPRESION + ToTerm(Constantes.menor) + EXPRESION;
+            MENORIGUAL.Rule = EXPRESION + ToTerm(Constantes.menorIgual) + EXPRESION;
+            MAYOR.Rule = EXPRESION + ToTerm(Constantes.mayor) + EXPRESION;
+            MAYORIGUAL.Rule = EXPRESION + ToTerm(Constantes.mayorIgual) + EXPRESION;
+            IGUALIGUAL.Rule = EXPRESION + ToTerm(Constantes.igualIgual) + EXPRESION;
+            DISTINTOA.Rule = EXPRESION + ToTerm(Constantes.distintoA) + EXPRESION;
+            XOR.Rule = EXPRESION + ToTerm(Constantes.xorPython) + EXPRESION;
+            AND.Rule = EXPRESION + ToTerm(Constantes.andPython) + EXPRESION;
+            NOT.Rule = ToTerm(Constantes.notJavaPython) + EXPRESION;
+            OR.Rule = EXPRESION + ToTerm(Constantes.orPython) + EXPRESION;
+           
+            INSTANCIA.Rule = Constantes.nuevoPython + identificador + "[" + LEXPRESIONES + "]"
+                | Constantes.nuevoPython + identificador + "[" + "]";
 
             UNARIO.Rule = MAS_MAS
                 | MENOS_MENOS;
-            MAS_MAS.Rule = identificador + ToTerm("+") + "+";
-            MENOS_MENOS.Rule = identificador + ToTerm("-") + "-";
+
+            MAS_MAS.Rule = identificador + ToTerm(Constantes.masmas);
+
+            MENOS_MENOS.Rule = identificador + ToTerm(Constantes.menosmenos);
 
 
             NEGATIVO.Rule = ToTerm("-") + EXPRESION;
 
-            termino.Rule = ARITMETICA
-                | RELACIONAL
-                | LOGICA
+            termino.Rule = ToTerm("(") + ARITMETICA + ")"
+                | ToTerm("[") + RELACIONAL + "]"
+                | ToTerm("{") + LOGICA + "}"
                 | DECIMAL
                 | ENTERO
                 | ID
@@ -209,50 +316,40 @@ namespace Proyecto2_201122872.AnalizadorPython
                 | CHAR
                 | LLAMADA
                 | POSVECTOR
-                | UNARIO
-                | ToTerm("(") + EXPRESION + ")"
+                | ToTerm("(") + UNARIO + ")"
                 | NEGATIVO
-                | "{" + LFILAS + "}";
+                | "{" + LFILAS + "}"
+                | INSTANCIA;
 
-            LLAMADA.Rule = identificador + ToTerm("(") + LEXPRESIONES + ")"
-                | identificador + ToTerm("(") + ")";
+            LLAMADA.Rule = identificador + ToTerm("[") + LEXPRESIONES + "]"
+                | identificador + ToTerm("[") + "]";
 
 
             POSVECTOR.Rule = identificador + LPOSICIONES;
 
-            L_IDS.Rule = MakePlusRule(L_IDS, ToTerm(","), ID);
+            L_IDS.Rule = MakePlusRule(L_IDS, ToTerm(","), identificador);
 
 
 
-           
+
+            EXPRESION.Rule = MakePlusRule(EXPRESION, ToTerm("."), termino);
+
+            LEXPRESIONES.Rule = MakePlusRule(EXPRESION, ToTerm(","), EXPRESION);
+
+
+
+
+
 
             #endregion
 
 
-            INSTRUCCION.Rule = DECLARACION + Eos;
-            INSTRUCCIONES.Rule = MakePlusRule(INSTRUCCIONES, INSTRUCCION);
-            CUERPO.Rule = Indent + INSTRUCCIONES + Dedent;
-            FUNCION.Rule = VISIBILIDAD + ToTerm("funcion") + TIPO + identificador + "[" + "]" + Eos + CUERPO;
 
 
 
-            /*
-            Ciclo.Rule= ToTerm("Ciclo")+id+Bloque+eos;
-Bloque.Rule = Indent +  ListaInstrucciones + Dedent;
-ListaInstrucciones.Rule = MakeStarRule(ListaInstrucciones, Cuerpo); 
-Cuerpo.Rule=Funcion+Eos
-                     |Asignacion+Eos
-                     |Declaracion+Eos
-                     |Sentenciacualquiera+Eos
-                     |Ciclo;
-
-             
-             
-             */
 
 
-
-            this.Root = FUNCION;
+            this.Root = termino;
 
 
         }

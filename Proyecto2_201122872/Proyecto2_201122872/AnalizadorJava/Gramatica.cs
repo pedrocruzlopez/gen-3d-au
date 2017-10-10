@@ -394,7 +394,7 @@ namespace Proyecto2_201122872.AnalizadorJava
 
             POSVECTOR.Rule = identificador + LPOSICIONES;
 
-            L_IDS.Rule = MakePlusRule(L_IDS, ToTerm(","), ID);
+            L_IDS.Rule = MakePlusRule(L_IDS, ToTerm(","), identificador);
 
 
 
@@ -433,12 +433,12 @@ namespace Proyecto2_201122872.AnalizadorJava
 
            
            MarkTransient(L_ELEMENTOS, ELEMENTO,POSICION,EXPRESION,SIMB_ARIT,SIMB_LOG,SIMB_REL,DECLAPARA,termino, INSTRUCCION, INSTRUCCIONES,
-               ARITMETICA,LOGICA,RELACIONAL,UNARIO);
+               ARITMETICA,LOGICA,RELACIONAL,UNARIO,CUERPO);
 
 
 
 
-           this.Root = ASIGNACION;
+           this.Root = LISTACLASES;
 
 
 
