@@ -345,16 +345,15 @@ namespace Proyecto2_201122872.AnalizadorPython
 
 
 
+            NonTerminal n = new NonTerminal("fdsfd");
+            n.Rule = termino + Eos;
 
 
 
-
-            this.Root = termino;
+            this.Root = n;
 
 
         }
-
-
 
 
         public override void CreateTokenFilters(LanguageData language, TokenFilterList filters)
@@ -364,5 +363,7 @@ namespace Proyecto2_201122872.AnalizadorPython
             filters.Add(outlineFilter);
 
         }
+
+
     }
 }

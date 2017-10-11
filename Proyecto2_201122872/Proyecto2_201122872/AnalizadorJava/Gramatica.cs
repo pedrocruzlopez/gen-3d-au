@@ -181,7 +181,7 @@ namespace Proyecto2_201122872.AnalizadorJava
 
             PRINCIPAL.Rule = ToTerm(Constantes.principal) + ToTerm("(") + ToTerm(")") + CUERPO;
 
-            CONSTRUCTOR.Rule = VISIBILIDAD +identificador + ToTerm("(") + L_PARAMETRO + ToTerm(")") + CUERPO;
+            CONSTRUCTOR.Rule = identificador + ToTerm("(") + L_PARAMETRO + ToTerm(")") + CUERPO;
 
             FUNCION.Rule = VISIBILIDAD + TIPO + identificador + ToTerm("(") + L_PARAMETRO + ToTerm(")") + CUERPO
                            | VISIBILIDAD + ToTerm(tipoVoid) + identificador + ToTerm("(") + L_PARAMETRO + ToTerm(")") + CUERPO
@@ -205,10 +205,9 @@ namespace Proyecto2_201122872.AnalizadorJava
 
             ATRIBUTO.Rule = VISIBILIDAD + TIPO + L_IDS + ToTerm(";")
                 | VISIBILIDAD + TIPO + identificador + ToTerm("=") + EXPRESION + ToTerm(";")
-                | VISIBILIDAD + TIPO + identificador + ToTerm("=") + ToTerm(Constantes.nuevo) + identificador + ToTerm("(") + ToTerm(")") + ToTerm(";")
                 | TIPO + L_IDS + ToTerm(";")
-                | TIPO + identificador + ToTerm("=") + EXPRESION + ToTerm(";")
-                | TIPO + identificador + ToTerm("=") + ToTerm(Constantes.nuevo) + identificador + ToTerm("(") + ToTerm(")") + ToTerm(";");
+                | TIPO + identificador + ToTerm("=") + EXPRESION + ToTerm(";");
+
 
             L_IDS.Rule = MakePlusRule(L_IDS, ToTerm(","), identificador);
 
@@ -279,15 +278,7 @@ namespace Proyecto2_201122872.AnalizadorJava
             INSTRUCCIONES.Rule = MakeStarRule(INSTRUCCIONES, INSTRUCCION);
 
          
-            POSICION.Rule = ToTerm("[") + EXPRESION + "]";
-
-             LPOSICIONES.Rule = MakePlusRule(LPOSICIONES, POSICION);
-
-             FILA.Rule= ToTerm("{") + LEXPRESIONES + "}";
-
-            LEXPRESIONES.Rule = MakePlusRule(LEXPRESIONES,ToTerm(","), EXPRESION);
-
-            LFILAS.Rule = MakePlusRule(LFILAS,ToTerm(","), FILA);
+            
 
             DECLARACION.Rule = TIPO + identificador + ToTerm(";")
                 | TIPO + identificador + ToTerm("=") + EXPRESION + ";"
@@ -307,7 +298,15 @@ namespace Proyecto2_201122872.AnalizadorJava
             #region expresion
 
 
-          
+            POSICION.Rule = ToTerm("[") + EXPRESION + "]";
+
+            LPOSICIONES.Rule = MakePlusRule(LPOSICIONES, POSICION);
+
+            FILA.Rule = ToTerm("{") + LEXPRESIONES + "}";
+
+            
+
+            LFILAS.Rule = MakePlusRule(LFILAS, ToTerm(","), FILA);
 
             DECIMAL.Rule = numero;
             ENTERO.Rule = numero;
@@ -369,7 +368,7 @@ namespace Proyecto2_201122872.AnalizadorJava
             MENOS_MENOS.Rule = identificador + ToTerm(Constantes.menosmenos);
 
 
-            NEGATIVO.Rule = ToTerm("-") + EXPRESION;
+            NEGATIVO.Rule = ToTerm("-") + termino;
 
             termino.Rule = ARITMETICA
                 | RELACIONAL
@@ -383,7 +382,7 @@ namespace Proyecto2_201122872.AnalizadorJava
                 | LLAMADA
                 | POSVECTOR
                 | UNARIO
-                | ToTerm("(") + EXPRESION + ")"
+                | ToTerm("(") + termino + ")"
                 | NEGATIVO
                 | "{" + LFILAS + "}"
                 | INSTANCIA;
@@ -397,8 +396,8 @@ namespace Proyecto2_201122872.AnalizadorJava
             L_IDS.Rule = MakePlusRule(L_IDS, ToTerm(","), identificador);
 
 
-
-            EXPRESION.Rule = MakePlusRule(EXPRESION,ToTerm("."),termino);
+            LEXPRESIONES.Rule = MakePlusRule(LEXPRESIONES, ToTerm(","), EXPRESION);
+            EXPRESION.Rule = MakePlusRule(EXPRESION, ToTerm("."), termino);
 
             
 
@@ -428,12 +427,12 @@ namespace Proyecto2_201122872.AnalizadorJava
             MarkPunctuation(",", "(", ")", ";", "=", "@", "{","}","clase","[","]",Constantes.nuevo,".","si","sino",
                 "mientras","hacer","para","x","repetir","return","imprimir",Constantes.masmas, Constantes.menosmenos,
                 Constantes.menor, Constantes.mayor, Constantes.menorIgual, Constantes.mayorIgual, Constantes.igualIgual, Constantes.distintoA,
-                Constantes.orJava, Constantes.andJava, Constantes.xorJava, Constantes.notJavaPython);
+                Constantes.orJava, Constantes.andJava, Constantes.xorJava, Constantes.notJavaPython,sobreescribir);
 
 
            
-           MarkTransient(L_ELEMENTOS, ELEMENTO,POSICION,EXPRESION,SIMB_ARIT,SIMB_LOG,SIMB_REL,DECLAPARA,termino, INSTRUCCION, INSTRUCCIONES,
-               ARITMETICA,LOGICA,RELACIONAL,UNARIO,CUERPO);
+           MarkTransient(L_ELEMENTOS, ELEMENTO,POSICION,SIMB_ARIT,SIMB_LOG,SIMB_REL,DECLAPARA, INSTRUCCION, INSTRUCCIONES,
+               ARITMETICA,LOGICA,RELACIONAL,UNARIO,CUERPO, termino);
 
 
 

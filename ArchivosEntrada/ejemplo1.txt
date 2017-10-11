@@ -1,18 +1,17 @@
-
-
-clase Deposito {
+ clase Deposito {
 //Campos de la clase
-privado decimal diametro;
+privado decimal diametro,u=6;
 privado decimal altura;
 privado Cadena idDeposito;
 //Constructor sin parámetros auxiliar
 publico Deposito () {
- diametro = hola.hola.hola(2,3);
+ diametro = 0;
  altura = 0;
  idDeposito = ""; 
 
 } //Cierre del constructor
- publico Deposito (decimal valor_diametro, decimal valor_altura, Cadena valor_idDeposito){
+ publico Deposito (decimal valor_diametro, decimal valor_altura, Cadena
+valor_idDeposito) {
  si(valor_diametro > 0 && valor_altura > 0) {
  diametro = valor_diametro;
  altura = valor_altura;
@@ -21,7 +20,8 @@ publico Deposito () {
  diametro = 10;
  altura = 5;
  idDeposito = "000";
- imprimir("Creado depOsito con valores por defecto diOmetro 10 metros altura 5 metros id 000" );
+ imprimir("Creado depósito con valores por defecto diámetro 10 metros
+altura 5 metros id 000" );
  }
 } //Cierre del constructor
 publico void setValoresDeposito (Cadena valor_idDeposito, decimal
@@ -32,11 +32,12 @@ valor_diametro, decimal valor_altura) {
  si (idDeposito !="" && valor_diametro > 0 && valor_altura > 0) {
 
  } sino {
- imprimir("Valores no admisibles. No se han establecido valores para el depósito");
+ imprimir("Valores no admisibles. No se han establecido valores para el
+depósito");
  /*
  Deposito (0.0f, 0.0f, "");
  Esto no es posible.
- Un constructor no es un metodo y por tanto no podemos llamarlo
+ Un constructor no es un método y por tanto no podemos llamarlo
  */
  idDeposito = " ";
  diametro = 0;

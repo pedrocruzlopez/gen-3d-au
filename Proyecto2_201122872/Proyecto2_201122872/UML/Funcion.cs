@@ -14,7 +14,25 @@ namespace Proyecto2_201122872.UML
         private ListaParametro parametros;
         private string visibilidad;
         public string firma;
+        public Boolean esSobreescrita=false;
+        public Boolean esPrincipal = false;
+        public Boolean esConstructor = false;
 
+        public void setSobreescrita(bool val)
+        {
+            this.esSobreescrita = val;
+        }
+
+        public void setPrincipal(bool val)
+        {
+            this.esPrincipal = val;
+        }
+
+
+        public void setConstructor(bool val)
+        {
+            this.esConstructor = val;
+        }
 
         public Funcion(string clase, string nombre, string tipo, ListaParametro parametros, string visibilidad)
         {
