@@ -14,7 +14,7 @@ Deposito () {
 publico void setValoresDeposito (Cadena valor_idDeposito, decimal valor_diametro, decimal valor_altura) {
  
 } //Cierre del método
-publico decimal getDiametro () { }
+publico decimal getDiametro () { return g; return h; return k;}
 
 publico decimal getAltura () { }
 

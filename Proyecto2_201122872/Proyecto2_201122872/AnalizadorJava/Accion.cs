@@ -115,7 +115,7 @@ namespace Proyecto2_201122872.AnalizadorJava
             ListaParametro parametros;
             if (noHijos == 5)
             {//posee visibilidad;
-                visibilidad = nodoFuncion.ChildNodes[0].Token.Value.ToString();
+                visibilidad = nodoFuncion.ChildNodes[0].ChildNodes[0].Token.Value.ToString();
                 nombre = nodoFuncion.ChildNodes[2].Token.Value.ToString();
                 parametros = getParametros(nodoFuncion.ChildNodes[3]);
                 if (nodoFuncion.ChildNodes[1].Term.Name.Equals(Constantes.tipo))
