@@ -130,5 +130,19 @@ namespace Proyecto2_201122872
 
 
         }
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            String contenido = getCadenaArchivo(@"C:\Users\Alina\Documents\Repositorios\CompiProyecto2\ArchivosEntrada\ejemplo1.txt");
+            analizador.parseConvertirUML(contenido);
+            uml.generarGrafo();
+            mostraImagen();
+
+        }
+
+        private void toolStripButton4_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

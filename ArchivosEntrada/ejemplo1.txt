@@ -1,60 +1,26 @@
  clase Deposito {
 //Campos de la clase
-privado decimal diametro,u=6;
+privado decimal diametro;
 privado decimal altura;
 privado Cadena idDeposito;
 //Constructor sin parámetros auxiliar
-publico Deposito () {
- diametro = 0;
- altura = 0;
- idDeposito = ""; 
+Deposito () {
+
 
 } //Cierre del constructor
- publico Deposito (decimal valor_diametro, decimal valor_altura, Cadena
-valor_idDeposito) {
- si(valor_diametro > 0 && valor_altura > 0) {
- diametro = valor_diametro;
- altura = valor_altura;
- idDeposito = valor_idDeposito;
- } sino {
- diametro = 10;
- altura = 5;
- idDeposito = "000";
- imprimir("Creado depósito con valores por defecto diámetro 10 metros
-altura 5 metros id 000" );
- }
+  Deposito (decimal valor_diametro, decimal valor_altura, Cadena valor_idDeposito) {
+ 
 } //Cierre del constructor
-publico void setValoresDeposito (Cadena valor_idDeposito, decimal
-valor_diametro, decimal valor_altura) {
- idDeposito = valor_idDeposito;
- diametro = valor_diametro;
- altura = valor_altura;
- si (idDeposito !="" && valor_diametro > 0 && valor_altura > 0) {
-
- } sino {
- imprimir("Valores no admisibles. No se han establecido valores para el
-depósito");
- /*
- Deposito (0.0f, 0.0f, "");
- Esto no es posible.
- Un constructor no es un método y por tanto no podemos llamarlo
- */
- idDeposito = " ";
- diametro = 0;
- altura = 0;
- }
+publico void setValoresDeposito (Cadena valor_idDeposito, decimal valor_diametro, decimal valor_altura) {
+ 
 } //Cierre del método
-publico decimal getDiametro () { return diametro; }
+publico decimal getDiametro () { }
 
-publico decimal getAltura () { return altura; }
+publico decimal getAltura () { }
 
-publico Cadena getIdDeposito () { return idDeposito; }
+publico Cadena getIdDeposito () {  }
 
 publico decimal valorCapacidad () { //Método tipo función
- decimal capacidad;
- decimal pi = 3.1416;
- capacidad = pi * (diametro/2) * (diametro/2) * altura;
- return capacidad;
 
 }
 } //Cierre de la clase

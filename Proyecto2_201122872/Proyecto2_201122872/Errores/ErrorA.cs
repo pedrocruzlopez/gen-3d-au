@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Irony.Ast;
+using Irony.Interpreter;
+using Irony.Parsing;
 
 namespace Proyecto2_201122872.Errores
 {
@@ -22,6 +25,16 @@ namespace Proyecto2_201122872.Errores
             this.posicion = pos;
             this.columna = col;
             this.mensaje = mensaje;
+        }
+
+
+        public ErrorA(string tipo, string mensaje, Token tok)
+        {
+            this.mensaje = mensaje;
+            this.tipoError = tipo;
+            this.fila = tok.Location.Line;
+            this.columna = tok.Location.Column;
+            this.posicion = tok.Location.Position;
         }
 
 

@@ -28,11 +28,25 @@ namespace Proyecto2_201122872.AnalizadorJava
         public void generarUML(ParseTreeNode raiz)
         {
             generarListadoClases(raiz);
-            Boolean resultado;
+            Clase claseActual;
             foreach (ParseTreeNode actual in this.clasesUML)
             {
-                resultado = generarClase(actual);
+                claseActual = generarClase(actual);
+                if (claseActual != null)
+                {
+                    if (!Form1.uml.insertarClase(claseActual))
+                    {
+                        ErrorA nuevo = new ErrorA(Constantes.errorSemantico, "La clase " + claseActual.getNombre() + ", no se pudo crear, ya existe", actual.FindToken());
+                        Form1.errores.addError(nuevo);
+                    }
+                }
+                else
+                {
+                    ErrorA nuevo = new ErrorA(Constantes.errorSemantico, "Ocurrio un error, no se pudo generar la clase ", actual.FindToken());
+                    Form1.errores.addError(nuevo);
 
+                }
+                
 
             }
 
@@ -41,7 +55,7 @@ namespace Proyecto2_201122872.AnalizadorJava
         }
 
         
-        private Boolean generarClase(ParseTreeNode clase)
+        private Clase generarClase(ParseTreeNode clase)
         {
             string nombre, herencia;
             Clase nuevaClase;
@@ -49,7 +63,9 @@ namespace Proyecto2_201122872.AnalizadorJava
             {//no posee herencia
                 nombre = clase.ChildNodes[0].Token.Value.ToString();
                 nuevaClase = new Clase(nombre);
+                nuevaClase = agregarInstruccionesClase(nuevaClase, clase.ChildNodes[1]);
 
+                return nuevaClase;
 
             }
             else if (clase.ChildNodes.Count == 3)
@@ -57,11 +73,13 @@ namespace Proyecto2_201122872.AnalizadorJava
                 nombre = clase.ChildNodes[0].Token.Value.ToString();
                 herencia = clase.ChildNodes[1].Token.Value.ToString();
                 nuevaClase = new Clase(nombre, herencia);
+                nuevaClase = agregarInstruccionesClase(nuevaClase, clase.ChildNodes[2]);
+                return nuevaClase;
 
             }
 
-
-            return false;
+            return null;
+            
         }
 
 
@@ -74,7 +92,7 @@ namespace Proyecto2_201122872.AnalizadorJava
             variable nuevoParametro; 
             foreach (ParseTreeNode item in nodoParametros.ChildNodes)
             {
-                tipo = item.ChildNodes[0].Token.Value.ToString();
+                tipo = item.ChildNodes[0].ChildNodes[0].Token.Value.ToString();
                 nombre = item.ChildNodes[1].Token.Value.ToString();
                 nuevoParametro = new variable(nombre, tipo);
                 parametros.addParametro(nuevoParametro);
@@ -114,7 +132,7 @@ namespace Proyecto2_201122872.AnalizadorJava
                 if (nodoFuncion.ChildNodes[0].Term.Name.Equals(Constantes.tipo))
                     tipo = nodoFuncion.ChildNodes[0].ChildNodes[0].Token.Value.ToString();
                 else
-                    tipo = nodoFuncion.ChildNodes[0].Token.Value.ToString();
+                    tipo = nodoFuncion.ChildNodes[0].ChildNodes[0].Token.Value.ToString();
                 nombre = nodoFuncion.ChildNodes[1].Token.Value.ToString();
                 parametros = getParametros(nodoFuncion.ChildNodes[2]);
                 nueva = new Funcion(nombreClase, nombre, tipo, parametros, visibilidad);
