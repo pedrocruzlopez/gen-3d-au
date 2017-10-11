@@ -68,6 +68,8 @@
     <Compile Include="AnalizadorPython\AnalizadorPy.cs" />
     <Compile Include="AnalizadorPython\ArbolPy.cs" />
     <Compile Include="AnalizadorPython\GramaticaPython.cs" />
+    <Compile Include="Errores\ErrorA.cs" />
+    <Compile Include="Errores\ListaErrores.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -128,9 +130,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Errores\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\diagrama.jpg" />
   </ItemGroup>

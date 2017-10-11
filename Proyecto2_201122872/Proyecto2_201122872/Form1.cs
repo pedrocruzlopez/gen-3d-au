@@ -1,5 +1,6 @@
 ﻿using Proyecto2_201122872.AnalizadorJava;
 using Proyecto2_201122872.AnalizadorPython;
+using Proyecto2_201122872.Errores;
 using Proyecto2_201122872.Formularios;
 using Proyecto2_201122872.UML;
 using System;
@@ -22,6 +23,7 @@ namespace Proyecto2_201122872
         private ArbolPy analizador2;
         public static clasesDiagrama uml;
         public static Panel panel = new Panel();
+        public static ListaErrores errores = new ListaErrores();
 
         public Form1()
         {

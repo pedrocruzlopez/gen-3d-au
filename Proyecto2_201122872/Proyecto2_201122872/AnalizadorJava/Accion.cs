@@ -7,6 +7,7 @@ using Irony.Ast;
 using Irony.Interpreter;
 using Irony.Parsing;
 using Proyecto2_201122872.UML;
+using Proyecto2_201122872.Errores;
 
 
 namespace Proyecto2_201122872.AnalizadorJava
@@ -109,7 +110,7 @@ namespace Proyecto2_201122872.AnalizadorJava
             }
             else 
             {//no posee visibilidad;
-                visibilidad = "publico";
+                visibilidad = Constantes.publico;
                 if (nodoFuncion.ChildNodes[0].Term.Name.Equals(Constantes.tipo))
                     tipo = nodoFuncion.ChildNodes[0].ChildNodes[0].Token.Value.ToString();
                 else
@@ -139,7 +140,7 @@ namespace Proyecto2_201122872.AnalizadorJava
             string tipo, nombre, visibilidad;
             if (noHijos == 2)
             {
-                visibilidad = "publico";
+                visibilidad = Constantes.publico;
                 tipo = nodoAtributo.ChildNodes[0].ChildNodes[0].Token.Value.ToString();
                 foreach (ParseTreeNode item in nodoAtributo.ChildNodes[1].ChildNodes)
                 {
@@ -177,7 +178,7 @@ namespace Proyecto2_201122872.AnalizadorJava
                 }
                 else
                 {
-                    visibilidad = "publico";
+                    visibilidad = Constantes.publico;
                     tipo = nodoAtributo.ChildNodes[0].ChildNodes[0].Token.Value.ToString();
                     nombre = nodoAtributo.ChildNodes[1].Token.Value.ToString();
                     nuevo = new Atributo(visibilidad, nombre, tipo);
@@ -200,26 +201,31 @@ namespace Proyecto2_201122872.AnalizadorJava
             if (nombre.ToUpper().Equals(nombreClase.ToUpper()))
             {
                 ListaParametro parametros = getParametros(nodoConstructor.ChildNodes[1]);
-                constructor = new Funcion(nombreClase, nombre, "void", parametros, "publico");
+                constructor = new Funcion(nombreClase, nombre, Constantes.tipoVoid, parametros, Constantes.publico);
                 constructor.setConstructor(true);
                 return constructor;
             }
             else
             {
+                ErrorA nuevo = new ErrorA(Constantes.errorSemantico, nodoConstructor.ChildNodes[0].Token.Location.Line,
+                    nodoConstructor.ChildNodes[0].Token.Location.Position, nodoConstructor.ChildNodes[0].Token.Location.Column,
+                    "El nombre de " + nombre + ", no coincide con el nombre de clase, " + nombreClase);
+                Form1.errores.addError(nuevo);
+                return null;
                 //error semantico
             }
-
-            return null;
-
-
-
         }
 
 
-        private Funcion getPrincipal(ParseTreeNode nodoPrincipal)
+        private Funcion getPrincipal(ParseTreeNode nodoPrincipal, string nombreClase)
         {
             /*
             PRINCIPAL.Rule = ToTerm(Constantes.principal) + ToTerm("(") + ToTerm(")") + CUERPO;*/
+
+            Funcion principal = new Funcion(nombreClase, Constantes.principal, Constantes.tipoVoid, new ListaParametro(), Constantes.publico);
+            principal.setPrincipal(true);
+            return principal;
+
 
         }
 
@@ -258,11 +264,25 @@ namespace Proyecto2_201122872.AnalizadorJava
 
                     case Constantes.principal:
                         {
-
+                            if (claseModificar.funciones.hayPrincipal())
+                            {
+                                Funcion principal = getPrincipal(item, claseModificar.getNombre());
+                                claseModificar.addFuncion(principal);
+                            }
+                            else
+                            {
+                                ErrorA err = new ErrorA(Constantes.errorSemantico, item.FindToken().Location.Line, item.FindToken().Location.Position, item.FindToken().Location.Column, "Una clase unicamente puede poseer un metodo principal");
+                                Form1.errores.addError(err);
+                            }
                             break;
                         }
                     case Constantes.constructor:
                         {
+                            Funcion constructor = getConstructor(item, claseModificar.getNombre());
+                            if (constructor != null)
+                            {
+                                claseModificar.addFuncion(constructor);
+                            }
 
                             break;
                         }

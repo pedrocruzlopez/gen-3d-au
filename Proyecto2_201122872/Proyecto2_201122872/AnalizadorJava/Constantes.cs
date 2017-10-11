@@ -130,6 +130,9 @@ namespace Proyecto2_201122872.AnalizadorJava
         public const string doubletoint = "doubletoint";
         public const string salir = "salir";
 
+        public const string errorLexico = "Lexico";
+        public const string errorSemantico = "Semantico";
+        public const string errorSintactico = "Sintactico";
     
            
         

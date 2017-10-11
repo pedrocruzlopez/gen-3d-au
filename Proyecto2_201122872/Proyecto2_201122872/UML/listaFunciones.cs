@@ -52,6 +52,17 @@ namespace Proyecto2_201122872.UML
         }
 
 
+        public Boolean hayPrincipal()
+        {
+            foreach (Funcion item in this.funciones)
+            {
+                if (item.esPrincipal)
+                    return true;
+            }
+            return false;
+        }
+
+
 
         /*traduccion de codigo */
 
