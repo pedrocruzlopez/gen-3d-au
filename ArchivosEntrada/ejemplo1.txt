@@ -1,13 +1,18 @@
- clase Deposito {
-//Campos de la clase
+ /*clase Deposito {
+
+ //Campos de la clase
+
 privado decimal diametro;
 privado decimal altura;
 privado Cadena idDeposito;
+
 //Constructor sin parámetros auxiliar
+
 Deposito () {
 
 
 } //Cierre del constructor
+  
   Deposito (decimal valor_diametro, decimal valor_altura, Cadena valor_idDeposito) {
  
 } //Cierre del constructor
@@ -23,4 +28,7 @@ publico Cadena getIdDeposito () {  }
 publico decimal valorCapacidad () { //Método tipo función
 
 }
-} //Cierre de la clase
+} //Cierre de la clase*/
+
+
+hola(5,6,7,6).hola[9].hola.hola(9*7,90)

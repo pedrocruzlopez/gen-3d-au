@@ -1,4 +1,4 @@
-clase prueba1[puebas]:
+{--clase prueba1[puebas]:
 
 	publico mEtoDo nombreMetodo[entero num1, decimal num2]:
 		entero valor
@@ -22,9 +22,5 @@ clase prueba1[puebas]:
 							loop:
 								c=>"hoa"
 						hasta 5
-					mientras 7
-					
-					
-	
-					
-	
+					mientras 7--}
+HOLA.HOLA.HOA

@@ -95,7 +95,28 @@ namespace Proyecto2_201122872.AnalizadorPython
                 DOUBLETOINT = new NonTerminal(Constantes.doubletoint),
                 SUPER = new NonTerminal(Constantes.super),
                 SELF = new NonTerminal(Constantes.self),
-                DECLAARREGLO = new NonTerminal(Constantes.declaArreglo);
+                DECLAARREGLO = new NonTerminal(Constantes.declaArreglo),
+                ARITMETICA = new NonTerminal(Constantes.aritmetica),
+                LOGICA = new NonTerminal(Constantes.logica),
+                RELACIONAL = new NonTerminal(Constantes.relacional);
+
+            NonTerminal SUMA = new NonTerminal(Constantes.suma);
+            NonTerminal RESTA = new NonTerminal(Constantes.resta);
+            NonTerminal MULTIPLICACION = new NonTerminal(Constantes.multiplicacion);
+            NonTerminal DIVISION = new NonTerminal(Constantes.division);
+            NonTerminal POTENCIA = new NonTerminal(Constantes.potencia);
+            NonTerminal MENOR = new NonTerminal(Constantes.menor);
+            NonTerminal MENORIGUAL = new NonTerminal(Constantes.menorIgual);
+            NonTerminal MAYOR = new NonTerminal(Constantes.mayor);
+            NonTerminal MAYORIGUAL = new NonTerminal(Constantes.mayorIgual);
+            NonTerminal IGUALIGUAL = new NonTerminal(Constantes.igualIgual);
+            NonTerminal DISTINTOA = new NonTerminal(Constantes.distintoA);
+            NonTerminal XOR = new NonTerminal(Constantes.xorPython);
+            NonTerminal AND = new NonTerminal(Constantes.andPython);
+            NonTerminal NOT = new NonTerminal(Constantes.notJavaPython);
+            NonTerminal OR = new NonTerminal(Constantes.orPython);
+            
+                
 
 
             #endregion
@@ -275,6 +296,46 @@ namespace Proyecto2_201122872.AnalizadorPython
             BOOL.Rule = ToTerm(val_true)
                 | ToTerm(val_false);
 
+
+            ARITMETICA.Rule = SUMA
+               | RESTA
+               | MULTIPLICACION
+               | DIVISION
+               | POTENCIA;
+
+            RELACIONAL.Rule = MENOR
+                | MAYOR
+                | MENORIGUAL
+                | MAYORIGUAL
+                | DISTINTOA
+                | IGUALIGUAL;
+
+            LOGICA.Rule = XOR
+                | OR
+                | AND
+                | NOT;
+
+
+
+
+
+            SUMA.Rule = EXPRESION + EXPRESION + ToTerm(Constantes.suma);
+            RESTA.Rule = EXPRESION + EXPRESION + ToTerm(Constantes.resta);
+            MULTIPLICACION.Rule = EXPRESION + EXPRESION + ToTerm(Constantes.multiplicacion);
+            DIVISION.Rule = EXPRESION + EXPRESION + ToTerm(Constantes.division);
+            POTENCIA.Rule = EXPRESION + EXPRESION + ToTerm(Constantes.potencia);
+            MENOR.Rule = EXPRESION + EXPRESION + ToTerm(Constantes.menor);
+            MENORIGUAL.Rule = EXPRESION + ToTerm(Constantes.menorIgual) + EXPRESION;
+            MAYOR.Rule = EXPRESION + ToTerm(Constantes.mayor) + EXPRESION;
+            MAYORIGUAL.Rule = EXPRESION + ToTerm(Constantes.mayorIgual) + EXPRESION;
+            IGUALIGUAL.Rule = EXPRESION + ToTerm(Constantes.igualIgual) + EXPRESION;
+            DISTINTOA.Rule = EXPRESION + ToTerm(Constantes.distintoA) + EXPRESION;
+            XOR.Rule = EXPRESION + ToTerm(Constantes.xorJava) + EXPRESION;
+            AND.Rule = EXPRESION + ToTerm(Constantes.andJava) + EXPRESION;
+            NOT.Rule = ToTerm(Constantes.notJavaPython) + EXPRESION;
+            OR.Rule = EXPRESION + ToTerm(Constantes.orJava) + EXPRESION;
+
+
             TERMINO.Rule = ID
                 | ENTERO
                 | DECIMAL
@@ -303,9 +364,10 @@ namespace Proyecto2_201122872.AnalizadorPython
 
             #endregion
 
+            NonTerminal N = new NonTerminal("FD");
+            N.Rule = EXPRESION + Eos;
 
-
-            this.Root = LISTACLASES;
+            this.Root = N;
 
         }
 

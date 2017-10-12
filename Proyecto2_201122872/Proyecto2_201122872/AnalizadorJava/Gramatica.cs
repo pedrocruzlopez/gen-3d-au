@@ -119,7 +119,7 @@ namespace Proyecto2_201122872.AnalizadorJava
             NonTerminal MAS_MAS = new NonTerminal(Constantes.masmas);
             NonTerminal MENOS_MENOS = new NonTerminal(Constantes.menosmenos);
             NonTerminal ASIG_ARRAY = new NonTerminal(Constantes.asig_array);
-            NonTerminal termino = new NonTerminal(Constantes.termino);
+            NonTerminal TERMINO = new NonTerminal(Constantes.termino);
             NonTerminal RETORNO = new NonTerminal(Constantes.retorno);
             NonTerminal LISTACLASES = new NonTerminal(Constantes.l_clases);
 
@@ -339,24 +339,25 @@ namespace Proyecto2_201122872.AnalizadorJava
                 | NOT;
 
 
-         
+
+            SUMA.Rule = TERMINO + ToTerm(Constantes.suma) + TERMINO;
+            RESTA.Rule = TERMINO + ToTerm(Constantes.resta) + TERMINO;
+            MULTIPLICACION.Rule = TERMINO + ToTerm(Constantes.multiplicacion) + TERMINO;
+            DIVISION.Rule = TERMINO + ToTerm(Constantes.division) + TERMINO;
+            POTENCIA.Rule = TERMINO + ToTerm(Constantes.potencia) + TERMINO;
+            MENOR.Rule = TERMINO + ToTerm(Constantes.menor) + TERMINO;
+            MENORIGUAL.Rule = TERMINO + ToTerm(Constantes.menorIgual) + TERMINO;
+            MAYOR.Rule = TERMINO + ToTerm(Constantes.mayor) + TERMINO;
+            MAYORIGUAL.Rule = TERMINO + ToTerm(Constantes.mayorIgual) + TERMINO;
+            IGUALIGUAL.Rule = TERMINO + ToTerm(Constantes.igualIgual) + TERMINO;
+            DISTINTOA.Rule = TERMINO + ToTerm(Constantes.distintoA) + TERMINO;
+            XOR.Rule = TERMINO + ToTerm(Constantes.xorJava) + TERMINO;
+            AND.Rule = TERMINO + ToTerm(Constantes.andJava) + TERMINO;
+            NOT.Rule = ToTerm(Constantes.notJavaPython) + TERMINO;
+            OR.Rule = TERMINO + ToTerm(Constantes.orJava) + TERMINO;
 
 
-            SUMA.Rule = EXPRESION + ToTerm(Constantes.suma) + EXPRESION;
-            RESTA.Rule = EXPRESION + ToTerm(Constantes.resta) + EXPRESION;
-            MULTIPLICACION.Rule = EXPRESION + ToTerm(Constantes.multiplicacion) + EXPRESION;
-            DIVISION.Rule = EXPRESION + ToTerm(Constantes.division) + EXPRESION;
-            POTENCIA.Rule = EXPRESION + ToTerm(Constantes.potencia) + EXPRESION;
-            MENOR.Rule = EXPRESION + ToTerm(Constantes.menor) + EXPRESION;
-            MENORIGUAL.Rule = EXPRESION + ToTerm(Constantes.menorIgual) + EXPRESION;
-            MAYOR.Rule = EXPRESION + ToTerm(Constantes.mayor) + EXPRESION;
-            MAYORIGUAL.Rule = EXPRESION + ToTerm(Constantes.mayorIgual) + EXPRESION;
-            IGUALIGUAL.Rule = EXPRESION + ToTerm(Constantes.igualIgual) + EXPRESION;
-            DISTINTOA.Rule = EXPRESION + ToTerm(Constantes.distintoA) + EXPRESION;
-            XOR.Rule = EXPRESION + ToTerm(Constantes.xorJava) + EXPRESION;
-            AND.Rule = EXPRESION + ToTerm(Constantes.andJava) + EXPRESION;
-            NOT.Rule = ToTerm(Constantes.notJavaPython) + EXPRESION;
-            OR.Rule = EXPRESION + ToTerm(Constantes.orJava) + EXPRESION;
+            
             INSTANCIA.Rule = Constantes.nuevo + identificador + "(" + LEXPRESIONES + ")"
                 | Constantes.nuevo + identificador + "(" + ")";
 
@@ -368,24 +369,24 @@ namespace Proyecto2_201122872.AnalizadorJava
             MENOS_MENOS.Rule = identificador + ToTerm(Constantes.menosmenos);
 
 
-            NEGATIVO.Rule = ToTerm("-") + termino;
+            NEGATIVO.Rule = ToTerm("-") + TERMINO;
 
-            termino.Rule = ARITMETICA
+            TERMINO.Rule = ARITMETICA
                 | RELACIONAL
                 | LOGICA
-                | DECIMAL
-                | ENTERO
-                | ID
-                | CADENA
-                | BOOLEANO
-                | CHAR
-                | LLAMADA
-                | POSVECTOR
+                | DECIMAL//
+                | ENTERO //
+                | ID//
+                | CADENA//
+                | BOOLEANO//
+                | CHAR//
+                | LLAMADA//
+                | POSVECTOR //
                 | UNARIO
-                | ToTerm("(") + termino + ")"
+                | ToTerm("(") + TERMINO + ")"
                 | NEGATIVO
                 | "{" + LFILAS + "}"
-                | INSTANCIA;
+                | INSTANCIA;//
 
             LLAMADA.Rule = identificador + ToTerm("(") + LEXPRESIONES + ")"
                 | identificador + ToTerm("(") + ")";
@@ -397,7 +398,7 @@ namespace Proyecto2_201122872.AnalizadorJava
 
 
             LEXPRESIONES.Rule = MakePlusRule(LEXPRESIONES, ToTerm(","), EXPRESION);
-            EXPRESION.Rule = MakePlusRule(EXPRESION, ToTerm("."), termino);
+            EXPRESION.Rule = MakePlusRule(EXPRESION, ToTerm("."), TERMINO);
 
             
 
@@ -432,7 +433,7 @@ namespace Proyecto2_201122872.AnalizadorJava
 
            
            MarkTransient(L_ELEMENTOS, ELEMENTO,POSICION,SIMB_ARIT,SIMB_LOG,SIMB_REL,DECLAPARA, INSTRUCCION, INSTRUCCIONES,
-               ARITMETICA,LOGICA,RELACIONAL,UNARIO,INSTRUCCIONES, termino,CUERPO_CLASE);
+               ARITMETICA,LOGICA,RELACIONAL,UNARIO,INSTRUCCIONES, TERMINO,CUERPO_CLASE);
 
 
 
