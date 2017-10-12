@@ -135,6 +135,15 @@ namespace Proyecto2_201122872.AnalizadorJava
         public const string errorLexico = "Lexico";
         public const string errorSemantico = "Semantico";
         public const string errorSintactico = "Sintactico";
+
+        public const string elegir = "elejir";
+        public const string caso = "caso";
+        public const string lcasos = "lcasos";
+        public const string defecto = "defecto";
+        public const string cuerpoElegir = "cuerpoElegir";
+        public const string super = "super";
+        public const string self = "self";
+        public const string declaArreglo = "declaArreglo";
     
            
         

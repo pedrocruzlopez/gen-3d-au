@@ -53,9 +53,28 @@ namespace Proyecto2_201122872.AnalizadorPython
                 SI = new NonTerminal(Constantes.si),
                 SI_NO = new NonTerminal(Constantes.sino),
                 EXTRA = new NonTerminal(Constantes.extraSi),
-                L_EXTRAS = new NonTerminal(Constantes.lextra);
+                L_EXTRAS = new NonTerminal(Constantes.lextra),
+                SALIR = new NonTerminal(Constantes.salir),
+                CONTINUAR = new NonTerminal(Constantes.constructor),
+                MIENTRAS = new NonTerminal(Constantes.mientras),
+                HACER = new NonTerminal(Constantes.hacer),
+                REPETIR = new NonTerminal(Constantes.repetir),
+                PARA = new NonTerminal(Constantes.para),
+                LOOP = new NonTerminal(Constantes.loop),
+                CASO = new NonTerminal(Constantes.caso),
+                DEFECTO = new NonTerminal(Constantes.defecto),
+                LISTACASOS = new NonTerminal(Constantes.lcasos),
+                ELEGIR = new NonTerminal(Constantes.elegir),
+                CUERPOELEGIR = new NonTerminal(Constantes.cuerpoElegir),
+                LLAMADA = new NonTerminal(Constantes.llamada),
+                INSTANCIA = new NonTerminal(Constantes.instancia),
+                LEXPRESIONES = new NonTerminal(Constantes.lexpresiones),
+                CLASE = new NonTerminal(Constantes.clase);
 
-
+            NonTerminal LISTACLASES = new NonTerminal(Constantes.l_clases),
+               CUERPO_CLASE = new NonTerminal(Constantes.CUERPO_CLASE),
+               L_ELEMENTOS = new NonTerminal(Constantes.listaElementos),
+               ELEMENTO = new NonTerminal(Constantes.elementoClase);
 
             NonTerminal
                 EXPRESION = new NonTerminal(Constantes.expresion),
@@ -67,8 +86,16 @@ namespace Proyecto2_201122872.AnalizadorPython
                 TERMINO = new NonTerminal(Constantes.termino),
                 CHAR = new NonTerminal(Constantes.tipoChar),
                 POSICION = new NonTerminal(Constantes.posicion),
-                POSICIONES = new NonTerminal(Constantes.lposiciones);
-
+                POSICIONES = new NonTerminal(Constantes.lposiciones),
+                OUT_STRING = new NonTerminal(Constantes.out_string),
+                PARSEINT = new NonTerminal(Constantes.parseint),
+                PARSEDOUBLE = new NonTerminal(Constantes.parsedouble),
+                INTTOSTR = new NonTerminal(Constantes.inttostr),
+                DOUBLETOSTR = new NonTerminal(Constantes.doubletostr),
+                DOUBLETOINT = new NonTerminal(Constantes.doubletoint),
+                SUPER = new NonTerminal(Constantes.super),
+                SELF = new NonTerminal(Constantes.self),
+                DECLAARREGLO = new NonTerminal(Constantes.declaArreglo);
 
 
             #endregion
@@ -111,9 +138,27 @@ namespace Proyecto2_201122872.AnalizadorPython
 
             CONSTRUCTOR.Rule = ToTerm("__constructor") + "[" + PARAMETROS + "]" + ":" + Eos + CUERPO;
 
+           
+
+            LISTACLASES.Rule = MakePlusRule(LISTACLASES, CLASE);
+            CLASE.Rule = ToTerm(Constantes.clase) + identificador + "[" + identificador + "]"+":"+Eos + CUERPO_CLASE
+              | ToTerm(Constantes.clase) + identificador + "[" + "]"+":"+Eos + CUERPO_CLASE;
+
+
+            CUERPO_CLASE.Rule = Indent + L_ELEMENTOS + Dedent;
+
+
+            L_ELEMENTOS.Rule = MakeStarRule(L_ELEMENTOS, ELEMENTO);
+
+            ELEMENTO.Rule = FUNCION
+                | ATRIBUTO
+                | CONSTRUCTOR
+                | FUNCION_SOBRE;
+
+
 
             #endregion
-
+             
 
 
 
@@ -126,11 +171,20 @@ namespace Proyecto2_201122872.AnalizadorPython
 
             INSTRUCCION.Rule = DECLRACION + Eos
                 | ASIGNACION + Eos
-                | SI;
+                | SI
+                | SALIR + Eos
+                | CONTINUAR + Eos
+                | MIENTRAS
+                | PARA
+                | LOOP
+                | HACER
+                | REPETIR
+                | ELEGIR;
 
+            DECLAARREGLO.Rule = identificador + POSICIONES;
 
             DECLRACION.Rule = TIPO + L_IDS
-                | TIPO + L_IDS + POSICIONES;
+                | TIPO + DECLAARREGLO;
 
             ASIGNACION.Rule = EXPRESION + ToTerm("=") + ">" + EXPRESION;
 
@@ -149,6 +203,34 @@ namespace Proyecto2_201122872.AnalizadorPython
 
             L_EXTRAS.Rule = MakeStarRule(L_EXTRAS, EXTRA);
 
+
+            SALIR.Rule = ToTerm(Constantes.salir);
+            CONTINUAR.Rule = ToTerm(Constantes.continuar);
+
+            MIENTRAS.Rule = ToTerm(Constantes.mientras) + EXPRESION+":" + Eos + CUERPO;
+
+            HACER.Rule = ToTerm(Constantes.hacer) + ":" + Eos + CUERPO + Constantes.mientras + EXPRESION+Eos;
+
+            REPETIR.Rule = ToTerm(Constantes.repetir) + ":" + Eos + CUERPO + Constantes.hasta + EXPRESION+Eos;
+
+            PARA.Rule = ToTerm(Constantes.para) + "[" + ASIGNACION + ":" + EXPRESION + ":" + EXPRESION + "]" + ":" + Eos + CUERPO;
+
+            LOOP.Rule = ToTerm(Constantes.loop) + ":" + Eos + CUERPO;
+
+            CASO.Rule = EXPRESION + ToTerm(":") + Eos + CUERPO;
+            
+            DEFECTO.Rule = ToTerm(Constantes.defecto) + ":" + Eos + CUERPO;
+
+            LISTACASOS.Rule = MakeStarRule(LISTACASOS, CASO);
+
+            CUERPOELEGIR.Rule = Indent + LISTACASOS + DEFECTO + Dedent
+                | Indent + LISTACASOS + Dedent
+                | Indent + DEFECTO + Dedent;
+
+            ELEGIR.Rule = ToTerm(Constantes.elegir) + EXPRESION + ":" + Eos + CUERPOELEGIR;
+
+
+
             #endregion
 
 
@@ -161,9 +243,29 @@ namespace Proyecto2_201122872.AnalizadorPython
 
             #region expresion
 
+            LEXPRESIONES.Rule = MakeStarRule(LEXPRESIONES, ToTerm(","), EXPRESION);
+
+            LLAMADA.Rule = identificador + ToTerm("[") + LEXPRESIONES + "]"
+                | identificador + ToTerm("[") + "]";
+
+            INSTANCIA.Rule = ToTerm(Constantes.nuevoPython) + identificador + ToTerm("[") + LEXPRESIONES + "]"
+                | ToTerm(Constantes.nuevoPython) + identificador + ToTerm("[") + "]";
+
+
+
+            OUT_STRING.Rule = ToTerm(Constantes.out_string) + "[" + EXPRESION + "]";
+            PARSEINT.Rule = ToTerm(Constantes.parseint) + "[" + EXPRESION + "]";
+            PARSEDOUBLE.Rule = ToTerm(Constantes.parsedouble) + "[" + EXPRESION + "]";
+            INTTOSTR.Rule = ToTerm(Constantes.inttostr) + "[" + EXPRESION + "]";
+            DOUBLETOSTR.Rule = ToTerm(Constantes.doubletostr) + "[" + EXPRESION + "]";
+            DOUBLETOINT.Rule = ToTerm(Constantes.doubletoint) + "[" + EXPRESION + "]";
+
+
             POSICION.Rule = ToTerm("[") + EXPRESION + "]";
 
             POSICIONES.Rule = MakePlusRule(POSICIONES, POSICION);
+            SUPER.Rule= ToTerm(Constantes.super);
+            SELF.Rule= ToTerm(Constantes.self);
 
             ID.Rule = identificador;
             ENTERO.Rule = numero;
@@ -178,10 +280,22 @@ namespace Proyecto2_201122872.AnalizadorPython
                 | DECIMAL
                 | CADENA
                 | CHAR
-                | BOOL;
+                | BOOL
+                | OUT_STRING
+                | PARSEINT
+                | PARSEDOUBLE
+                | INTTOSTR
+                | DOUBLETOSTR
+                | DOUBLETOINT
+                | INSTANCIA
+                | LLAMADA
+                | SUPER
+                | SELF
+                | DECLAARREGLO;
 
-            EXPRESION.Rule = TERMINO;
-            
+
+
+            EXPRESION.Rule = MakePlusRule(EXPRESION, ToTerm("."), TERMINO);
 
 
 
@@ -191,7 +305,7 @@ namespace Proyecto2_201122872.AnalizadorPython
 
 
 
-            this.Root = FUNCION;
+            this.Root = LISTACLASES;
 
         }
 
