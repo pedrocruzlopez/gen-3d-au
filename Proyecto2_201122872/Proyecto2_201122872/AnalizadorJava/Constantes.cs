@@ -49,6 +49,8 @@ namespace Proyecto2_201122872.AnalizadorJava
         public const string nuevo = "new";
         public const string si = "si";
         public const string sino = "sino";
+        public const string sino_python = "si_no";
+        public const string sino_si_python = "si_no_si";
         public const string mientras = "mientras";
         public const string hacer = "hacer";
         public const string x = "x";

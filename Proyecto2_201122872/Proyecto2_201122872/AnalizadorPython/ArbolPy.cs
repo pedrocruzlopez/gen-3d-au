@@ -21,7 +21,7 @@ namespace Proyecto2_201122872.AnalizadorPython
         public ArbolPy()
         {
             accion = new AccionPy();
-            lenguaje = new LanguageData(new AnalizadorPy());//clase de la gramatica
+            lenguaje = new LanguageData(new GramaticaTree());//clase de la gramatica
             p = new Parser(lenguaje);
             path = @"C:\";
         }
