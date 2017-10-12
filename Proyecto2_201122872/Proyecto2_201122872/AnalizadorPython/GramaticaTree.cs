@@ -388,10 +388,29 @@ namespace Proyecto2_201122872.AnalizadorPython
 
             #endregion
 
-            NonTerminal N = new NonTerminal("FD");
-            N.Rule = EXPRESION + Eos;
+            
 
             this.Root = LISTACLASES;
+
+
+            MarkPunctuation(",", "(", ")", ";", "=", "@", "{", "}", "clase", "[", "]", Constantes.nuevoPython, ".", "si", "sino",
+               "mientras", "hacer", "para", "x", "repetir", "return", "imprimir", Constantes.masmas, Constantes.menosmenos,
+               Constantes.menor, Constantes.mayor, Constantes.menorIgual, Constantes.mayorIgual, Constantes.igualIgual, Constantes.distintoA,
+               Constantes.orPython, Constantes.andPython, Constantes.xorPython, Constantes.notJavaPython, "__consturctor",Constantes.metodo, Constantes.funcion,
+               
+                Constantes.out_string,
+            Constantes.parseint,
+            Constantes.parsedouble,
+            Constantes.inttostr,
+            Constantes.doubletostr,
+            Constantes.doubletoint, Constantes.super, Constantes.self, "/**Sobreescribir**/",":", Constantes.sino_python, Constantes.sino_si_python
+               
+               );
+
+
+
+            MarkTransient(L_ELEMENTOS, ELEMENTO, POSICION, TIPOUNARIO, INSTRUCCION, INSTRUCCIONES,
+                ARITMETICA, LOGICA, RELACIONAL, UNARIO, INSTRUCCIONES, TERMINO, CUERPO_CLASE);
 
         }
 
