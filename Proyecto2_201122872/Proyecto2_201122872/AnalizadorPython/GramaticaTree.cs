@@ -115,6 +115,11 @@ namespace Proyecto2_201122872.AnalizadorPython
             NonTerminal AND = new NonTerminal(Constantes.andPython);
             NonTerminal NOT = new NonTerminal(Constantes.notJavaPython);
             NonTerminal OR = new NonTerminal(Constantes.orPython);
+            NonTerminal UNARIO = new NonTerminal(Constantes.unario),
+                MAS_MAS = new NonTerminal(Constantes.masmas),
+                MENOS_MENOS = new NonTerminal(Constantes.menosmenos),
+                TIPOUNARIO = new NonTerminal("TIPOU"),
+                NEGATIVO = new NonTerminal(Constantes.negativo);
             
                 
 
@@ -318,22 +323,36 @@ namespace Proyecto2_201122872.AnalizadorPython
 
 
 
+            SUMA.Rule = TERMINO + TERMINO + ToTerm(Constantes.suma);
+            RESTA.Rule = TERMINO + TERMINO + ToTerm(Constantes.resta);
+            MULTIPLICACION.Rule = TERMINO + TERMINO + ToTerm(Constantes.multiplicacion);
+            DIVISION.Rule = TERMINO + TERMINO + ToTerm(Constantes.division);
+            POTENCIA.Rule = TERMINO + TERMINO + ToTerm(Constantes.potencia);
+            MENOR.Rule = TERMINO + TERMINO + ToTerm(Constantes.menor);
+            MENORIGUAL.Rule = TERMINO + TERMINO + ToTerm(Constantes.menorIgual);
+            MAYOR.Rule = TERMINO + TERMINO + ToTerm(Constantes.mayor);
+            MAYORIGUAL.Rule = TERMINO + TERMINO + ToTerm(Constantes.mayorIgual);
+            IGUALIGUAL.Rule = TERMINO + TERMINO + ToTerm(Constantes.igualIgual);
+            DISTINTOA.Rule = TERMINO + TERMINO + ToTerm(Constantes.distintoA);
+            XOR.Rule = TERMINO + TERMINO + ToTerm(Constantes.xorJava);
+            AND.Rule = TERMINO + TERMINO + ToTerm(Constantes.andJava);
+            NOT.Rule = TERMINO + ToTerm(Constantes.notJavaPython);
+            OR.Rule = TERMINO + TERMINO + ToTerm(Constantes.orJava);
 
-            SUMA.Rule = EXPRESION + EXPRESION + ToTerm(Constantes.suma);
-            RESTA.Rule = EXPRESION + EXPRESION + ToTerm(Constantes.resta);
-            MULTIPLICACION.Rule = EXPRESION + EXPRESION + ToTerm(Constantes.multiplicacion);
-            DIVISION.Rule = EXPRESION + EXPRESION + ToTerm(Constantes.division);
-            POTENCIA.Rule = EXPRESION + EXPRESION + ToTerm(Constantes.potencia);
-            MENOR.Rule = EXPRESION + EXPRESION + ToTerm(Constantes.menor);
-            MENORIGUAL.Rule = EXPRESION + ToTerm(Constantes.menorIgual) + EXPRESION;
-            MAYOR.Rule = EXPRESION + ToTerm(Constantes.mayor) + EXPRESION;
-            MAYORIGUAL.Rule = EXPRESION + ToTerm(Constantes.mayorIgual) + EXPRESION;
-            IGUALIGUAL.Rule = EXPRESION + ToTerm(Constantes.igualIgual) + EXPRESION;
-            DISTINTOA.Rule = EXPRESION + ToTerm(Constantes.distintoA) + EXPRESION;
-            XOR.Rule = EXPRESION + ToTerm(Constantes.xorJava) + EXPRESION;
-            AND.Rule = EXPRESION + ToTerm(Constantes.andJava) + EXPRESION;
-            NOT.Rule = ToTerm(Constantes.notJavaPython) + EXPRESION;
-            OR.Rule = EXPRESION + ToTerm(Constantes.orJava) + EXPRESION;
+            TIPOUNARIO.Rule = CHAR
+                | DECIMAL
+                | ENTERO;
+
+            UNARIO.Rule = MAS_MAS
+               | MENOS_MENOS;
+
+            MAS_MAS.Rule = TIPOUNARIO + ToTerm(Constantes.masmas);
+
+            MENOS_MENOS.Rule = TIPOUNARIO + ToTerm(Constantes.menosmenos);
+
+
+            NEGATIVO.Rule = ToTerm("-") + TERMINO;
+
 
 
             TERMINO.Rule = ID
@@ -352,7 +371,12 @@ namespace Proyecto2_201122872.AnalizadorPython
                 | LLAMADA
                 | SUPER
                 | SELF
-                | DECLAARREGLO;
+                | DECLAARREGLO
+                | ToTerm("(") + ARITMETICA + ")"
+                | ToTerm("[") + RELACIONAL + "]"
+                | ToTerm("{") + LOGICA + "}"
+                | UNARIO
+                | NEGATIVO;
 
 
 
@@ -367,7 +391,7 @@ namespace Proyecto2_201122872.AnalizadorPython
             NonTerminal N = new NonTerminal("FD");
             N.Rule = EXPRESION + Eos;
 
-            this.Root = N;
+            this.Root = LISTACLASES;
 
         }
 

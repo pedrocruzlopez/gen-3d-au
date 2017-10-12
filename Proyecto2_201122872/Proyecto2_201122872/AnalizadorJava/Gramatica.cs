@@ -371,9 +371,9 @@ namespace Proyecto2_201122872.AnalizadorJava
 
             NEGATIVO.Rule = ToTerm("-") + TERMINO;
 
-            TERMINO.Rule = ARITMETICA
-                | RELACIONAL
-                | LOGICA
+            TERMINO.Rule = ARITMETICA//
+                | RELACIONAL//
+                | LOGICA//
                 | DECIMAL//
                 | ENTERO //
                 | ID//
@@ -383,9 +383,9 @@ namespace Proyecto2_201122872.AnalizadorJava
                 | LLAMADA//
                 | POSVECTOR //
                 | UNARIO
-                | ToTerm("(") + TERMINO + ")"
+                | ToTerm("(") + TERMINO + ")"//no es necesario en python
                 | NEGATIVO
-                | "{" + LFILAS + "}"
+                | "{" + LFILAS + "}"//no existe en python
                 | INSTANCIA;//
 
             LLAMADA.Rule = identificador + ToTerm("(") + LEXPRESIONES + ")"
