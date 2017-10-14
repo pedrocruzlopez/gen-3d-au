@@ -27,6 +27,33 @@ namespace Proyecto2_201122872.AnalizadorPython
         }
 
         #region 1. ANALIZAR ARBOL
+
+        public void parseConvertirUML(String str)
+        {
+            ParseTree s_tree = p.Parse(str); //parsear la entrada
+            if (s_tree.HasErrors())//SE VERIFICA SI LA ENTRADA POSEE ERRORES
+                foreach (var item in s_tree.ParserMessages)
+                {   //SI EXISTEN ERRORES LOS IMPRIME van errores <--------- 
+                    Console.WriteLine("en Fil: {0}, Col: {1}, Pos: {2}, Tipo: {3}", item.Location.Line + 1, item.Location.Column + 1, item.Location.Position, item.Message);
+                }
+
+
+            if (s_tree.Root != null)
+            {
+                Console.WriteLine("========ACCIONES AL EVVALUAR EL ARBOL=============");
+                accion.generarUML(s_tree.Root);//EVALUO EL ARBOL
+                Console.WriteLine("==================================================");
+                dispTree(s_tree.Root, 0);//IMPRIMO EL ARBOL
+                graficarArbol(s_tree.Root);//GRAFICO EL ARBOL
+            }
+            else
+                MessageBox.Show(null, "Entrada posee errores", "Error", 0);
+
+        }
+
+
+
+
         public void parse(String str)
         {
             ParseTree s_tree = p.Parse(str); //parsear la entrada

@@ -303,6 +303,12 @@ namespace Proyecto2_201122872.AnalizadorJava
                             {
                                 claseModificar.addFuncion(constructor);
                             }
+                            else
+                            {
+                                ErrorA nuevo = new ErrorA("Semantico", "No se pudo generar el constructor", item.Token);
+                                Form1.errores.addError(nuevo);
+
+                            }
 
                             break;
                         }

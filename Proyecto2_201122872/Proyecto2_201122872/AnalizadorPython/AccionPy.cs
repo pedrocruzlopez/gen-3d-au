@@ -28,6 +28,22 @@ namespace Proyecto2_201122872.AnalizadorPython
             foreach (ParseTreeNode actual in this.clasesUML)
             {
                 claseActual = generarClase(actual);
+                if (claseActual != null)
+                {
+                    claseActual.setLenguaje("python");
+                    if (!Form1.uml.insertarClase(claseActual))
+                    {
+                        ErrorA nuevo = new ErrorA(Constantes.errorSemantico, "La clase " + claseActual.getNombre() + ", no se pudo crear, ya existe", actual.FindToken());
+                        Form1.errores.addError(nuevo);
+                    }
+                }
+                else
+                {
+                    ErrorA nuevo = new ErrorA(Constantes.errorSemantico, "Ocurrio un error, no se pudo generar la clase ", actual.FindToken());
+                    Form1.errores.addError(nuevo);
+
+                }
+                
             }
 
             
@@ -44,16 +60,25 @@ namespace Proyecto2_201122872.AnalizadorPython
             Clase nuevaClase;
             if (clase.ChildNodes.Count == 2)
             {//no posee herencia
+                nombre = clase.ChildNodes[0].Token.Value.ToString();
+                nuevaClase = new Clase(nombre);
+                nuevaClase = agregarInstruccionesClase(nuevaClase, clase.ChildNodes[1]);
+
+                return nuevaClase;
 
             }
-            else if(clase.ChildNodes.Count==3)
-            {//posee herencia
-               
- 
+            else if (clase.ChildNodes.Count == 3)
+            {//si posee herencia
+                nombre = clase.ChildNodes[0].Token.Value.ToString();
+                herencia = clase.ChildNodes[1].Token.Value.ToString();
+                nuevaClase = new Clase(nombre, herencia);
+                nuevaClase = agregarInstruccionesClase(nuevaClase, clase.ChildNodes[2]);
+                return nuevaClase;
+
             }
-            
 
             return null;
+            
         }
 
 
@@ -200,7 +225,7 @@ namespace Proyecto2_201122872.AnalizadorPython
             Funcion nueva = new Funcion(nombreClase, Constantes.constructor, Constantes.tipoVoid, parametros, Constantes.publico);
             if (nombre.ToUpper().Equals(nombreClase.ToUpper()))
             {
-                 nueva = new Funcion(nombreClase, nombre, Constantes.tipoVoid, parametros, Constantes.publico);
+                nueva = new Funcion(nombreClase, nombre, Constantes.tipoVoid, parametros, Constantes.publico);
                 nueva.setConstructor(true);
                 return nueva;
             }
@@ -220,7 +245,7 @@ namespace Proyecto2_201122872.AnalizadorPython
 
 
 
-        private Clase agregarInstruccionClase(Clase claseModificar, ParseTreeNode instrucciones)
+        private Clase agregarInstruccionesClase(Clase claseModificar, ParseTreeNode instrucciones)
         {
             foreach (ParseTreeNode item in instrucciones.ChildNodes)
             {
@@ -234,25 +259,45 @@ namespace Proyecto2_201122872.AnalizadorPython
 
                     case Constantes.funcion:
                         {
+                            Funcion nueva = getFuncion(item, claseModificar.getNombre());
+                            claseModificar.addFuncion(nueva);
 
                             break;
                         }
 
                     case Constantes.atributo:
                         {
+                            List<Atributo> atributos = generarAtributos(item);
+                            foreach (Atributo atr in atributos)
+                            {
+                                claseModificar.addAtributo(atr);
+                            }
                             
                             break;
                         }
 
                     case Constantes.constructor:
                         {
+                            Funcion constructor = getconstructor(item, claseModificar.getNombre());
+                            if (constructor != null)
+                            {
+                                claseModificar.addFuncion(constructor);
+                            }
+                            else
+                            {
+                                ErrorA nuevo = new ErrorA("Semantico", "No se pudo generar el constructor", item.Token);
+                                Form1.errores.addError(nuevo);
+
+                            }
 
                             break;
                         }
 
                     case Constantes.funSobre:
                         {
-
+                            Funcion nueva = getFuncion(item.ChildNodes[0], claseModificar.getNombre());
+                            nueva.setSobreescrita(true);
+                            claseModificar.addFuncion(nueva);
                             break;
                         }
 

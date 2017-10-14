@@ -142,7 +142,10 @@ namespace Proyecto2_201122872
 
         private void toolStripButton4_Click(object sender, EventArgs e)
         {
-
+            String contenido = getCadenaArchivo(@"C:\Users\Alina\Documents\Repositorios\CompiProyecto2\ArchivosEntrada\ejemplo2.txt");
+            analizador2.parseConvertirUML(contenido);
+            uml.generarGrafo();
+            mostraImagen();
         }
 
         private void modoGeneracion3DToolStripMenuItem_Click(object sender, EventArgs e)
