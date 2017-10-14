@@ -83,6 +83,12 @@
     <Compile Include="Formularios\crearClase.Designer.cs">
       <DependentUpon>crearClase.cs</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Debugger.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\Debugger.Designer.cs">
+      <DependentUpon>Debugger.cs</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Reportes.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,6 +110,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\crearClase.resx">
       <DependentUpon>crearClase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\Debugger.resx">
+      <DependentUpon>Debugger.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Reportes.resx">
       <DependentUpon>Reportes.cs</DependentUpon>

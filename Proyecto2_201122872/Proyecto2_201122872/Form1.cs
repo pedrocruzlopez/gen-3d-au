@@ -144,5 +144,11 @@ namespace Proyecto2_201122872
         {
 
         }
+
+        private void modoGeneracion3DToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Debugger debug = new Debugger();
+            debug.Show();
+        }
     }
 }

@@ -12,6 +12,7 @@ namespace Proyecto2_201122872.UML
         private string herencia;
         public listaAtributos atributos;
         public listaFunciones funciones;
+        public string lenguaje;
 
 
         public Boolean esNula()
@@ -20,6 +21,11 @@ namespace Proyecto2_201122872.UML
 
         }
 
+
+        public void setLenguaje(string l)
+        {
+            this.lenguaje = l;
+        }
 
 
         private void iniciarValores()

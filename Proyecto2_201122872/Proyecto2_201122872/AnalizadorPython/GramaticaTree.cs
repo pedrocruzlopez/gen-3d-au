@@ -148,7 +148,10 @@ namespace Proyecto2_201122872.AnalizadorPython
 
             #region instrucciones clase
 
-            ATRIBUTO.Rule = VISIBILIDAD + TIPO + L_IDS;
+            ATRIBUTO.Rule = VISIBILIDAD + TIPO + L_IDS
+                | VISIBILIDAD + TIPO + DECLAARREGLO
+                | TIPO + L_IDS
+                | TIPO + DECLAARREGLO;
 
             PARAMETRO.Rule = TIPO + identificador;
 
@@ -393,10 +396,10 @@ namespace Proyecto2_201122872.AnalizadorPython
             this.Root = LISTACLASES;
 
 
-            MarkPunctuation(",", "(", ")", ";", "=", "@", "{", "}", "clase", "[", "]", Constantes.nuevoPython, ".", "si", "sino",
+            MarkPunctuation(Constantes.out_string, Constantes.orPython, Constantes.andPython, Constantes.xorPython, Constantes.notJavaPython,"+","-","*","/","^", "(", ")", ";", "=", "@", "{", "}", "clase", "[", "]", Constantes.nuevoPython, ".", "si", "sino",
                "mientras", "hacer", "para", "x", "repetir", "return", "imprimir", Constantes.masmas, Constantes.menosmenos,
                Constantes.menor, Constantes.mayor, Constantes.menorIgual, Constantes.mayorIgual, Constantes.igualIgual, Constantes.distintoA,
-               Constantes.orPython, Constantes.andPython, Constantes.xorPython, Constantes.notJavaPython, "__consturctor",Constantes.metodo, Constantes.funcion,
+               Constantes.orPython, Constantes.andPython, Constantes.xorPython, Constantes.notJavaPython, "__consturctor",
                
                 Constantes.out_string,
             Constantes.parseint,

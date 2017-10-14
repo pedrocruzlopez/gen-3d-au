@@ -1,4 +1,4 @@
- /*clase Deposito {
+ clase Deposito {
 
  //Campos de la clase
 
@@ -28,7 +28,6 @@ publico Cadena getIdDeposito () {  }
 publico decimal valorCapacidad () { //Método tipo función
 
 }
-} //Cierre de la clase*/
+} //Cierre de la clase
 
 
-hola(5,6,7,6).hola[9].hola.hola(9*7,90)

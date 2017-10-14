@@ -34,6 +34,7 @@ namespace Proyecto2_201122872.AnalizadorJava
                 claseActual = generarClase(actual);
                 if (claseActual != null)
                 {
+                    claseActual.setLenguaje("java");
                     if (!Form1.uml.insertarClase(claseActual))
                     {
                         ErrorA nuevo = new ErrorA(Constantes.errorSemantico, "La clase " + claseActual.getNombre() + ", no se pudo crear, ya existe", actual.FindToken());
@@ -127,6 +128,7 @@ namespace Proyecto2_201122872.AnalizadorJava
 
             }
             else 
+
             {//no posee visibilidad;
                 visibilidad = Constantes.publico;
                 if (nodoFuncion.ChildNodes[0].Term.Name.Equals(Constantes.tipo))
