@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Proyecto2_201122872.Generacion3D.TablaSimbolos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -90,8 +91,6 @@ namespace Proyecto2_201122872.UML
 
 
 
-
-
         /*------- Traduccion a codigo ---------------*/
 
         public string getCodigoJava()
@@ -103,7 +102,6 @@ namespace Proyecto2_201122872.UML
             return cad;
 
         }
-
 
 
         public string getCodigoPython()
@@ -123,6 +121,35 @@ namespace Proyecto2_201122872.UML
         {
            
             return "[shape=record,label=\"{ "+ nombre+"|{"+atributos.getCadenaGraphivz()+"}|{"+funciones.getCadenaGrapvhiz()+"}}\"];";
+
+        }
+
+
+
+
+        /*-------------------- Pasar Elementos a tabla de simbolos ----------------------*/
+
+        public List<Simbolo> generarSimbolosClase()
+        {
+            int apuntador = 0;
+            List<Simbolo> listado = new List<Simbolo>();
+            //insertamos el this
+
+            //generamos atributo
+
+            Simbolo nuevo;
+            foreach (Atributo item in atributos.atributos)
+            {
+                nuevo = new Simbolo(item.visibilidad, item.nombre, item.tipo, this.nombre, Constantes3D.variableDeClase, apuntador, item.getSize());
+                listado.Add(nuevo);
+                apuntador++;
+            }
+
+            
+
+
+
+            return listado;
 
         }
 

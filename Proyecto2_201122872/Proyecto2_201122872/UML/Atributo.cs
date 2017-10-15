@@ -8,9 +8,16 @@ namespace Proyecto2_201122872.UML
 {
    public  class Atributo
     {
-        private string visibilidad;
-        private string nombre;
-        private string tipo;
+        public string visibilidad;
+        public string nombre;
+        public string tipo;
+        
+
+
+
+
+
+
 
 
         public Atributo(string visibiliad, string nombre, string tipo)
@@ -19,6 +26,20 @@ namespace Proyecto2_201122872.UML
             this.nombre = nombre;
             this.tipo = tipo;
         }
+
+
+
+        public int getSize()
+        {
+            switch (tipo)
+            {
+
+            }
+
+            return 1;
+        }
+
+
 
         public string getNombre()
         {
@@ -58,5 +79,11 @@ namespace Proyecto2_201122872.UML
         {
             return this.visibilidad + " " + this.tipo + " " + this.nombre + "\n";
         }
+
+
+       
+
+
+
     }
 }

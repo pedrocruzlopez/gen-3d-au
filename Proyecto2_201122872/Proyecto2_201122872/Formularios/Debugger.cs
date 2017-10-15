@@ -53,6 +53,11 @@ namespace Proyecto2_201122872.Formularios
 
         #endregion
 
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+
+        }
+
 
     }
 }

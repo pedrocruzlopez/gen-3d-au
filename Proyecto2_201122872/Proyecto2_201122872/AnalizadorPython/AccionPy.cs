@@ -9,6 +9,7 @@ using Irony.Parsing;
 using Proyecto2_201122872.AnalizadorJava;
 using Proyecto2_201122872.UML;
 using Proyecto2_201122872.Errores;
+using Proyecto2_201122872.Instrucciones;
 
 namespace Proyecto2_201122872.AnalizadorPython
 {
@@ -160,6 +161,61 @@ namespace Proyecto2_201122872.AnalizadorPython
             return parametros;
         }
 
+        private Cuerpo getCuerpo(ParseTreeNode nodoCuerpo)
+        {
+            Cuerpo contenido = new Cuerpo();
+
+            Instruccion actual;
+            foreach (ParseTreeNode item in nodoCuerpo.ChildNodes)
+            {
+                actual = getInstruccion(item);
+                if (actual != null)
+                    contenido.addInstruccion(actual);
+                
+            }
+
+            return contenido;
+        }
+
+
+        private Instruccion getInstruccion(ParseTreeNode instr)
+        {
+
+            switch (instr.Term.Name)
+            {
+                case Constantes.expresion: //para las llamadas
+                    {
+                        int noHijos = instr.ChildNodes.Count;
+                        ExpresionLlamada nuevaLlamada;
+                        if(instr.ChildNodes[noHijos-1].Term.Name.Equals(Constantes.llamada,StringComparison.OrdinalIgnoreCase){
+                            nuevaLlamada= new ExpresionLlamada(instr);
+                            return nuevaLlamada;
+                        }else{
+                            ErrorA err = new ErrorA(Constantes.errorSemantico,"En invalido colocar este tipo de expresion, debe ser una llamada",instr.Token);
+                            Form1.errores.addError(err);
+                            return null;
+                        }
+                        
+                    }
+
+                case Constantes.declaracion:{
+
+                    Declaracion nuevo = new Declaracion(instr);
+                    return nuevo;
+                }
+
+
+
+
+
+            }
+
+
+            return null;
+        }
+
+
+
         private Funcion getFuncion(ParseTreeNode nodoFuncion, string nombreClase)
         { //5465
             /*FUNCION.Rule = VISIBILIDAD + ToTerm(Constantes.metodo) + identificador + ToTerm("[") + PARAMETROS + "]" + ":" + Eos + CUERPO
@@ -171,7 +227,7 @@ namespace Proyecto2_201122872.AnalizadorPython
             Funcion nueva;
             string visibilidad, tipo, nombre;
             int noHijos = nodoFuncion.ChildNodes.Count;
-
+            Cuerpo instr;
             ListaParametro parametros;
             if (noHijos == 4)
             {// es un metodo sin visibilidad
@@ -179,7 +235,9 @@ namespace Proyecto2_201122872.AnalizadorPython
                 tipo = Constantes.tipoVoid;
                 nombre = nodoFuncion.ChildNodes[1].Token.ValueString;
                 parametros = getParametros(nodoFuncion.ChildNodes[2]);
+                instr = getCuerpo(nodoFuncion.ChildNodes[3]);
                 nueva = new Funcion(nombreClase, nombre, tipo, parametros, visibilidad);
+                nueva.setCuerpo(instr);
                 return nueva;
             }
             else if (noHijos == 6)
@@ -189,7 +247,9 @@ namespace Proyecto2_201122872.AnalizadorPython
                 tipo = nodoFuncion.ChildNodes[2].ChildNodes[0].Token.ValueString;
                 nombre = nodoFuncion.ChildNodes[3].Token.ValueString;
                 parametros = getParametros(nodoFuncion.ChildNodes[4]);
+                instr = getCuerpo(nodoFuncion.ChildNodes[5]);
                 nueva = new Funcion(nombreClase, nombre, tipo, parametros, visibilidad);
+                nueva.setCuerpo(instr);
                 return nueva;
             }
             else if (noHijos == 5 && nodoFuncion.ChildNodes[0].Term.Name.Equals(Constantes.visibilidad))
@@ -198,7 +258,9 @@ namespace Proyecto2_201122872.AnalizadorPython
                 visibilidad = nodoFuncion.ChildNodes[0].ChildNodes[0].Token.ValueString;
                 nombre = nodoFuncion.ChildNodes[2].Token.ValueString;
                 parametros = getParametros(nodoFuncion.ChildNodes[3]);
+                instr = getCuerpo(nodoFuncion.ChildNodes[4]);
                 nueva = new Funcion(nombreClase, nombre, Constantes.tipoVoid, parametros, visibilidad);
+                nueva.setCuerpo(instr);
                 return nueva;
 
             }
@@ -208,7 +270,9 @@ namespace Proyecto2_201122872.AnalizadorPython
                 tipo = nodoFuncion.ChildNodes[1].ChildNodes[0].Token.ValueString;
                 parametros = getParametros(nodoFuncion.ChildNodes[3]);
                 nombre = nodoFuncion.ChildNodes[2].Token.ValueString;
+                instr = getCuerpo(nodoFuncion.ChildNodes[4]);
                 nueva = new Funcion(nombreClase, nombre, tipo, parametros, Constantes.publico);
+                nueva.setCuerpo(instr);
                 return nueva;
                 
             }
@@ -220,13 +284,16 @@ namespace Proyecto2_201122872.AnalizadorPython
         private Funcion getconstructor(ParseTreeNode nodoConstructor, string nombreClase)
         {
             //CONSTRUCTOR.Rule = ToTerm("__constructor") + "[" + PARAMETROS + "]" + ":" + Eos + CUERPO;
+            Cuerpo instr;
             ListaParametro parametros = getParametros(nodoConstructor.ChildNodes[0]);
            string nombre = nodoConstructor.ChildNodes[0].Token.Value.ToString();
             Funcion nueva = new Funcion(nombreClase, Constantes.constructor, Constantes.tipoVoid, parametros, Constantes.publico);
-            if (nombre.ToUpper().Equals(nombreClase.ToUpper()))
+            if (nombre.Equals(nombreClase,StringComparison.OrdinalIgnoreCase))
             {
                 nueva = new Funcion(nombreClase, nombre, Constantes.tipoVoid, parametros, Constantes.publico);
                 nueva.setConstructor(true);
+                instr = getCuerpo(nodoConstructor.ChildNodes[1]);
+                nueva.setCuerpo(instr);
                 return nueva;
             }
             else

@@ -38,6 +38,9 @@ namespace Proyecto2_201122872.AnalizadorJava
                     Console.WriteLine("en Fil: {0}, Col: {1}, Pos: {2}, Tipo: {3}", item.Location.Line + 1, item.Location.Column + 1, item.Location.Position, item.Message);
                 }
 
+            //JE JE PA QUE QUIERES SABER ESO
+            //HACIENDO COMPI O QUE HACE
+            //HANNS GUZMAN
 
             if (s_tree.Root != null)
             {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Proyecto2_201122872.Instrucciones;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ namespace Proyecto2_201122872.UML
         public Boolean esSobreescrita=false;
         public Boolean esPrincipal = false;
         public Boolean esConstructor = false;
+        public Cuerpo instrucciones;
 
         public void setSobreescrita(bool val)
         {
@@ -42,8 +44,14 @@ namespace Proyecto2_201122872.UML
             this.parametros = parametros;
             this.visibilidad = visibilidad;
             this.firma = generarFirma();
+            this.instrucciones = new Cuerpo();
         }
 
+
+
+        public void setCuerpo (Cuerpo fun){
+            this.instrucciones= fun;
+        }
 
 
         private string generarFirma()

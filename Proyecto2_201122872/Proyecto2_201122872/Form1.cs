@@ -87,14 +87,9 @@ namespace Proyecto2_201122872
 
         public static void mostraImagen()
         {
+            
             Image newImage = (Image)Image.FromFile(@"C:\\diagrama.jpg");
-           
             panel.BackgroundImage = newImage;
-      
-            
-            
-
-
         }
 
 
