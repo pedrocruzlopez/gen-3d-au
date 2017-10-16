@@ -95,6 +95,7 @@
     <Compile Include="Formularios\Reportes.Designer.cs">
       <DependentUpon>Reportes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Generacion3D\GeneracionCodigo.cs" />
     <Compile Include="Generacion3D\TablaSimbolos\Constantes3D.cs" />
     <Compile Include="Generacion3D\TablaSimbolos\Simbolo.cs" />
     <Compile Include="Generacion3D\TablaSimbolos\tablaDeSimbolos.cs" />

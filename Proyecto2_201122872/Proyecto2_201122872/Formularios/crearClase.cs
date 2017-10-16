@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Proyecto2_201122872.AnalizadorJava;
 
 
 namespace Proyecto2_201122872.Formularios
@@ -86,13 +86,31 @@ namespace Proyecto2_201122872.Formularios
 
             }
         }
+
+        private string getTipoAtributo(String tipo)
+        {
+            if (tipo.Equals(Constantes.tipoBool, StringComparison.OrdinalIgnoreCase) ||
+                tipo.Equals(Constantes.tipoCadena, StringComparison.OrdinalIgnoreCase) ||
+                tipo.Equals(Constantes.tipoChar, StringComparison.OrdinalIgnoreCase) ||
+                tipo.Equals(Constantes.tipoDecimal, StringComparison.OrdinalIgnoreCase) ||
+                tipo.Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase))
+            {
+                return Constantes.VARNORMAL;
+            }
+            else
+            {
+                return Constantes.OBJETO;
+            }
+        }
+
+
         private void capturarAtributo()
         {
 
             String visibilidad = this.comboBox1.Text;
             String tipo = this.comboBox2.Text;
             String nombre = this.textBox1.Text;
-            Atributo atri = new Atributo(visibilidad, nombre, tipo);
+            Atributo atri = new Atributo(visibilidad, nombre, tipo, getTipoAtributo(tipo));
             bool res = Form1.uml.addAtributoActual(atri);
             if (!res)
             {
