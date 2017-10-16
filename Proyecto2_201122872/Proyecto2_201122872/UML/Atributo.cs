@@ -29,8 +29,22 @@ namespace Proyecto2_201122872.UML
 
         public Atributo(string visibilidad, string nombre, string tipo, string tipoAtributo, int noDimensiones, ParseTreeNode[] valores)
         {
-
+            this.visibilidad = visibilidad;
+            this.nombre = nombre;
+            this.tipo = tipo;
+            this.tipoAtributo = tipoAtributo;
+            this.noDimensiones = noDimensiones;
+            this.expresionesDimensiones = valores;
+            this.valLinealizado = getLinealizado();
         }
+
+
+
+        private int getLinealizado()
+        {
+            return 0;
+        }
+
 
         public int getSize()
         {
