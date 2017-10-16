@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto2_201122872.UML
 {
-   public class variable:elementoVarArreglo
+   public class variable
     {
         public string nombre;
         public string tipo;

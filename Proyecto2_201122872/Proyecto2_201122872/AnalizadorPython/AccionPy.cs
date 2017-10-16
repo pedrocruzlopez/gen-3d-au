@@ -83,6 +83,22 @@ namespace Proyecto2_201122872.AnalizadorPython
         }
 
 
+        private string getTipoAtributo(String tipo)
+        {
+            if(tipo.Equals(Constantes.tipoBool,StringComparison.OrdinalIgnoreCase) ||
+                tipo.Equals(Constantes.tipoCadena,StringComparison.OrdinalIgnoreCase)||
+                tipo.Equals(Constantes.tipoChar,StringComparison.OrdinalIgnoreCase)||
+                tipo.Equals(Constantes.tipoDecimal,StringComparison.OrdinalIgnoreCase)||
+                tipo.Equals(Constantes.tipoEntero,StringComparison.OrdinalIgnoreCase))
+            {
+                return Constantes.VARNORMAL;
+            }
+            else
+            {
+                return Constantes.OBJETO;
+            }
+        }
+
 
 
         private List<Atributo> generarAtributos(ParseTreeNode nodoAtri)
@@ -110,7 +126,7 @@ namespace Proyecto2_201122872.AnalizadorPython
                 foreach (ParseTreeNode item in nodoAtri.ChildNodes[2].ChildNodes)
                 {
                     nombre = item.Token.ValueString;
-                    nuevo = new Atributo(visibilidad, nombre, tipo);
+                    nuevo = new Atributo(visibilidad, nombre, tipo, getTipoAtributo(tipo));
                     lista.Add(nuevo);
                 }
                 return lista;
@@ -123,7 +139,7 @@ namespace Proyecto2_201122872.AnalizadorPython
                 foreach (ParseTreeNode item in nodoAtri.ChildNodes[1].ChildNodes)
                 {
                     nombre = item.Token.ValueString;
-                    nuevo = new Atributo(visibilidad, nombre, tipo);
+                    nuevo = new Atributo(visibilidad, nombre, tipo, getTipoAtributo(tipo));
                     lista.Add(nuevo);
 
                 }
@@ -187,7 +203,7 @@ namespace Proyecto2_201122872.AnalizadorPython
                     {
                         int noHijos = instr.ChildNodes.Count;
                         ExpresionLlamada nuevaLlamada;
-                        if(instr.ChildNodes[noHijos-1].Term.Name.Equals(Constantes.llamada,StringComparison.OrdinalIgnoreCase){
+                        if(instr.ChildNodes[noHijos-1].Term.Name.Equals(Constantes.llamada,StringComparison.OrdinalIgnoreCase)){
                             nuevaLlamada= new ExpresionLlamada(instr);
                             return nuevaLlamada;
                         }else{

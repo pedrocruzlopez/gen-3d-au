@@ -55,6 +55,22 @@ namespace Proyecto2_201122872.AnalizadorJava
 
         }
 
+
+        private string getTipoAtributo(String tipo)
+        {
+            if (tipo.Equals(Constantes.tipoBool, StringComparison.OrdinalIgnoreCase) ||
+                tipo.Equals(Constantes.tipoCadena, StringComparison.OrdinalIgnoreCase) ||
+                tipo.Equals(Constantes.tipoChar, StringComparison.OrdinalIgnoreCase) ||
+                tipo.Equals(Constantes.tipoDecimal, StringComparison.OrdinalIgnoreCase) ||
+                tipo.Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase))
+            {
+                return Constantes.VARNORMAL;
+            }
+            else
+            {
+                return Constantes.OBJETO;
+            }
+        }
         
         private Clase generarClase(ParseTreeNode clase)
         {
@@ -144,16 +160,192 @@ namespace Proyecto2_201122872.AnalizadorJava
 
         }
 
+        private ParseTreeNode[] getExpresionesArreglo(ParseTreeNode nodo){
+            ParseTreeNode[] expresiones = new ParseTreeNode[nodo.ChildNodes.Count];
+            for (int i = 0; i < expresiones.Length; i++)
+            {
+                expresiones[i] = nodo.ChildNodes[i];
+                
+            }
+
+            return expresiones;
+        
+        }
 
         private List<Atributo> generarAtributos(ParseTreeNode nodoAtributo)
         {
-            /*
+
+            List<Atributo> lista = new List<Atributo>();
+            Atributo nuevo;
+            int noHijos = nodoAtributo.ChildNodes.Count;
+            string tipo, nombre, visibilidad;
+
+            if (noHijos == 5)
+            {//arreglo con filas declaradas y visibilidad
+                // VISIBILIDAD + TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";"
+             
+                visibilidad = nodoAtributo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                tipo = nodoAtributo.ChildNodes[1].ChildNodes[0].Token.ValueString;
+                nombre = nodoAtributo.ChildNodes[2].Token.ValueString;
+                int noPosiciones = nodoAtributo.ChildNodes[3].ChildNodes.Count;
+                ParseTreeNode[] expresionesDimensiones = getExpresionesArreglo(nodoAtributo.ChildNodes[3]);
+                if (noPosiciones == expresionesDimensiones.Length && noPosiciones == nodoAtributo.ChildNodes[4].ChildNodes.Count)
+                {//si se puede crear el arreglo
+                    nuevo = new Atributo(visibilidad, nombre, tipo, Constantes.ARREGLO, noPosiciones, expresionesDimensiones);
+                    lista.Add(nuevo);
+                }
+                else
+                {//error semantico 
+                    ErrorA err = new ErrorA(Constantes.errorSemantico, "No coinciden numero de dimensiones", nodoAtributo.Token);
+                    Form1.errores.addError(err);
+
+                }
+
+            }
+            else if (noHijos == 4)
+            {
+                
+                
+
+                if (nodoAtributo.ChildNodes[0].Term.Name.Equals(Constantes.tipo, StringComparison.OrdinalIgnoreCase))
+                {
+                  // TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";";
+                 
+                    visibilidad = Constantes.publico;
+                    tipo = nodoAtributo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                    nombre = nodoAtributo.ChildNodes[1].Token.ValueString;
+                    int noPosiciones = nodoAtributo.ChildNodes[3].ChildNodes.Count;
+                    ParseTreeNode[] expresionesDimensiones = getExpresionesArreglo(nodoAtributo.ChildNodes[2]);
+                    int noFilasExpresion = nodoAtributo.ChildNodes[3].ChildNodes.Count;
+                    if (expresionesDimensiones.Length == noPosiciones && noPosiciones == noFilasExpresion)
+                    {
+                        nuevo = new Atributo(visibilidad, nombre, tipo, Constantes.ARREGLO, noPosiciones, expresionesDimensiones);
+                        lista.Add(nuevo);
+
+                    }
+                    else
+                    {
+                        ErrorA err = new ErrorA(Constantes.errorSemantico, "No coinciden numero de dimensiones", nodoAtributo.Token);
+                        Form1.errores.addError(err);
+
+                    }
+
+
+                }
+                else if (nodoAtributo.ChildNodes[3].Term.Name.Equals(Constantes.lposiciones, StringComparison.OrdinalIgnoreCase)) 
+                {
+                    // VISIBILIDAD + TIPO + identificador + LPOSICIONES + ToTerm(";")
+                    visibilidad = nodoAtributo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                    tipo = nodoAtributo.ChildNodes[1].ChildNodes[0].Token.ValueString;
+                    nombre = nodoAtributo.ChildNodes[2].Token.ValueString;
+                    int noPosiciones = nodoAtributo.ChildNodes[3].ChildNodes.Count;
+                    ParseTreeNode[] expresionesDimensiones = getExpresionesArreglo(nodoAtributo.ChildNodes[3]);
+                    if (noPosiciones == expresionesDimensiones.Length)
+                    {//si se puede crear el arreglo
+                        nuevo = new Atributo(visibilidad, nombre, tipo, Constantes.ARREGLO, noPosiciones, expresionesDimensiones);
+                        lista.Add(nuevo);
+                    }
+                    else
+                    {//error semantico 
+                        ErrorA err = new ErrorA(Constantes.errorSemantico, "No coinciden numero de dimensiones", nodoAtributo.Token);
+                        Form1.errores.addError(err);
+
+                    }
+
+                }
+                else
+                {
+                    /*VISIBILIDAD + TIPO + identificador + ToTerm("=") + EXPRESION + ToTerm(";") //1
+                */
+                    visibilidad = nodoAtributo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                    tipo = nodoAtributo.ChildNodes[1].ChildNodes[0].Token.ValueString;
+                    nombre = nodoAtributo.ChildNodes[2].Token.ValueString;
+                    nuevo = new Atributo(visibilidad, nombre, tipo, getTipoAtributo(tipo));
+                    lista.Add(nuevo);
+
+                }
+
+            }//fin de ==4
+            else if (noHijos == 3)
+            {
+
+                if (nodoAtributo.ChildNodes[0].Term.Name.Equals(Constantes.visibilidad, StringComparison.OrdinalIgnoreCase))
+                {
+                    //ATRIBUTO.Rule = VISIBILIDAD + TIPO + L_IDS + ToTerm(";")
+                    visibilidad = nodoAtributo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                    tipo = nodoAtributo.ChildNodes[1].ChildNodes[0].Token.ValueString;
+                    foreach (ParseTreeNode item in nodoAtributo.ChildNodes[2].ChildNodes)
+                    {
+                        nombre = item.Token.Value.ToString();
+                        nuevo = new Atributo(visibilidad, nombre, tipo,getTipoAtributo(tipo));
+                        lista.Add(nuevo);
+                    }
+                    
+                }
+                else if (nodoAtributo.ChildNodes[2].Term.Name.Equals(Constantes.lposiciones, StringComparison.OrdinalIgnoreCase))
+                {
+                    //| TIPO + identificador + LPOSICIONES + ToTerm(";")
+                    visibilidad = Constantes.publico;
+                    nombre = nodoAtributo.ChildNodes[1].Token.ValueString;
+                    tipo = nodoAtributo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                    int noPosiciones = nodoAtributo.ChildNodes[2].ChildNodes.Count;
+                    ParseTreeNode[] expresionesDimensiones = getExpresionesArreglo(nodoAtributo.ChildNodes[2]);
+                    if (noPosiciones == expresionesDimensiones.Length)
+                    {//si se puede crear el arreglo
+                        nuevo = new Atributo(visibilidad, nombre, tipo, Constantes.ARREGLO, noPosiciones, expresionesDimensiones);
+                        lista.Add(nuevo);
+                    }
+                    else
+                    {//error semantico 
+                        ErrorA err = new ErrorA(Constantes.errorSemantico, "No coinciden numero de dimensiones", nodoAtributo.Token);
+                        Form1.errores.addError(err);
+
+                    }
+
+                    
+
+                }
+                else
+                {
+                    //| TIPO + identificador + ToTerm("=") + EXPRESION + ToTerm(";") //1
+                    visibilidad = Constantes.publico;
+                    nombre = nodoAtributo.ChildNodes[1].Token.ValueString;
+                    tipo = nodoAtributo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                    nuevo = new Atributo(visibilidad, nombre, tipo, getTipoAtributo(tipo));
+                    lista.Add(nuevo);
+                }
+
+
+            }
+            else if(noHijos==2)
+            {
+                //TIPO + L_IDS + ToTerm(";")
+
+                visibilidad = Constantes.publico;
+                tipo = nodoAtributo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                foreach (ParseTreeNode item in nodoAtributo.ChildNodes[1].ChildNodes)
+                {
+                    nombre = item.Token.Value.ToString();
+                    nuevo = new Atributo(visibilidad, nombre, tipo, getTipoAtributo(tipo));
+                    lista.Add(nuevo);
+                }
+
+            }
+
+            return lista;
+        }
+
+
+/*
+        private List<Atributo> generarAtributos(ParseTreeNode nodoAtributo)
+        {
+            
               ATRIBUTO.Rule = VISIBILIDAD + TIPO + L_IDS + ToTerm(";")3,4,2,3
                 | VISIBILIDAD + TIPO + identificador + ToTerm("=") + EXPRESION + ToTerm(";")
                 | TIPO + L_IDS + ToTerm(";")
                 | TIPO + identificador + ToTerm("=") + EXPRESION + ToTerm(";");
              
-             */
+             
             List<Atributo> lista = new List<Atributo>();
             Atributo nuevo;
             int noHijos = nodoAtributo.ChildNodes.Count;
@@ -211,7 +403,7 @@ namespace Proyecto2_201122872.AnalizadorJava
             }
 
         }
-
+*/
      
         private Funcion getConstructor(ParseTreeNode nodoConstructor, string nombreClase)
         {

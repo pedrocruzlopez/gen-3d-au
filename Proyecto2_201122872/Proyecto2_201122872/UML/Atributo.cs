@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Irony.Parsing;
+using Irony.Ast;
+using Irony.Interpreter;
 
 namespace Proyecto2_201122872.UML
 {
@@ -11,23 +14,23 @@ namespace Proyecto2_201122872.UML
         public string visibilidad;
         public string nombre;
         public string tipo;
-        
+        public string tipoAtributo;
+        public int valLinealizado;
+        public int noDimensiones;
+        public ParseTreeNode[] expresionesDimensiones;
 
-
-
-
-
-
-
-
-        public Atributo(string visibiliad, string nombre, string tipo)
+        public Atributo(string visibiliad, string nombre, string tipo, string tipoAtributo)
         {
             this.visibilidad = visibiliad;
             this.nombre = nombre;
             this.tipo = tipo;
+            this.tipoAtributo = tipoAtributo;
         }
 
+        public Atributo(string visibilidad, string nombre, string tipo, string tipoAtributo, int noDimensiones, ParseTreeNode[] valores)
+        {
 
+        }
 
         public int getSize()
         {

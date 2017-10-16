@@ -18,12 +18,6 @@ namespace Proyecto2_201122872.Instrucciones
             this.nodo = nodo;
         }
 
-        public override string ejecutar()
-        {
-
-            return "";
-
-        }
-
+      
     }
 }

@@ -204,9 +204,13 @@ namespace Proyecto2_201122872.AnalizadorJava
             RETORNO.Rule = ToTerm(Constantes.retorno) + EXPRESION + ToTerm(";");
 
             ATRIBUTO.Rule = VISIBILIDAD + TIPO + L_IDS + ToTerm(";")
-                | VISIBILIDAD + TIPO + identificador + ToTerm("=") + EXPRESION + ToTerm(";")
+                | VISIBILIDAD + TIPO + identificador + ToTerm("=") + EXPRESION + ToTerm(";") //1
                 | TIPO + L_IDS + ToTerm(";")
-                | TIPO + identificador + ToTerm("=") + EXPRESION + ToTerm(";");
+                | TIPO + identificador + ToTerm("=") + EXPRESION + ToTerm(";") //1
+                | VISIBILIDAD + TIPO + identificador + LPOSICIONES + ToTerm(";")
+                | VISIBILIDAD + TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";"
+                | TIPO + identificador + LPOSICIONES + ToTerm(";")
+                | TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";";
 
 
             L_IDS.Rule = MakePlusRule(L_IDS, ToTerm(","), identificador);

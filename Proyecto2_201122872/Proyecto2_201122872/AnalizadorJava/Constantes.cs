@@ -144,6 +144,10 @@ namespace Proyecto2_201122872.AnalizadorJava
         public const string super = "super";
         public const string self = "self";
         public const string declaArreglo = "declaArreglo";
+
+        public const string ARREGLO = "arreglo";
+        public const string OBJETO = "objeto";
+        public const string VARNORMAL = "variable";
     
            
         
