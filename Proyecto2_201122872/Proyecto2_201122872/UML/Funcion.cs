@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Irony.Parsing;
+using Irony.Interpreter;
+using Irony.Ast;
 
 namespace Proyecto2_201122872.UML
 {
@@ -18,7 +21,9 @@ namespace Proyecto2_201122872.UML
         public Boolean esSobreescrita=false;
         public Boolean esPrincipal = false;
         public Boolean esConstructor = false;
-        public Cuerpo instrucciones;
+        ///public Cuerpo instrucciones;
+        public ParseTreeNode cuerpo; 
+        
 
         public void setSobreescrita(bool val)
         {
@@ -36,7 +41,7 @@ namespace Proyecto2_201122872.UML
             this.esConstructor = val;
         }
 
-        public Funcion(string clase, string nombre, string tipo, ListaParametro parametros, string visibilidad)
+        public Funcion(string clase, string nombre, string tipo, ListaParametro parametros, string visibilidad, ParseTreeNode cuerpo)
         {
             this.clase = clase;
             this.nombre = nombre;
@@ -44,13 +49,13 @@ namespace Proyecto2_201122872.UML
             this.parametros = parametros;
             this.visibilidad = visibilidad;
             this.firma = generarFirma();
-            this.instrucciones = new Cuerpo();
+            this.cuerpo = cuerpo;
         }
 
 
 
-        public void setCuerpo (Cuerpo fun){
-            this.instrucciones= fun;
+        public void setCuerpo (ParseTreeNode cuerpo){
+            this.cuerpo= cuerpo;
         }
 
 

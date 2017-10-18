@@ -8,7 +8,7 @@ namespace Proyecto2_201122872.UML
 {
     public class listaFunciones
     {
-        private List<Funcion> funciones;
+        public List<Funcion> funciones;
 
         public listaFunciones()
         {

@@ -10,6 +10,8 @@ using Proyecto2_201122872.AnalizadorJava;
 using Proyecto2_201122872.UML;
 using Proyecto2_201122872.Errores;
 using Proyecto2_201122872.Instrucciones;
+using Proyecto2_201122872.Generacion3D.TablaSimbolos;
+using Proyecto2_201122872.Generacion3D;
 
 namespace Proyecto2_201122872.AnalizadorPython
 {
@@ -177,7 +179,7 @@ namespace Proyecto2_201122872.AnalizadorPython
             return parametros;
         }
 
-        private Cuerpo getCuerpo(ParseTreeNode nodoCuerpo)
+        private ParseTreeNode getCuerpo(ParseTreeNode nodoCuerpo)
         {
             Cuerpo contenido = new Cuerpo();
 
@@ -190,7 +192,7 @@ namespace Proyecto2_201122872.AnalizadorPython
                 
             }
 
-            return contenido;
+            return nodoCuerpo;
         }
 
 
@@ -251,9 +253,9 @@ namespace Proyecto2_201122872.AnalizadorPython
                 tipo = Constantes.tipoVoid;
                 nombre = nodoFuncion.ChildNodes[1].Token.ValueString;
                 parametros = getParametros(nodoFuncion.ChildNodes[2]);
-                instr = getCuerpo(nodoFuncion.ChildNodes[3]);
-                nueva = new Funcion(nombreClase, nombre, tipo, parametros, visibilidad);
-                nueva.setCuerpo(instr);
+                //instr = getCuerpo(nodoFuncion.ChildNodes[3]);
+                nueva = new Funcion(nombreClase, nombre, tipo, parametros, visibilidad, nodoFuncion.ChildNodes[3]);
+               // nueva.setCuerpo(instr);
                 return nueva;
             }
             else if (noHijos == 6)
@@ -263,9 +265,9 @@ namespace Proyecto2_201122872.AnalizadorPython
                 tipo = nodoFuncion.ChildNodes[2].ChildNodes[0].Token.ValueString;
                 nombre = nodoFuncion.ChildNodes[3].Token.ValueString;
                 parametros = getParametros(nodoFuncion.ChildNodes[4]);
-                instr = getCuerpo(nodoFuncion.ChildNodes[5]);
-                nueva = new Funcion(nombreClase, nombre, tipo, parametros, visibilidad);
-                nueva.setCuerpo(instr);
+                //instr = getCuerpo(nodoFuncion.ChildNodes[5]);
+                nueva = new Funcion(nombreClase, nombre, tipo, parametros, visibilidad, nodoFuncion.ChildNodes[5]);
+               // nueva.setCuerpo(instr);
                 return nueva;
             }
             else if (noHijos == 5 && nodoFuncion.ChildNodes[0].Term.Name.Equals(Constantes.visibilidad))
@@ -274,9 +276,9 @@ namespace Proyecto2_201122872.AnalizadorPython
                 visibilidad = nodoFuncion.ChildNodes[0].ChildNodes[0].Token.ValueString;
                 nombre = nodoFuncion.ChildNodes[2].Token.ValueString;
                 parametros = getParametros(nodoFuncion.ChildNodes[3]);
-                instr = getCuerpo(nodoFuncion.ChildNodes[4]);
-                nueva = new Funcion(nombreClase, nombre, Constantes.tipoVoid, parametros, visibilidad);
-                nueva.setCuerpo(instr);
+               // instr = getCuerpo(nodoFuncion.ChildNodes[4]);
+                nueva = new Funcion(nombreClase, nombre, Constantes.tipoVoid, parametros, visibilidad, nodoFuncion.ChildNodes[4]);
+               // nueva.setCuerpo(instr);
                 return nueva;
 
             }
@@ -286,9 +288,9 @@ namespace Proyecto2_201122872.AnalizadorPython
                 tipo = nodoFuncion.ChildNodes[1].ChildNodes[0].Token.ValueString;
                 parametros = getParametros(nodoFuncion.ChildNodes[3]);
                 nombre = nodoFuncion.ChildNodes[2].Token.ValueString;
-                instr = getCuerpo(nodoFuncion.ChildNodes[4]);
-                nueva = new Funcion(nombreClase, nombre, tipo, parametros, Constantes.publico);
-                nueva.setCuerpo(instr);
+               // instr = getCuerpo(nodoFuncion.ChildNodes[4]);
+                nueva = new Funcion(nombreClase, nombre, tipo, parametros, Constantes.publico, nodoFuncion.ChildNodes[4]);
+               // nueva.setCuerpo(instr);
                 return nueva;
                 
             }
@@ -303,13 +305,13 @@ namespace Proyecto2_201122872.AnalizadorPython
             Cuerpo instr;
             ListaParametro parametros = getParametros(nodoConstructor.ChildNodes[0]);
            string nombre = nodoConstructor.ChildNodes[0].Token.Value.ToString();
-            Funcion nueva = new Funcion(nombreClase, Constantes.constructor, Constantes.tipoVoid, parametros, Constantes.publico);
+           Funcion nueva = new Funcion(nombreClase, Constantes.constructor, Constantes.tipoVoid, parametros, Constantes.publico, nodoConstructor.ChildNodes[1]);
             if (nombre.Equals(nombreClase,StringComparison.OrdinalIgnoreCase))
             {
-                nueva = new Funcion(nombreClase, nombre, Constantes.tipoVoid, parametros, Constantes.publico);
+                nueva = new Funcion(nombreClase, nombre, Constantes.tipoVoid, parametros, Constantes.publico, nodoConstructor.ChildNodes[1]);
                 nueva.setConstructor(true);
-                instr = getCuerpo(nodoConstructor.ChildNodes[1]);
-                nueva.setCuerpo(instr);
+               // instr = getCuerpo(nodoConstructor.ChildNodes[1]);
+               // nueva.setCuerpo(instr);
                 return nueva;
             }
             else
@@ -394,6 +396,7 @@ namespace Proyecto2_201122872.AnalizadorPython
 
 
 
+        
 
         private void generarListadoClases(ParseTreeNode nodo)
         {
@@ -422,6 +425,8 @@ namespace Proyecto2_201122872.AnalizadorPython
             }
 
         }
+
+
 
 
 

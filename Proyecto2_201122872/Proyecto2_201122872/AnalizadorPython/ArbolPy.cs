@@ -9,7 +9,7 @@ using Irony.Parsing;
 
 namespace Proyecto2_201122872.AnalizadorPython
 {
-    class ArbolPy
+   public class ArbolPy
     {
 
         private int niv = 0;

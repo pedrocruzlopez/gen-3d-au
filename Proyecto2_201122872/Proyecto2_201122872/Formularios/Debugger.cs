@@ -1,11 +1,13 @@
 ﻿using FastColoredTextBoxNS;
 using Proyecto2_201122872.Generacion3D;
+using Proyecto2_201122872.Generacion3D.TablaSimbolos;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -75,12 +77,99 @@ namespace Proyecto2_201122872.Formularios
         }
 
 
+       private void closeTab()
+        {
+            TabPage current_tab = tabControl1.SelectedTab;
+            ArrayTab.Remove(current_tab);
+            tabControl1.TabPages.Remove(current_tab);
+            cont--;
+        }
+
+
+       public void Abrir()
+       {
+           if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+           {
+               TabPage auxiliar = null;
+               int seleccion = tabControl1.SelectedIndex;
+               String path = openFileDialog1.InitialDirectory + openFileDialog1.FileName;
+               auxiliar = tabControl1.TabPages[seleccion];
+               foreach (Control ctrl in auxiliar.Controls)
+               {
+                   if (ctrl is FastColoredTextBox)
+                   {
+                       FastColoredTextBox textoAuxiliar = (FastColoredTextBox)ctrl;
+                       MessageBox.Show("Archivo abierto :D");
+                       textoAuxiliar.Text = File.ReadAllText(path);
+
+
+                   }
+               }
+
+           }
+       }
+
+
+       public void guarda()
+       {
+           if (tabControl1.TabCount == 0) return;
+           TabPage tab = tabControl1.SelectedTab;
+           foreach (Control ctrl in tab.Controls)
+           {
+               if (ctrl is FastColoredTextBox)
+               {
+                   FastColoredTextBox tempTxt = (FastColoredTextBox)ctrl;
+                   if (tab.Tag != null)
+                   {
+                       File.WriteAllText((string)tab.Tag, tempTxt.Text);
+                       MessageBox.Show("Guardado con exito");
+                   }
+                   else
+                       guardarComo();
+               }
+           }
+
+
+
+
+
+
+
+
+       }
+
+
+
+       public void guardarComo()
+       {
+           if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+           {
+               TabPage temp = null;
+               int seleccion = tabControl1.SelectedIndex;
+
+               temp = tabControl1.TabPages[seleccion];
+               foreach (Control ctrl in temp.Controls)
+               {
+                   if (ctrl is FastColoredTextBox)
+                   {
+                       FastColoredTextBox tempTxt = (FastColoredTextBox)ctrl;
+                       tabControl1.TabPages[seleccion].Tag = saveFileDialog1.FileName + ".olc";
+                       tabControl1.TabPages[seleccion].Tag = saveFileDialog1.FileName + ".tree";
+                       File.WriteAllText(saveFileDialog1.FileName + ".sbs", tempTxt.Text);
+                       File.WriteAllText(saveFileDialog1.FileName + ".tree", tempTxt.Text);
+                   }
+               }
+
+           }
+       }
+
+
 
         #endregion
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-
+            closeTab();
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -90,7 +179,7 @@ namespace Proyecto2_201122872.Formularios
 
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
-            generador = new GeneracionCodigo();
+            Abrir();
 
         }
 
@@ -106,6 +195,63 @@ namespace Proyecto2_201122872.Formularios
 
 
         #endregion
+
+        private void toolStripDropDownButton1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripButton4_Click(object sender, EventArgs e)
+        {
+            guarda();
+        }
+
+        private void toolStripButton5_Click(object sender, EventArgs e)
+        {
+            guardarComo();
+        }
+
+        private void toolStripButton6_Click(object sender, EventArgs e)
+        {
+            //ejecutar
+            generador = new GeneracionCodigo();
+      
+            string[] ubicacion = Directory.GetFiles(@"C:\Users\Alina\Documents\Repositorios\CompiProyecto2\ArchivosEntrada");
+           
+            
+            for (int i = 0; i < ubicacion.Length ;i++)
+            {
+                
+                Console.WriteLine(Path.GetFullPath(ubicacion[i]));
+                generador.ejecutarArchivos(Path.GetFullPath(ubicacion[i]), Path.GetExtension(ubicacion[i]));
+
+            }
+            int j=0;
+            string[] row0;
+            foreach (Simbolo s in generador.tablaSimbolos.tabla)
+            {
+               
+
+row0 = { visibilidad, s.nombreReferencia, s.nombreReal, s.nombreReferencia, s.tipo, s.ambito, s.rol, s.apuntador+"",s.tamanho+""};
+        //"Beatles", "The Beatles [White Album]","fdgsgds","dsffdsf","hhhhh" };
+            dataGridView1.Rows.Add(row0);
+            }
+
+
+            /* this.dataGridView1.Columns.Add("acceso", "Acceso");
+            this.dataGridView1.Columns.Add("nombreAcceso", "Nombre de Acceso");
+            this.dataGridView1.Columns.Add("nombre", "Nombre");
+            this.dataGridView1.Columns.Add("tipo", "Tipo");
+            this.dataGridView1.Columns.Add("ambito", "Ambito");
+            this.dataGridView1.Columns.Add("rol", "Rol");
+            this.dataGridView1.Columns.Add("apuntador", "Apuntador");
+            this.dataGridView1.Columns.Add("tamanho", "Tamanho");
+
+            string[] row0 = { "11/22/1968", "29", "Revolution 9", 
+        "Beatles", "The Beatles [White Album]","fdgsgds","dsffdsf","hhhhh" };
+            dataGridView1.Rows.Add(row0);*/
+
+        }
 
     }
 }

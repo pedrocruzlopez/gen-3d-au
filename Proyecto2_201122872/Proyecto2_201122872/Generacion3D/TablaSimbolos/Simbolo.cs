@@ -12,6 +12,7 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
         public string visibilidad;
         public string nombreReferencia;
         public string nombreReal;
+        public string tipoElemento;
         public string tipo;
         public string ambito;
         public string rol;
@@ -19,7 +20,7 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
         public int tamanho;
 
 
-        public Simbolo(string visibilidad, string nombre, string tipo,string ambito, string rol, int apuntado, int tamanho )
+        public Simbolo(string visibilidad, string nombre, string tipo,string tipoElemento, string ambito, string rol, int apuntado, int tamanho )
         {
 
             this.visibilidad = visibilidad;
@@ -29,6 +30,7 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
             this.rol = rol;
             this.apuntador = apuntado;
             this.tamanho = tamanho;
+            this.tipoElemento = tipoElemento;
         }
 
 

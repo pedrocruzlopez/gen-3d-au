@@ -9,7 +9,7 @@ namespace Proyecto2_201122872.Instrucciones
     public class Cuerpo
     {
 
-        List<Instruccion> instruccionesCuerpo;
+        public List<Instruccion> instruccionesCuerpo;
         
 
         public Cuerpo()

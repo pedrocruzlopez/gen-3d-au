@@ -148,6 +148,9 @@ namespace Proyecto2_201122872.AnalizadorJava
         public const string ARREGLO = "arreglo";
         public const string OBJETO = "objeto";
         public const string VARNORMAL = "variable";
+
+        public const string noTieneVisi = "No tiene";
+        public const string varLocal = "var local";
     
            
         

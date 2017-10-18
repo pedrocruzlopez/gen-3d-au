@@ -9,7 +9,7 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
     public class tablaDeSimbolos
     {
 
-        List<Simbolo> tabla;
+       public List<Simbolo> tabla;
 
 
         public tablaDeSimbolos()
@@ -24,6 +24,14 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
 
         }
 
+
+        public void addLista(List<Simbolo> lista)
+        {
+            foreach (Simbolo item in lista)
+            {
+                tabla.Add(item);
+            }
+        }
 
 
 
