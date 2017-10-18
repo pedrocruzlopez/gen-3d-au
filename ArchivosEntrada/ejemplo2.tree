@@ -1,0 +1,51 @@
+clase prueba1[puebas]:
+
+	publico mEtoDo nombreMetodo[entero num1, decimal num2]:
+		entero valor
+		char caracter,valor2
+		hola => 5
+		si true: 
+			entero val
+			cadena numero
+		SI_NO_SI hola.hola: 
+			char caracter
+		SI_NO:
+			J=>8
+			mientras true.true.llamar[4]:      
+				si false:
+					estudiante v
+					v=> nuevo estudiante[4,56,pos[x]]
+					hacer:
+						estudi h
+						repetir:
+							j=>65
+							loop:
+								c=>"hoa"
+						hasta 5
+					mientras HOLA.HOLA.HOA.((6 9 *)(90 10 +)/).PO[3][4].JL[2,3,4]
+
+clase prueba2[puebas]:
+
+	publico mEtoDo nombreMetodo2[]:
+		entero valor
+		char caracter,valor2
+		hola => 5
+		si true: 
+			entero val
+			cadena numero
+		SI_NO_SI hola.hola: 
+			char caracter
+		SI_NO:
+			J=>8
+			mientras true.true.llamar[4]:      
+				si false:
+					estudiante v
+					v=> nuevo estudiante[4,56,pos[x]]
+					hacer:
+						estudi h
+						repetir:
+							j=>65
+							loop:
+								c=>"hoa"
+						hasta 5
+					mientras HOLA.HOLA.HOA.((6 9 *)(90 10 +)/).PO[3][4].JL[2,3,4]					

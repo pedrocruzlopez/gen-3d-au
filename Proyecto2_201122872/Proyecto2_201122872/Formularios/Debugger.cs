@@ -219,22 +219,20 @@ namespace Proyecto2_201122872.Formularios
             string[] ubicacion = Directory.GetFiles(@"C:\Users\Alina\Documents\Repositorios\CompiProyecto2\ArchivosEntrada");
            
             
-            for (int i = 0; i < ubicacion.Length ;i++)
+            for (int i = 0; i < ubicacion.Length; i++)
             {
                 
                 Console.WriteLine(Path.GetFullPath(ubicacion[i]));
+                Console.WriteLine(Path.GetExtension(ubicacion[i]));
                 generador.ejecutarArchivos(Path.GetFullPath(ubicacion[i]), Path.GetExtension(ubicacion[i]));
 
             }
-            int j=0;
-            string[] row0;
+
+           // generador.generarTablaSimbolos();
             foreach (Simbolo s in generador.tablaSimbolos.tabla)
             {
-               
-
-row0 = { visibilidad, s.nombreReferencia, s.nombreReal, s.nombreReferencia, s.tipo, s.ambito, s.rol, s.apuntador+"",s.tamanho+""};
-        //"Beatles", "The Beatles [White Album]","fdgsgds","dsffdsf","hhhhh" };
-            dataGridView1.Rows.Add(row0);
+               string [] row0={s.visibilidad,s.nombreReferencia,s.nombreReal,s.tipo,s.ambito,s.rol,s.apuntador+"",s.tamanho+""};
+               dataGridView1.Rows.Add(row0);
             }
 
 

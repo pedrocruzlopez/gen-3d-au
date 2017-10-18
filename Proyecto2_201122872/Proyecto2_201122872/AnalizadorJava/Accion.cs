@@ -139,7 +139,7 @@ namespace Proyecto2_201122872.AnalizadorJava
                     tipo = nodoFuncion.ChildNodes[1].ChildNodes[0].Token.Value.ToString();
                 else
                     tipo = nodoFuncion.ChildNodes[1].Token.Value.ToString();
-                nueva = new Funcion(nombreClase, nombre, tipo, parametros, visibilidad);
+                nueva = new Funcion(nombreClase, nombre, tipo, parametros, visibilidad,nodoFuncion.ChildNodes[4]);
                 return nueva;
 
             }
@@ -153,7 +153,7 @@ namespace Proyecto2_201122872.AnalizadorJava
                     tipo = nodoFuncion.ChildNodes[0].ChildNodes[0].Token.Value.ToString();
                 nombre = nodoFuncion.ChildNodes[1].Token.Value.ToString();
                 parametros = getParametros(nodoFuncion.ChildNodes[2]);
-                nueva = new Funcion(nombreClase, nombre, tipo, parametros, visibilidad);
+                nueva = new Funcion(nombreClase, nombre, tipo, parametros, visibilidad, nodoFuncion.ChildNodes[3]);
                 return nueva;
 
             }
@@ -413,7 +413,7 @@ namespace Proyecto2_201122872.AnalizadorJava
             if (nombre.ToUpper().Equals(nombreClase.ToUpper()))
             {
                 ListaParametro parametros = getParametros(nodoConstructor.ChildNodes[1]);
-                constructor = new Funcion(nombreClase, nombre, Constantes.tipoVoid, parametros, Constantes.publico);
+                constructor = new Funcion(nombreClase, nombre, Constantes.tipoVoid, parametros, Constantes.publico,nodoConstructor.ChildNodes[2]);
                 constructor.setConstructor(true);
                 return constructor;
             }
@@ -434,7 +434,7 @@ namespace Proyecto2_201122872.AnalizadorJava
             /*
             PRINCIPAL.Rule = ToTerm(Constantes.principal) + ToTerm("(") + ToTerm(")") + CUERPO;*/
 
-            Funcion principal = new Funcion(nombreClase, Constantes.principal, Constantes.tipoVoid, new ListaParametro(), Constantes.publico);
+            Funcion principal = new Funcion(nombreClase, Constantes.principal, Constantes.tipoVoid, new ListaParametro(), Constantes.publico,nodoPrincipal.ChildNodes[0]);
             principal.setPrincipal(true);
             return principal;
 

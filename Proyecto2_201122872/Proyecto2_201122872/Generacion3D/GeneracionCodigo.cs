@@ -19,8 +19,8 @@ namespace Proyecto2_201122872.Generacion3D
 
         public tablaDeSimbolos tablaSimbolos;
         public clasesDiagrama uml;
-        public Arbol analizadorJava;
-        public ArbolPy analizadorPython;
+        private Arbol analizadorJava;
+        private ArbolPy analizadorPython;
 
         public GeneracionCodigo()
         {
@@ -51,17 +51,33 @@ namespace Proyecto2_201122872.Generacion3D
         public void ejecutarArchivos(String ruta, String extension)
         {
             String contenido = getCadenaArchivo(ruta);
-            if (extension.Equals("tree", StringComparison.OrdinalIgnoreCase))
+            if (extension.Equals(".tree", StringComparison.OrdinalIgnoreCase))
             {
-                analizadorPython.parseConvertirUML(contenido);
+                
+                    uml = analizadorPython.parseConvertirUML2(contenido);
+                    generarTablaSimbolos();
+
+               
+                
                 
             }
             else
             {
-                analizadorJava.parseConvertirUML(contenido);
+              // uml= analizadorJava.parseConvertirUML(contenido);
                
             }
 
+        }
+
+        public void generarTablaSimbolos()
+        {
+            if (uml != null)
+            {
+                foreach (Clase clase in uml.listaClases)
+                {
+                    this.tablaSimbolos.addLista(clase.getSimbolosClase());
+                }
+            }
         }
 
 

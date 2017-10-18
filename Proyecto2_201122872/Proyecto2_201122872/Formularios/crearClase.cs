@@ -251,7 +251,7 @@ namespace Proyecto2_201122872.Formularios
                 visiFun = comboBox5.Text;
                 tipoFunc = comboBox4.Text;
                 comboBox7.Items.Clear();
-                Funcion nueva = new Funcion(Form1.uml.claseActual.getNombre(), nombreFun, tipoFunc, this.lParametros, visiFun);
+                Funcion nueva = new Funcion(Form1.uml.claseActual.getNombre(), nombreFun, tipoFunc, this.lParametros, visiFun,null);
                 if (Form1.uml.claseActual.addFuncion(nueva))
                 {
                     MessageBox.Show("Funcion creada exitosamente");
