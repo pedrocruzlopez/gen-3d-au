@@ -401,7 +401,7 @@ namespace Proyecto2_201122872.AnalizadorPython
                Constantes.menor, Constantes.mayor, Constantes.menorIgual, Constantes.mayorIgual, Constantes.igualIgual, Constantes.distintoA,
                Constantes.orPython, Constantes.andPython, Constantes.xorPython, Constantes.notJavaPython, "__consturctor",
                
-                Constantes.out_string,
+                Constantes.out_string,Constantes.loop,
             Constantes.parseint,
             Constantes.parsedouble,
             Constantes.inttostr,

@@ -22,6 +22,7 @@ namespace Proyecto2_201122872.UML
         public string lenguaje;
         public int tamanho;
 
+        int apuntador;
 
 
         public Boolean esNula()
@@ -154,24 +155,208 @@ namespace Proyecto2_201122872.UML
             }
         }
 
-        private List<Simbolo> generarSimbolosMetodo(ParseTreeNode nodo, int apuntador, List<Simbolo> lista, Ambitos ambitos)
+        private List<Simbolo> generarSimbolosMetodo(ParseTreeNode nodo, List<Simbolo> lista, Ambitos ambitos)
         {
 
             String nombreNodo = nodo.Term.Name.ToString();
             switch (nombreNodo)
             {
                 /*INSTRUCCION.Rule = DECLRACION + Eos
-                | ASIGNACION + Eos
+                | ASIGNACION + Eos no se HACWE //
                 | SI
                 | SALIR + Eos//
                 | CONTINUAR + Eos//
-                | MIENTRAS
-                | PARA
-                | LOOP
-                | HACER
-                | REPETIR
-                | ELEGIR;*/
+                | MIENTRAS//
+                | PARA//
+                | LOOP//
+                | HACER//
+                 * 
+                | REPETIR//
+                | ELEGIR;//*/
+                
+                
+                case Constantes.si:
+                    {
+                        /* *   SI.Rule = ToTerm(Constantes.si) + EXPRESION + ":" + Eos + CUERPO + L_EXTRAS + SI_NO
+                | ToTerm(Constantes.si) + EXPRESION + ":" + Eos + CUERPO + L_EXTRAS
+                | ToTerm(Constantes.si) + EXPRESION + ":" + Eos + CUERPO + SI_NO;
+                 */
 
+                        int noHijos = nodo.ChildNodes.Count;
+                        if (noHijos == 3)
+                        {
+                            ambitos.addIf();
+                            lista = generarSimbolosMetodo(nodo.ChildNodes[1], lista, ambitos);
+                            ambitos.ambitos.Pop();
+                            lista = generarSimbolosMetodo(nodo.ChildNodes[2], lista, ambitos);
+
+                        }
+                        else
+                        {
+                            ambitos.addIf();
+                            lista = generarSimbolosMetodo(nodo.ChildNodes[1], lista, ambitos);
+                            ambitos.ambitos.Pop();
+                            lista = generarSimbolosMetodo(nodo.ChildNodes[2], lista, ambitos);
+                            lista = generarSimbolosMetodo(nodo.ChildNodes[3], lista, ambitos);
+                            
+                        }
+                        return lista;
+                    }
+
+                case Constantes.lextra:
+                    {
+                        //L_EXTRAS.Rule = MakeStarRule(L_EXTRAS, EXTRA);
+                        foreach (ParseTreeNode nodoHijo in nodo.ChildNodes)
+                        {
+                            lista = generarSimbolosMetodo(nodoHijo, lista, ambitos);
+                        }
+                        return lista;
+                    }
+
+                case Constantes.extraSi:
+                    {
+                        //EXTRA.Rule = ToTerm(Constantes.sino_si_python) + EXPRESION + ":" + Eos + CUERPO;
+                        ambitos.addIf();
+                        lista = generarSimbolosMetodo(nodo.ChildNodes[1], lista, ambitos);
+                        ambitos.ambitos.Pop();
+                        return lista;
+                    }
+
+                case Constantes.sino:
+                    {
+                        // SI_NO.Rule = ToTerm(Constantes.sino_python) + ":" + Eos + CUERPO;
+                        ambitos.addElse();
+                        lista = generarSimbolosMetodo(nodo.ChildNodes[0], lista, ambitos);
+                        ambitos.ambitos.Pop();
+                        return lista;
+
+                    }
+
+
+                case Constantes.elegir:
+                    {
+                        // ELEGIR.Rule = ToTerm(Constantes.elegir) + EXPRESION + ":" + Eos + CUERPOELEGIR;
+                        ambitos.addElegir();
+                        lista= generarSimbolosMetodo(nodo.ChildNodes[1], lista, ambitos);
+                        ambitos.ambitos.Pop();
+                        return lista;
+                    }
+
+                case Constantes.cuerpoElegir:
+                    {
+                        int noHijos = nodo.ChildNodes.Count;
+                        if (noHijos == 2)
+                        {
+                            lista = generarSimbolosMetodo(nodo.ChildNodes[0], lista, ambitos);
+                            lista = generarSimbolosMetodo(nodo.ChildNodes[1], lista, ambitos);
+                        }
+                        else
+                        {
+                            lista = generarSimbolosMetodo(nodo.ChildNodes[0], lista, ambitos);
+
+                        }
+                        return lista;
+                    }
+
+                case Constantes.lcasos:
+                    {
+                        foreach (ParseTreeNode nodoHijo in nodo.ChildNodes)
+                        {
+                            lista = generarSimbolosMetodo(nodoHijo, lista, ambitos);
+                        }
+                        return lista;
+                    }
+
+                case Constantes.defecto:
+                    {
+                        //DEFECTO.Rule = ToTerm(Constantes.defecto) + ":" + Eos + CUERPO;
+                        ambitos.addDefecto();
+                        lista = generarSimbolosMetodo(nodo.ChildNodes[0], lista, ambitos);
+                        ambitos.ambitos.Pop();
+                        return lista;
+
+
+                    }
+
+                case Constantes.caso:
+                    {
+                        //CASO.Rule = EXPRESION + TtoTerm(":") + Eos + CUERPO;
+                        ambitos.addCaso();
+                        lista = generarSimbolosMetodo(nodo.ChildNodes[1], lista, ambitos);
+                        ambitos.ambitos.Pop();
+                        return lista;
+
+                    }
+
+
+                case Constantes.loop:
+                    {
+                        //LOOP.Rule = ToTerm(Constantes.loop) + ":" + Eos + CUERPO;
+                        ambitos.addLoop();
+                        lista = generarSimbolosMetodo(nodo.ChildNodes[0], lista, ambitos);
+                        ambitos.ambitos.Pop();
+                        return lista;
+                    }
+
+
+
+                case Constantes.para:
+                    {
+                        //PARA.Rule = ToTerm(Constantes.para) + "[" + ASIGNACION + ":" + EXPRESION + ":" + EXPRESION + "]" + ":" + Eos + CUERPO;
+                        ambitos.addPara();
+                        lista = generarSimbolosMetodo(nodo.ChildNodes[3], lista, ambitos);
+                        ambitos.ambitos.Pop();
+                        return lista;
+
+
+                    }
+
+                case Constantes.hacer:
+                    {
+
+                        //HACER.Rule = ToTerm(Constantes.hacer) + ":" + Eos + CUERPO + Constantes.mientras + EXPRESION + Eos;
+                        ambitos.addHAcer();
+                        lista = generarSimbolosMetodo(nodo.ChildNodes[0], lista, ambitos);
+                        ambitos.ambitos.Pop();
+                        return lista;
+
+                    }
+                case Constantes.repetir:
+                    {
+
+                        //REPETIR.Rule = ToTerm(Constantes.repetir) + ":" + Eos + CUERPO + Constantes.hasta + EXPRESION+Eos;
+                        ambitos.addRepetir();
+                        lista = generarSimbolosMetodo(nodo.ChildNodes[0], lista, ambitos);
+                        ambitos.ambitos.Pop();
+                        return lista;
+
+                    }
+
+
+
+
+
+                case Constantes.asignacion:
+                    {
+                        break;
+
+                    }
+                case Constantes.cuerpo:
+                    {
+                        return generarSimbolosMetodo(nodo.ChildNodes[0], lista, ambitos);
+                    }
+                case Constantes.instrucciones:
+                    {
+                        foreach (ParseTreeNode nodoHijo in nodo.ChildNodes)
+                        {
+                            lista = generarSimbolosMetodo(nodoHijo, lista, ambitos);
+                        }
+                        return lista;
+                    }
+                case Constantes.instruccion:
+                    {
+                        return generarSimbolosMetodo(nodo.ChildNodes[0], lista, ambitos);
+                    }
 
                 case Constantes.continuar:
                     {
@@ -207,10 +392,12 @@ namespace Proyecto2_201122872.UML
                                 if (getTipoAtributo(tipo).Equals(Constantes.OBJETO, StringComparison.OrdinalIgnoreCase))
                                 {
                                     nuevo = new Simbolo(Constantes.noTieneVisi, nombre, tipo, getTipoAtributo(tipo), ambitos.ambitos.Peek(), Constantes.varLocal, apuntador, 1);
+                                    this.apuntador++;
                                 }
                                 else
                                 {
                                     nuevo = new Simbolo(Constantes.noTieneVisi, nombre, tipo, getTipoAtributo(tipo), ambitos.ambitos.Peek(), Constantes.varLocal, apuntador, 1);
+                                    this.apuntador++;
                                 }
                                 lista.Add(nuevo);
                             }
@@ -220,9 +407,22 @@ namespace Proyecto2_201122872.UML
 
                     }
 
+                case Constantes.mientras:
+                    {
+
+                        ambitos.addWhile();
+                        //MIENTRAS.Rule = ToTerm(Constantes.mientras) + EXPRESION+":" + Eos + CUERPO;
+                        lista = generarSimbolosMetodo(nodo.ChildNodes[1], lista, ambitos);
+                        ambitos.ambitos.Pop();
+                        return lista;
+                    }
+
+
+
+
             }
 
-
+           
 
             return lista;
 
@@ -280,14 +480,14 @@ namespace Proyecto2_201122872.UML
 
             retorno = generarSimbolosAtributos();
             Ambitos ambitos;
-            int apuntador;
+            
             foreach (Funcion func in this.funciones.funciones)
             {
                 apuntador = 0;
                 ambitos = new Ambitos();
                 ambitos.addAmbito(func.firma);
                 List<Simbolo> lTemporalFuncion= new List<Simbolo>();
-                lTemporalFuncion = generarSimbolosMetodo(func.cuerpo, apuntador, lTemporalFuncion, ambitos);
+                lTemporalFuncion = generarSimbolosMetodo(func.cuerpo, lTemporalFuncion, ambitos);
                 foreach (Simbolo item in lTemporalFuncion)
                 {
                     retorno.Add(item);

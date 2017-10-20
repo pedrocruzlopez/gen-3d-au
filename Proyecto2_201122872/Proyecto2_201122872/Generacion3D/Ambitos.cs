@@ -23,7 +23,7 @@ namespace Proyecto2_201122872.Generacion3D
                 | ELEGIR;*/
 
         public Stack<String> ambitos;
-        int valIf, valWhile, valPara, valLoop, valHacer, valRepetir, valElegir; 
+        int valIf, valWhile, valPara, valLoop, valHacer, valRepetir, valCaso, valDefecto, valElse, valElegir; 
 
         public Ambitos()
         {
@@ -34,8 +34,11 @@ namespace Proyecto2_201122872.Generacion3D
             valLoop = 0;
             valHacer = 0;
             valRepetir = 0;
-            valElegir = 0;
+            valCaso = 0;
+            valDefecto = 0;
+            valElse = 0;
         }
+
 
         public void addRepetir()
         {
@@ -76,10 +79,30 @@ namespace Proyecto2_201122872.Generacion3D
             this.ambitos.Push(Constantes.si + valIf);
         }
 
+        public void addElse()
+        {
+            valElse++;
+            this.ambitos.Push(Constantes.sino + valElse);
+        }
+
+        
+        public void addCaso()
+        {
+            valCaso++;
+            this.ambitos.Push(Constantes.caso + valCaso);
+        }
+
+        public void addDefecto()
+        {
+            valDefecto++;
+            this.ambitos.Push(Constantes.defecto + valDefecto);
+        }
+
         public void addWhile()
         {
             valWhile++;
             this.ambitos.Push(Constantes.mientras + valWhile);
+            
         }
 
 
