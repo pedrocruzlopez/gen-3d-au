@@ -66,7 +66,8 @@ namespace Proyecto2_201122872.Generacion3D
             }
             else
             {
-              // uml= analizadorJava.parseConvertirUML(contenido);
+               uml= analizadorJava.parseConvertirUML2(contenido);
+               generarTablaSimbolos();
                
             }
 

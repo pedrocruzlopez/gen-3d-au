@@ -151,8 +151,8 @@ namespace Proyecto2_201122872.AnalizadorJava
 
         public const string noTieneVisi = "No tiene";
         public const string varLocal = "var local";
-    
-           
+
+        public const string decla2 = "decla2";   
         
 
 

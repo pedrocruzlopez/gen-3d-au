@@ -120,9 +120,9 @@ namespace Proyecto2_201122872.AnalizadorPython
                 MENOS_MENOS = new NonTerminal(Constantes.menosmenos),
                 TIPOUNARIO = new NonTerminal("TIPOU"),
                 NEGATIVO = new NonTerminal(Constantes.negativo);
-            
-                
 
+
+            NonTerminal RETORNO = new NonTerminal(Constantes.retorno);
 
             #endregion
 
@@ -198,18 +198,20 @@ namespace Proyecto2_201122872.AnalizadorPython
 
             INSTRUCCIONES.Rule = MakeStarRule(INSTRUCCIONES, INSTRUCCION);
 
-            INSTRUCCION.Rule = DECLRACION + Eos
-                | ASIGNACION + Eos
-                | SI
+            INSTRUCCION.Rule = DECLRACION + Eos//
+                | ASIGNACION + Eos//--
+                | SI//--
                 | SALIR + Eos
                 | CONTINUAR + Eos
-                | MIENTRAS
-                | PARA
+                | MIENTRAS//--
+                | PARA//--
                 | LOOP
-                | HACER
-                | REPETIR
+                | HACER//--
+                | REPETIR//--
                 | ELEGIR
-                | EXPRESION;
+                | EXPRESION + Eos//--
+               | RETORNO + Eos;//--
+
 
             DECLAARREGLO.Rule = identificador + POSICIONES;
 
@@ -225,7 +227,7 @@ namespace Proyecto2_201122872.AnalizadorPython
                | ToTerm(Constantes.si) + EXPRESION + ":" + Eos + CUERPO + L_EXTRAS
                | ToTerm(Constantes.si) + EXPRESION + ":" + Eos + CUERPO + SI_NO;
 
-
+            RETORNO.Rule = ToTerm(Constantes.retorno) + EXPRESION ;
 
             SI_NO.Rule = ToTerm(Constantes.sino_python) + ":" + Eos + CUERPO;
 
@@ -238,7 +240,7 @@ namespace Proyecto2_201122872.AnalizadorPython
             CONTINUAR.Rule = ToTerm(Constantes.continuar);
 
             MIENTRAS.Rule = ToTerm(Constantes.mientras) + EXPRESION+":" + Eos + CUERPO;
-
+            
             HACER.Rule = ToTerm(Constantes.hacer) + ":" + Eos + CUERPO + Constantes.mientras + EXPRESION+Eos;
 
             REPETIR.Rule = ToTerm(Constantes.repetir) + ":" + Eos + CUERPO + Constantes.hasta + EXPRESION+Eos;

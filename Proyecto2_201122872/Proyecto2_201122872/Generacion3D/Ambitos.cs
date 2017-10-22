@@ -10,7 +10,7 @@ namespace Proyecto2_201122872.Generacion3D
     {
 
         public Stack<String> ambitos;
-        int valIf, valWhile, valPara, valLoop, valHacer, valRepetir, valCaso, valDefecto, valElse, valElegir; 
+        int valIf, valWhile, valPara, valLoop, valHacer, valRepetir, valCaso, valDefecto, valElse, valElegir,valX; 
 
         public Ambitos()
         {
@@ -24,6 +24,7 @@ namespace Proyecto2_201122872.Generacion3D
             valCaso = 0;
             valDefecto = 0;
             valElse = 0;
+            valX = 0;
         }
 
 
@@ -92,7 +93,11 @@ namespace Proyecto2_201122872.Generacion3D
             
         }
 
-
+        public void addX()
+        {
+            valX++;
+            this.ambitos.Push(Constantes.x + valX);
+        }
 
         public String getAmbito()
         {
@@ -116,6 +121,9 @@ namespace Proyecto2_201122872.Generacion3D
 
             return contexto;
         }
+
+
+
 
 
     }

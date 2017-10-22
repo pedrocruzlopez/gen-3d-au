@@ -90,7 +90,7 @@ namespace Proyecto2_201122872.AnalizadorJava
             NonTerminal DECLAPARA = new NonTerminal("DECLAPARA");
             NonTerminal INSTRUCCIONES = new NonTerminal(Constantes.instrucciones);
             NonTerminal INSTRUCCION = new NonTerminal(Constantes.instruccion);
-            NonTerminal DECLARACION = new NonTerminal(Constantes.declaracion);
+            NonTerminal DECLARACION = new NonTerminal(Constantes.decla2);
             NonTerminal LPOSICIONES = new NonTerminal(Constantes.lposiciones);
             NonTerminal LEXPRESIONES = new NonTerminal(Constantes.lexpresiones);
             NonTerminal LFILAS = new NonTerminal(Constantes.lfilas);
@@ -265,16 +265,16 @@ namespace Proyecto2_201122872.AnalizadorJava
 
 
             INSTRUCCION.Rule = IMPRIMIR
-                | PARA
-                | REPETIR
+                | PARA//--
+                | REPETIR//--
                 | X
-                | HACER
-                | MIENTRAS
-                | SI
-                | DECLARACION
-                | ASIGNACION
-                | EXPRESION + ToTerm(";")
-                | RETORNO;
+                | HACER//--
+                | MIENTRAS//--
+                | SI//--
+                | DECLARACION//
+                | ASIGNACION//--
+                | EXPRESION + ToTerm(";")//--
+                | RETORNO;//--
 
             DECLAPARA.Rule = DECLARACION
                 | ASIGNACION;
@@ -442,8 +442,7 @@ namespace Proyecto2_201122872.AnalizadorJava
 
 
 
-           this.Root = EXPRESION;
-
+           this.Root = LISTAPUNTOS;
 
 
 

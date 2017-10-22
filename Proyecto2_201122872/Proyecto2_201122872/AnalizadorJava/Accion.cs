@@ -23,7 +23,34 @@ namespace Proyecto2_201122872.AnalizadorJava
             this.clasesUML = new List<ParseTreeNode>();
         }
 
+        public clasesDiagrama generarUML2(ParseTreeNode raiz)
+        {
+            clasesDiagrama nuevo = new clasesDiagrama();
+            generarListadoClases(raiz);
+            Clase claseActual;
+            foreach (ParseTreeNode actual in this.clasesUML)
+            {
+                claseActual = generarClase(actual);
+                if (claseActual != null)
+                {
+                    claseActual.setLenguaje("java");
+                    if (!nuevo.insertarClase(claseActual))
+                    {
+                        ErrorA nuev3o = new ErrorA(Constantes.errorSemantico, "La clase " + claseActual.getNombre() + ", no se pudo crear, ya existe", actual.FindToken());
+                        Form1.errores.addError(nuev3o);
+                    }
+                }
+                else
+                {
+                    ErrorA nuev3o = new ErrorA(Constantes.errorSemantico, "Ocurrio un error, no se pudo generar la clase ", actual.FindToken());
+                    Form1.errores.addError(nuev3o);
 
+                }
+
+            }
+            return nuevo;
+
+        }
 
         public void generarUML(ParseTreeNode raiz)
         {

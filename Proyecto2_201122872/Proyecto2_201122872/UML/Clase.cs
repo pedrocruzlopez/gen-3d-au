@@ -202,6 +202,8 @@ namespace Proyecto2_201122872.UML
             }
         }
 
+
+
         private List<Simbolo> generarSimbolosMetodo(ParseTreeNode nodo, List<Simbolo> lista, Ambitos ambitos)
         {
 
@@ -220,8 +222,52 @@ namespace Proyecto2_201122872.UML
                  * 
                 | REPETIR//
                 | ELEGIR;//*/
-                
-                
+
+                #region nuevasJava
+
+                case Constantes.decla2:{
+
+                    int noHijos = nodo.ChildNodes.Count;
+                    if (noHijos == 2)
+                    {//TIPO + identificador + ToTerm(";")
+                        Simbolo s = new Simbolo(Constantes.noTieneVisi, nodo.ChildNodes[1].Token.ValueString, nodo.ChildNodes[0].ChildNodes[0].Token.ValueString,
+                            getTipoAtributo(nodo.ChildNodes[0].ChildNodes[0].Token.ValueString), ambitos.getAmbito(), Constantes.varLocal, apuntador, 1);
+                        apuntador++;
+                        lista.Add(s);
+                        return lista;
+                        
+                    }
+                    else if (noHijos == 3)
+                    {
+                        if (nodo.ChildNodes[2].Term.Name.Equals(Constantes.lposiciones, StringComparison.OrdinalIgnoreCase))
+                        {//TIPO + identificador + LPOSICIONES + ToTerm(";")
+
+                            return lista;
+                        }
+                        else
+                        {//TIPO + identificador + ToTerm("=") + EXPRESION + ";"
+
+                            Simbolo s = new Simbolo(Constantes.noTieneVisi, nodo.ChildNodes[1].Token.ValueString, nodo.ChildNodes[0].ChildNodes[0].Token.ValueString,
+                            getTipoAtributo(nodo.ChildNodes[0].ChildNodes[0].Token.ValueString), ambitos.getAmbito(), Constantes.varLocal, apuntador, 1);
+                            apuntador++;
+                            lista.Add(s);
+                            return lista;
+
+                        }
+                    }
+                    else
+                    {
+                        //TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";";
+                        return lista;
+
+                    }
+
+
+                }
+
+                #endregion
+
+
                 case Constantes.si:
                     {
                         /* *   SI.Rule = ToTerm(Constantes.si) + EXPRESION + ":" + Eos + CUERPO + L_EXTRAS + SI_NO
@@ -287,6 +333,16 @@ namespace Proyecto2_201122872.UML
                         lista= generarSimbolosMetodo(nodo.ChildNodes[1], lista, ambitos);
                         ambitos.ambitos.Pop();
                         return lista;
+                    }
+
+                case Constantes.x:
+                    {
+
+                        ambitos.addX();
+                        lista = generarSimbolosMetodo(nodo.ChildNodes[2], lista, ambitos);
+                        ambitos.ambitos.Pop();
+                        return lista;
+
                     }
 
                 case Constantes.cuerpoElegir:
@@ -478,6 +534,28 @@ namespace Proyecto2_201122872.UML
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         #region GenerarSimbolos Atributos
         private List<Simbolo> generarSimbolosAtributos()
         {
@@ -519,6 +597,9 @@ namespace Proyecto2_201122872.UML
         }
 
         #endregion
+
+
+
 
 
 
