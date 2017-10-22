@@ -446,7 +446,10 @@ namespace Proyecto2_201122872.UML
                     }
                 case Constantes.cuerpo:
                     {
-                        return generarSimbolosMetodo(nodo.ChildNodes[0], lista, ambitos);
+                        if (nodo.ChildNodes.Count > 0)
+                            return generarSimbolosMetodo(nodo.ChildNodes[0], lista, ambitos);
+                        else
+                            return lista;
                     }
                 case Constantes.instrucciones:
                     {

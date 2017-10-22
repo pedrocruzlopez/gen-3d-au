@@ -442,7 +442,7 @@ namespace Proyecto2_201122872.AnalizadorJava
 
 
 
-           this.Root = LISTAPUNTOS;
+           this.Root = LISTACLASES;
 
 
 
