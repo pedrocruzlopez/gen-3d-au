@@ -82,7 +82,7 @@ namespace Proyecto2_201122872.AnalizadorPython
             return uml;
         }
 
-        public void parse(String str)
+        public ParseTreeNode parse(String str)
         {
             ParseTree s_tree = p.Parse(str); //parsear la entrada
             if (s_tree.HasErrors())//SE VERIFICA SI LA ENTRADA POSEE ERRORES
@@ -99,9 +99,12 @@ namespace Proyecto2_201122872.AnalizadorPython
                 Console.WriteLine("==================================================");
                 dispTree(s_tree.Root, 0);//IMPRIMO EL ARBOL
                 graficarArbol(s_tree.Root);//GRAFICO EL ARBOL
+                return s_tree.Root;
             }
             else
                 MessageBox.Show(null, "Entrada posee errores", "Error", 0);
+
+            return null;
         }
 
 

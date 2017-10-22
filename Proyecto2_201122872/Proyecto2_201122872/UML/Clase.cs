@@ -138,6 +138,56 @@ namespace Proyecto2_201122872.UML
         }
 
 
+
+        /*----- Retorno de constructores , principal y funciones con metodos -------------*/
+
+
+        public List<Funcion> getConstructores()
+        {
+            List<Funcion> retorno = new List<Funcion>();
+
+            foreach (Funcion func in funciones.funciones)
+            {
+                if (func.esConstructor)
+                {
+                    retorno.Add(func);
+                }
+                
+            }
+
+            return retorno;
+        }
+
+
+        public Funcion getPrincipal()
+        {
+            foreach (Funcion func in funciones.funciones)
+            {
+                if (func.esPrincipal)
+                {
+                    return func;
+                }
+
+            }
+
+            return null;
+        }
+
+        public List<Funcion> getFunciones()
+        {
+            List<Funcion> retorno = new List<Funcion>();
+            foreach (Funcion fun in funciones.funciones)
+            {
+                if (!fun.esPrincipal && !fun.esConstructor)
+                {
+                    retorno.Add(fun);
+                }
+            }
+            return retorno;
+        }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+
+
         /*-------------------- Pasar Elementos a tabla de simbolos ----------------------*/
         private string getTipoAtributo(String tipo)
         {

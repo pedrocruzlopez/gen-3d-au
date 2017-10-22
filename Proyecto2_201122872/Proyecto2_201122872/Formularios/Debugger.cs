@@ -45,10 +45,6 @@ namespace Proyecto2_201122872.Formularios
             this.dataGridView1.Columns.Add("apuntador", "Apuntador");
             this.dataGridView1.Columns.Add("tamanho", "Tamanho");
 
-            string[] row0 = { "11/22/1968", "29", "Revolution 9", 
-        "Beatles", "The Beatles [White Album]","fdgsgds","dsffdsf","hhhhh" };
-            dataGridView1.Rows.Add(row0);
-
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -227,7 +223,7 @@ namespace Proyecto2_201122872.Formularios
                 generador.ejecutarArchivos(Path.GetFullPath(ubicacion[i]), Path.GetExtension(ubicacion[i]));
 
             }
-
+            generador.escribirC3DClases();
            // generador.generarTablaSimbolos();
             foreach (Simbolo s in generador.tablaSimbolos.tabla)
             {
@@ -235,21 +231,39 @@ namespace Proyecto2_201122872.Formularios
                dataGridView1.Rows.Add(row0);
             }
 
+            Console.WriteLine("-------- Inicio codigo -----------");
 
-            /* this.dataGridView1.Columns.Add("acceso", "Acceso");
-            this.dataGridView1.Columns.Add("nombreAcceso", "Nombre de Acceso");
-            this.dataGridView1.Columns.Add("nombre", "Nombre");
-            this.dataGridView1.Columns.Add("tipo", "Tipo");
-            this.dataGridView1.Columns.Add("ambito", "Ambito");
-            this.dataGridView1.Columns.Add("rol", "Rol");
-            this.dataGridView1.Columns.Add("apuntador", "Apuntador");
-            this.dataGridView1.Columns.Add("tamanho", "Tamanho");
+            escribir3D(generador.c3d.codigo3D);
 
-            string[] row0 = { "11/22/1968", "29", "Revolution 9", 
-        "Beatles", "The Beatles [White Album]","fdgsgds","dsffdsf","hhhhh" };
-            dataGridView1.Rows.Add(row0);*/
+            Console.WriteLine("------- fin codigo --------------");
+
 
         }
+
+
+        public void escribir3D(string cad)
+        {
+            try
+            {
+
+                //Pass the filepath and filename to the StreamWriter Constructor
+                StreamWriter sw = new StreamWriter("C:\\Test.txt");
+
+                //Write a line of text
+                sw.WriteLine(cad);
+                //Close the file
+                sw.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Executing finally block.");
+            }
+        }
+
 
     }
 }

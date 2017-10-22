@@ -432,17 +432,17 @@ namespace Proyecto2_201122872.AnalizadorJava
             MarkPunctuation(",", "(", ")", ";", "=", "@", "{","}","clase","[","]",Constantes.nuevo,".","si","sino",
                 "mientras","hacer","para","x","repetir","return","imprimir",Constantes.masmas, Constantes.menosmenos,
                 Constantes.menor, Constantes.mayor, Constantes.menorIgual, Constantes.mayorIgual, Constantes.igualIgual, Constantes.distintoA,
-                Constantes.orJava, Constantes.andJava, Constantes.xorJava, Constantes.notJavaPython,sobreescribir);
+                Constantes.orJava, Constantes.andJava, Constantes.xorJava, Constantes.notJavaPython,sobreescribir,"*","^","+","-","/");
 
 
            
            MarkTransient(L_ELEMENTOS, ELEMENTO,POSICION,SIMB_ARIT,SIMB_LOG,SIMB_REL,DECLAPARA, INSTRUCCION, INSTRUCCIONES,
-               ARITMETICA,LOGICA,RELACIONAL,UNARIO,INSTRUCCIONES, TERMINO,CUERPO_CLASE);
+               ARITMETICA,LOGICA,RELACIONAL,UNARIO,INSTRUCCIONES,TERMINO,CUERPO_CLASE);
 
 
 
 
-           this.Root = LISTACLASES;
+           this.Root = EXPRESION;
 
 
 

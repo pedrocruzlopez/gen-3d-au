@@ -35,6 +35,73 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
 
 
 
+        public int getPosicionDeClase(string id, Ambitos ambito)
+        {
+            for (int i = 0; i < ambito.ambitos.Count; i++)
+            {
+                if (i == ambito.ambitos.Count - 1)
+                {
+                    string amb = ambito.ambitos.ElementAt(i);
+                    foreach (Simbolo simb in this.tabla)
+                    {
+                        if (simb.ambito.Equals(amb, StringComparison.OrdinalIgnoreCase) &&
+                            simb.nombreReal.Equals(id, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return simb.apuntador;
+                        }
+                    }
+
+                }
+
+            }
+
+
+
+            return -1;
+
+        }
+        public int getPosicion(string id, Ambitos ambito)
+        {
+            for (int i = 0; i < ambito.ambitos.Count; i++)
+            {
+                if (i != ambito.ambitos.Count - 1)
+                {
+                    string amb = ambito.ambitos.ElementAt(i);
+                    foreach (Simbolo simb in this.tabla)
+                    {
+                        if (simb.ambito.Equals(amb, StringComparison.OrdinalIgnoreCase) &&
+                            simb.nombreReal.Equals(id, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return simb.apuntador;
+                        }
+                    }
+
+                }
+                    
+            }
+            
+            
+           
+            return -1;
+        }
+
+        public string getTipo(string id, Ambitos ambito)
+        {
+            foreach (String amb in ambito.ambitos)
+            {
+                foreach (Simbolo simb in this.tabla)
+                {
+                    if (simb.ambito.Equals(amb, StringComparison.OrdinalIgnoreCase) &&
+                        simb.nombreReal.Equals(id, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return simb.tipo;
+                    }
+                }
+
+            }
+            return "";
+        }
+
 
 
     }

@@ -208,7 +208,8 @@ namespace Proyecto2_201122872.AnalizadorPython
                 | LOOP
                 | HACER
                 | REPETIR
-                | ELEGIR;
+                | ELEGIR
+                | EXPRESION;
 
             DECLAARREGLO.Rule = identificador + POSICIONES;
 
@@ -390,8 +391,9 @@ namespace Proyecto2_201122872.AnalizadorPython
             #endregion
 
             #endregion
+            NonTerminal h = new NonTerminal("e");
+            h.Rule = TERMINO + Eos;
 
-            
 
             this.Root = LISTACLASES;
 
@@ -399,7 +401,7 @@ namespace Proyecto2_201122872.AnalizadorPython
             MarkPunctuation(Constantes.out_string, Constantes.orPython, Constantes.andPython, Constantes.xorPython, Constantes.notJavaPython,"+","-","*","/","^", "(", ")", ";", "=", "@", "{", "}", "clase", "[", "]", Constantes.nuevoPython, ".", "si", "sino",
                "mientras", "hacer", "para", "x", "repetir", "return", "imprimir", Constantes.masmas, Constantes.menosmenos,
                Constantes.menor, Constantes.mayor, Constantes.menorIgual, Constantes.mayorIgual, Constantes.igualIgual, Constantes.distintoA,
-               Constantes.orPython, Constantes.andPython, Constantes.xorPython, Constantes.notJavaPython, "__consturctor",
+               Constantes.orPython, Constantes.andPython, Constantes.xorPython, Constantes.notJavaPython, "__constructor",Constantes.metodo,Constantes.funcion,
                
                 Constantes.out_string,Constantes.loop,
             Constantes.parseint,
@@ -413,7 +415,7 @@ namespace Proyecto2_201122872.AnalizadorPython
 
 
             MarkTransient(L_ELEMENTOS, ELEMENTO, POSICION, TIPOUNARIO, INSTRUCCION, INSTRUCCIONES,
-                ARITMETICA, LOGICA, RELACIONAL, UNARIO, INSTRUCCIONES, TERMINO, CUERPO_CLASE);
+                ARITMETICA, LOGICA, RELACIONAL, UNARIO, INSTRUCCIONES, TERMINO, CUERPO_CLASE,h);
 
         }
 
