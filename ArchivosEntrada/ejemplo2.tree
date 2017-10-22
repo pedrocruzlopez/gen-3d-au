@@ -1,5 +1,5 @@
 clase prueba1[puebas]:
-
+	protegido entero valorClase,banderaEntera
 	publico mEtoDo nombreMetodo[entero num1, decimal num2]:
 		entero valor
 		char caracter,valor2

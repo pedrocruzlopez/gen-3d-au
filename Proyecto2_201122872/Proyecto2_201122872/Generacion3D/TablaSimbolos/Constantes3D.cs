@@ -13,7 +13,9 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
         public const string retorno = "retorno";
         public const string funcion = "funcion";
         public const string metodo = "metodo";
+        public const string constructor = "constructor";
+        public const string principa = "principal";
         public const string goto_ = "goto";
-        
+        public const string THIS = "this";
     }
 }

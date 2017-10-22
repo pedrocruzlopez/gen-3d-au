@@ -1,5 +1,4 @@
-﻿using Proyecto2_201122872.Instrucciones;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,16 +6,17 @@ using System.Threading.Tasks;
 using Irony.Parsing;
 using Irony.Interpreter;
 using Irony.Ast;
+using Proyecto2_201122872.AnalizadorJava;
 
 namespace Proyecto2_201122872.UML
 {
     public class Funcion
     {
-        private string clase;
-        private string nombre;
-        private string tipo;
-        private ListaParametro parametros;
-        private string visibilidad;
+        public string clase;
+        public string nombre;
+        public string tipo;
+        public ListaParametro parametros;
+        public string visibilidad;
         public string firma;
         public Boolean esSobreescrita=false;
         public Boolean esPrincipal = false;
@@ -77,6 +77,49 @@ namespace Proyecto2_201122872.UML
         {
            return getVisibilidadGraphivz() + " " + this.nombre + "(" + this.parametros.getCadenaGraphivz() + "): " + tipo;
 
+
+        }
+
+        public String getRol()
+        {
+            if (tipo.Equals(Constantes.tipoVoid, StringComparison.OrdinalIgnoreCase))
+            {
+                //es un metodo
+
+                if (this.esConstructor)
+                {
+                    //constructor
+                    return Proyecto2_201122872.Generacion3D.TablaSimbolos.Constantes3D.constructor;
+
+                }
+                else if (this.esPrincipal)
+                {
+                    //es principal
+                    return Proyecto2_201122872.Generacion3D.TablaSimbolos.Constantes3D.principa;
+                }
+                else
+                {
+                    //es un metodo
+                    return Proyecto2_201122872.Generacion3D.TablaSimbolos.Constantes3D.metodo;
+                }
+            }
+            else
+            {//es una funcion
+                if (this.esConstructor)
+                {
+                    return Proyecto2_201122872.Generacion3D.TablaSimbolos.Constantes3D.constructor;
+                }
+                else if (this.esPrincipal)
+                {
+                    return Proyecto2_201122872.Generacion3D.TablaSimbolos.Constantes3D.principa;
+                }
+                else
+                {
+                    return Proyecto2_201122872.Generacion3D.TablaSimbolos.Constantes3D.funcion;
+                }
+
+
+            }
 
         }
 

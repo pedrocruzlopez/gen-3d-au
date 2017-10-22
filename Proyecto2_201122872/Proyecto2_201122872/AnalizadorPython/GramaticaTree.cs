@@ -180,7 +180,7 @@ namespace Proyecto2_201122872.AnalizadorPython
             L_ELEMENTOS.Rule = MakeStarRule(L_ELEMENTOS, ELEMENTO);
 
             ELEMENTO.Rule = FUNCION
-                | ATRIBUTO
+                | ATRIBUTO + Eos
                 | CONSTRUCTOR
                 | FUNCION_SOBRE;
 

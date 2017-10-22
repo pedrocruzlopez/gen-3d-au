@@ -9,19 +9,6 @@ namespace Proyecto2_201122872.Generacion3D
     public class Ambitos
     {
 
-
-          /*INSTRUCCION.Rule = DECLRACION + Eos
-                | ASIGNACION + Eos
-                | SI
-                | SALIR + Eos//
-                | CONTINUAR + Eos//
-                | MIENTRAS
-                | PARA
-                | LOOP
-                | HACER
-                | REPETIR
-                | ELEGIR;*/
-
         public Stack<String> ambitos;
         int valIf, valWhile, valPara, valLoop, valHacer, valRepetir, valCaso, valDefecto, valElse, valElegir; 
 
@@ -106,6 +93,29 @@ namespace Proyecto2_201122872.Generacion3D
         }
 
 
+
+        public String getAmbito()
+        {
+            string contexto="";
+            string val;
+            for (int i = ambitos.Count - 1; i >= 0; i--)
+            {
+
+                val = ambitos.ElementAt(i);
+                if (i==0)
+                {
+                    contexto += val;
+                }
+                else
+                {
+                    contexto += val + "_";
+
+                }
+
+            }
+
+            return contexto;
+        }
 
 
     }

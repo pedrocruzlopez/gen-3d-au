@@ -37,9 +37,9 @@ namespace Proyecto2_201122872.Formularios
             cont = 0;
 
             this.dataGridView1.Columns.Add("acceso", "Acceso");
-            this.dataGridView1.Columns.Add("nombreAcceso", "Nombre de Acceso");
             this.dataGridView1.Columns.Add("nombre", "Nombre");
             this.dataGridView1.Columns.Add("tipo", "Tipo");
+            this.dataGridView1.Columns.Add("tipoElemento", "Tipo Elemento");
             this.dataGridView1.Columns.Add("ambito", "Ambito");
             this.dataGridView1.Columns.Add("rol", "Rol");
             this.dataGridView1.Columns.Add("apuntador", "Apuntador");
@@ -227,7 +227,7 @@ namespace Proyecto2_201122872.Formularios
            // generador.generarTablaSimbolos();
             foreach (Simbolo s in generador.tablaSimbolos.tabla)
             {
-               string [] row0={s.visibilidad,s.nombreReferencia,s.nombreReal,s.tipo,s.ambito,s.rol,s.apuntador+"",s.tamanho+""};
+               string [] row0={s.visibilidad,s.nombreReal,s.tipo,s.tipoElemento,s.ambito,s.rol,s.apuntador+"",s.tamanho+""};
                dataGridView1.Rows.Add(row0);
             }
 

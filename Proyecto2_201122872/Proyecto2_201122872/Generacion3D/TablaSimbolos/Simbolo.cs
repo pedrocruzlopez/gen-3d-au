@@ -10,7 +10,6 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
     {
 
         public string visibilidad;
-        public string nombreReferencia;
         public string nombreReal;
         public string tipoElemento;
         public string tipo;

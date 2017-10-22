@@ -45,11 +45,11 @@ namespace Proyecto2_201122872.UML
                 actual = parametros.ElementAt(i);
                 if (i == parametros.Count - 1)
                 {
-                    cad += actual.nombre;
+                    cad += actual.tipo;
                 }
                 else
                 {
-                    cad += actual.nombre + "_";
+                    cad += actual.tipo + "_";
                 }
             }
             return cad;

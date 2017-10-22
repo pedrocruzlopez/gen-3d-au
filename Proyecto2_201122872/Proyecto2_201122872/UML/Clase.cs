@@ -31,12 +31,10 @@ namespace Proyecto2_201122872.UML
 
         }
 
-
         public void setLenguaje(string l)
         {
             this.lenguaje = l;
         }
-
 
         private void iniciarValores()
         {
@@ -45,7 +43,6 @@ namespace Proyecto2_201122872.UML
             funciones = new listaFunciones();
             this.tamanho = 0;
         }
-
 
         public Clase()
         {
@@ -441,12 +438,12 @@ namespace Proyecto2_201122872.UML
                                 nombre = item.Token.ValueString;
                                 if (getTipoAtributo(tipo).Equals(Constantes.OBJETO, StringComparison.OrdinalIgnoreCase))
                                 {
-                                    nuevo = new Simbolo(Constantes.noTieneVisi, nombre, tipo, getTipoAtributo(tipo), ambitos.ambitos.Peek(), Constantes.varLocal, apuntador, 1);
+                                    nuevo = new Simbolo(Constantes.noTieneVisi, nombre, tipo, getTipoAtributo(tipo), ambitos.getAmbito(), Constantes.varLocal, apuntador, 1);
                                     this.apuntador++;
                                 }
                                 else
                                 {
-                                    nuevo = new Simbolo(Constantes.noTieneVisi, nombre, tipo, getTipoAtributo(tipo), ambitos.ambitos.Peek(), Constantes.varLocal, apuntador, 1);
+                                    nuevo = new Simbolo(Constantes.noTieneVisi, nombre, tipo, getTipoAtributo(tipo), ambitos.getAmbito(), Constantes.varLocal, apuntador, 1);
                                     this.apuntador++;
                                 }
                                 lista.Add(nuevo);
@@ -479,6 +476,9 @@ namespace Proyecto2_201122872.UML
         }
 
 
+
+
+        #region GenerarSimbolos Atributos
         private List<Simbolo> generarSimbolosAtributos()
         {
             int apuntador = 0;
@@ -518,13 +518,24 @@ namespace Proyecto2_201122872.UML
 
         }
 
-        
+        #endregion
+
+
+
 
         /*---  Generacion de tabla de simbolos -------*/
 
 
         public List<Simbolo> getSimbolosClase()
         {
+            /*Pasos para simboos de fucniones y metodos: 
+             * 1.Ingresamos a la tabla de simblos el simbolo de la funcion o metodo
+             * 2. Ingresamos el this 
+             * 3. Ingresamos los parametros
+             * 4. ingresamos las declaraciones que se hayan realizado en la funcion
+             * 5. ingresamos el return
+             * 6. Calculamos el tamanho de metodo y lo vamos a actualizar en la lista
+             */
 
             List<Simbolo> retorno = new List<Simbolo>();
 
@@ -533,15 +544,48 @@ namespace Proyecto2_201122872.UML
             
             foreach (Funcion func in this.funciones.funciones)
             {
-                apuntador = 0;
+                
                 ambitos = new Ambitos();
                 ambitos.addAmbito(func.firma);
+                apuntador = 0;
+                
+                //paso 2
+                Simbolo simThis = new Simbolo(Constantes.noTieneVisi, Constantes3D.THIS, Constantes3D.THIS, "", ambitos.getAmbito(), Constantes3D.THIS, apuntador, 1);
+                apuntador++;
+
+               //paso 3
+                List<Simbolo> simbolosParametros = new List<Simbolo>();
+                Simbolo simTemporal;
+                foreach (variable var in func.parametros.parametros)
+                {
+                    simTemporal = new Simbolo(Constantes.noTieneVisi, var.nombre, var.tipo, getTipoAtributo(var.tipo), ambitos.getAmbito(), Constantes3D.parametro, apuntador, 1);
+                    simbolosParametros.Add(simTemporal);
+                    apuntador++;
+                }
+
+                //paso 4
                 List<Simbolo> lTemporalFuncion= new List<Simbolo>();
                 lTemporalFuncion = generarSimbolosMetodo(func.cuerpo, lTemporalFuncion, ambitos);
+
+                //paso 5
+                Simbolo simReturn = new Simbolo(Constantes.noTieneVisi, Constantes3D.retorno, Constantes3D.retorno, "", ambitos.getAmbito(), Constantes3D.retorno, apuntador, 1);
+
+                int sizeFun = 1 + simbolosParametros.Count + lTemporalFuncion.Count + 1;
+                //paso 1
+                Simbolo simFuncion = new Simbolo(func.visibilidad, func.nombre, func.tipo, "", this.nombre, func.getRol(), -1, sizeFun);
+                retorno.Add(simFuncion);
+                retorno.Add(simThis);
+                foreach (Simbolo item in simbolosParametros)
+                {
+                    retorno.Add(item);
+                }
+
                 foreach (Simbolo item in lTemporalFuncion)
                 {
                     retorno.Add(item);
                 }
+                retorno.Add(simReturn);
+                ambitos.ambitos.Pop();
             }
             return retorno;
         }
