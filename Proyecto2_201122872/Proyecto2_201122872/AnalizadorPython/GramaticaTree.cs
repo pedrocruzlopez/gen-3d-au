@@ -18,6 +18,9 @@ namespace Proyecto2_201122872.AnalizadorPython
 
             #region expresiones regulares
 
+            var doble = new RegexBasedTerminal("doble", "[0-9]+[.][0-9]+");
+            var entero = new RegexBasedTerminal("entero", "[0-9]+");
+
             var identificador = TerminalFactory.CreateCSharpIdentifier("identificador");
             var numero = TerminalFactory.CreateCSharpNumber("numero");
             var val_false = Constantes.falso;
@@ -300,8 +303,9 @@ namespace Proyecto2_201122872.AnalizadorPython
             SELF.Rule= ToTerm(Constantes.self);
 
             ID.Rule = identificador;
-            ENTERO.Rule = numero;
-            DECIMAL.Rule = numero;
+            ENTERO.Rule = entero;
+            DECIMAL.Rule = doble;
+
             CADENA.Rule = cadena;
             CHAR.Rule = caracter;
             BOOL.Rule = ToTerm(val_true)

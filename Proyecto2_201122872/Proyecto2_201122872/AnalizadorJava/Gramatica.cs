@@ -18,6 +18,8 @@ namespace Proyecto2_201122872.AnalizadorJava
 
             #region expresiones regulares
 
+            var doble = new RegexBasedTerminal("doble", "[0-9]+[.][0-9]+");
+            var entero = new RegexBasedTerminal("entero", "[0-9]+");
             var identificador = TerminalFactory.CreateCSharpIdentifier("identificador");
             var numero = TerminalFactory.CreateCSharpNumber("numero");
             var val_false = Constantes.falso;
@@ -312,8 +314,8 @@ namespace Proyecto2_201122872.AnalizadorJava
 
             LFILAS.Rule = MakePlusRule(LFILAS, ToTerm(","), FILA);
 
-            DECIMAL.Rule = numero;
-            ENTERO.Rule = numero;
+            DECIMAL.Rule = doble;
+            ENTERO.Rule = entero;
             CADENA.Rule = cadena;
             ID.Rule = identificador;
             CHAR.Rule = caracter;
@@ -415,7 +417,7 @@ namespace Proyecto2_201122872.AnalizadorJava
 
 
 
-            this.RegisterOperators(9, UNARIO);
+            this.RegisterOperators(9, UNARIO,NEGATIVO);
             this.RegisterOperators(8, Associativity.Right, "^");
             this.RegisterOperators(7, Associativity.Left, "/", "*");
             this.RegisterOperators(6, Associativity.Left, "-", "+");

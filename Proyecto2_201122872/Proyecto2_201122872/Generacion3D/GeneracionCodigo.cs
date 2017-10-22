@@ -64,7 +64,7 @@ namespace Proyecto2_201122872.Generacion3D
                 
                 
             }
-            else
+            else if (extension.Equals(".olc", StringComparison.OrdinalIgnoreCase))
             {
                uml= analizadorJava.parseConvertirUML2(contenido);
                generarTablaSimbolos();
@@ -157,18 +157,21 @@ namespace Proyecto2_201122872.Generacion3D
 
 
 
-
+        #region generacion c3d cuerpo
 
         public void evaluarCuerpo(ParseTreeNode nodo, Ambitos ambitos)
         {
-/*
+
             switch (nodo.Term.Name)
             {
 
                 #region inicialesCuerpo
                 case Constantes.cuerpo:
                     {
-                        evaluarCuerpo(nodo.ChildNodes[0], ambitos);
+                        if (nodo.ChildNodes.Count > 0)
+                            evaluarCuerpo(nodo.ChildNodes[0], ambitos);
+                        else
+                            break;
                         break;
                     }
                 case Constantes.instrucciones:
@@ -191,7 +194,7 @@ namespace Proyecto2_201122872.Generacion3D
 
 
                    case Constantes.asignacion:{
-
+                       /*
                        int noHijos1 = nodo.ChildNodes[0].ChildNodes.Count;
                        int noHijos2 = nodo.ChildNodes[1].ChildNodes.Count;
                        if (noHijos1 == 1)
@@ -232,7 +235,7 @@ namespace Proyecto2_201122872.Generacion3D
                        }
                        else { }
 
-
+                       */
                        break;
 
                     }
@@ -240,7 +243,59 @@ namespace Proyecto2_201122872.Generacion3D
                 #endregion
 
 
-                /*INSTRUCCION.Rule = DECLRACION + Eos
+                   #region Declaraciones
+
+                   case Constantes.declaracion:
+                       {//declaracion para variables de pythodn , lo unicio que se debe hacer es calcular el tamanho  de un arreglo
+
+                           break;
+                       }
+
+                   case Constantes.decla2:
+                       {
+                           /* 
+            DECLARACION.Rule = TIPO + identificador + ToTerm(";")
+                
+                | TIPO + identificador + LPOSICIONES + ToTerm(";")
+                | TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";";
+                            */
+                           int noHijos = nodo.ChildNodes.Count;
+
+                           if (noHijos == 3)
+                           {
+                               if (!nodo.ChildNodes[2].Term.Name.Equals(Constantes.lposiciones, StringComparison.OrdinalIgnoreCase) &&
+                                   nodo.ChildNodes[2].ChildNodes.Count==1)
+                               {
+                                   //| TIPO + identificador + ToTerm("=") + EXPRESION + ";
+                                   ParseTreeNode nodoExpresion = nodo.ChildNodes[2];
+                                   string nombreVar = nodo.ChildNodes[1].Token.ValueString;
+                                   string tipo = nodo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                                   int posVar = tablaSimbolos.getPosicion(nombreVar, ambitos);
+
+                                   //es un int
+                                   if (tipo.Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase))
+                                   {
+                                       string et1 = c3d.getTemporal();
+                                       c3d.addCodigo(et1 + " = P + " + posVar + ";");
+                                       object exp = evaluarInt(nodoExpresion.ChildNodes[0],ambitos);
+                                       c3d.addCodigo("STACK[ " + et1 + " ] = " + exp + ";");
+                                   }
+
+
+                               }
+                           }
+
+
+
+
+
+                           break;
+                       }
+
+                    
+                   #endregion
+
+                   /*INSTRUCCION.Rule = DECLRACION + Eos
                 | ASIGNACION + Eos
                 | SI
                 | SALIR + Eos
@@ -252,7 +307,7 @@ namespace Proyecto2_201122872.Generacion3D
                 | REPETIR
                 | ELEGIR
                 | EXPRESION;*/
-            /*
+           
                     
                    case Constantes.mientras: 
                        {
@@ -265,7 +320,7 @@ namespace Proyecto2_201122872.Generacion3D
                            //codigo i = i + 1;
                            goto L1: 
                        L3:
-                           *//*
+                           */
                            String etiqCiclo = c3d.getEtiqueta();
                            c3d.addCodigo(etiqCiclo);
                            //
@@ -298,20 +353,23 @@ namespace Proyecto2_201122872.Generacion3D
 
             }
 
-*/
+
 
         }
 
-
+        #endregion
         /* --- Generaacion de codigo  Expresiones  -------*/
 
 
+
+
+        #region evaluar int
         public object evaluarInt(ParseTreeNode nodo, Ambitos ambitos)
         {
             switch (nodo.Term.Name.ToString())
             {
 
-                #region
+                #region 
                 case Constantes.expresion:
                     {
                         foreach (ParseTreeNode exp in nodo.ChildNodes)
@@ -324,10 +382,8 @@ namespace Proyecto2_201122872.Generacion3D
 
                 #endregion
 
-
-
-
                 #region id
+
                 case Constantes.id:
                     {
                         string nombre = nodo.ChildNodes[0].Token.ValueString;
@@ -441,14 +497,13 @@ namespace Proyecto2_201122872.Generacion3D
                         ErrorA er = new ErrorA("Semantico", "Asignacion de tipo entero, no es valido una cadena", nodo.FindToken());
                         Form1.errores.addError(er);
                         return "nulo";
-
-
-
                     }
 
 
                 #endregion
                     
+
+
                 #region operaciones
                 case Constantes.suma:
                     {
@@ -502,6 +557,14 @@ namespace Proyecto2_201122872.Generacion3D
 
                 #region unarios
 
+                case Constantes.negativo:
+                    {
+                        Object resultado = evaluarInt(nodo.ChildNodes[0], ambitos);
+                        string et = c3d.getTemporal();
+                        c3d.addCodigo(et + " = " + resultado + " * -1;");
+                        return et;
+                    }
+
                 case Constantes.masmas://tree
                     {
                         string tipo = nodo.ChildNodes[0].Term.Name;
@@ -529,7 +592,7 @@ namespace Proyecto2_201122872.Generacion3D
                         }
                     }
 
-                case Constantes.menosmenos:
+                case Constantes.menosmenos: //tree
                     {
                         string tipo = nodo.ChildNodes[0].Term.Name;
                         if (string.Equals(tipo, Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase))
@@ -568,9 +631,10 @@ namespace Proyecto2_201122872.Generacion3D
         }
 
 
+#endregion
 
 
-
+        #region evaluar Condicion
 
         public object evaluarExp(ParseTreeNode nodo)
         {
@@ -896,7 +960,8 @@ namespace Proyecto2_201122872.Generacion3D
 
             return "nulo";
         }
-           
+
+        #endregion
 
     }
 }

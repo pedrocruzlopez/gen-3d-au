@@ -14,6 +14,8 @@ Deposito () {
 } //Cierre del constructor
   
   Deposito (decimal valor_diametro, decimal valor_altura, Cadena valor_idDeposito) {
+  
+  entero g = -(5)*10;
  
 } //Cierre del constructor
 publico void setValoresDeposito (Cadena valor_idDeposito, decimal valor_diametro, decimal valor_altura) {
