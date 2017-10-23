@@ -5,6 +5,7 @@
 privado decimal diametro;
 privado decimal altura;
 privado Cadena idDeposito;
+privado entero h;
 
 //Constructor sin parámetros auxiliar
 
@@ -15,7 +16,13 @@ Deposito () {
   
   Deposito (decimal valor_diametro, decimal valor_altura, Cadena valor_idDeposito) {
   
-  entero g = -(5)*10;
+  cadena g = "hola mundo";
+  mientras (5<10){
+  entero val = 5*10;
+  }
+  
+  
+
  
 } //Cierre del constructor
 publico void setValoresDeposito (Cadena valor_idDeposito, decimal valor_diametro, decimal valor_altura) {

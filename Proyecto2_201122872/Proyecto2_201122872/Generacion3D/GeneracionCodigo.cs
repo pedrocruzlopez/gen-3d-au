@@ -280,6 +280,66 @@ namespace Proyecto2_201122872.Generacion3D
                                        object exp = evaluarInt(nodoExpresion.ChildNodes[0],ambitos);
                                        c3d.addCodigo("STACK[ " + et1 + " ] = " + exp + ";");
                                    }
+                                   //es un double
+                                   else if (tipo.Equals(Constantes.tipoDecimal, StringComparison.OrdinalIgnoreCase))
+                                   {
+                                       string et1 = c3d.getTemporal();
+                                       c3d.addCodigo(et1 + " = P + " + posVar + ";");
+                                       object exp = evaluarDouble(nodoExpresion.ChildNodes[0], ambitos);
+                                       c3d.addCodigo("STACK[ " + et1 + " ] = " + exp + ";");
+
+                                   }
+                                   //es un char
+                                   else if (tipo.Equals(Constantes.tipoChar, StringComparison.OrdinalIgnoreCase))
+                                   {
+                                       String val = nodoExpresion.ChildNodes[0].Term.Name.ToString();
+                                       if (val.Equals(Constantes.tipoChar, StringComparison.OrdinalIgnoreCase))
+                                       {
+                                           char caracter = (nodoExpresion.ChildNodes[0].ChildNodes[0].Token.ValueString).ToString()[0];
+                                           int ascii = (int)caracter;
+                                           string temp = c3d.getTemporal();
+                                           c3d.addCodigo(temp + " =  P +" + posVar + ";");
+                                           c3d.addCodigo("STACK[" + temp + "] = " + ascii + ";");
+                                       }
+                                       else
+                                       {
+                                           ErrorA er = new ErrorA(Constantes.errorSemantico, "Valor no valido para un asignacion de tipo char", nodoExpresion.FindToken());
+                                           Form1.errores.addError(er);
+
+                                       }
+                                   }
+                                   //es un bool
+                                   else if (tipo.Equals(Constantes.tipoBool, StringComparison.OrdinalIgnoreCase))
+                                   {
+                                       string et1 = c3d.getTemporal();
+                                       c3d.addCodigo(et1 + " = P + " + posVar + ";");
+                                       object exp = evaluarBool(nodoExpresion.ChildNodes[0], ambitos);
+                                       c3d.addCodigo("STACK[ " + et1 + " ] = " + exp + ";");
+
+                                   }
+                                   //es un string
+                                   else if (tipo.Equals(Constantes.tipoCadena, StringComparison.OrdinalIgnoreCase))
+                                   {
+                                       string temp1 = c3d.getTemporal();
+                                       c3d.addCodigo(temp1 + " = H;");
+                                       Object val = evaluarCadena(nodoExpresion.ChildNodes[0],ambitos);
+                                       c3d.addCodigo("HEAP[H] = -1;");
+                                       c3d.addCodigo("H = H + 1;");
+                                       String temp = c3d.getTemporal();
+                                       c3d.addCodigo( temp + " = P + " + posVar + ";");
+                                       c3d.addCodigo("STACK[" + temp + "]=" + temp1 + ";");
+
+                                   }
+                                   //es un objeto
+                                   else
+                                   {
+
+                                   }
+
+                               }
+                               else
+                               {
+                                   //es un arreglo
 
 
                                }
@@ -321,10 +381,11 @@ namespace Proyecto2_201122872.Generacion3D
                            goto L1: 
                        L3:
                            */
+                          
                            String etiqCiclo = c3d.getEtiqueta();
-                           c3d.addCodigo(etiqCiclo);
-                           //
-                           Object g = evaluarExp(nodo.ChildNodes[0]);
+                           c3d.addCodigo(etiqCiclo+":");
+                           ambitos.addWhile();
+                           Object g = evaluarExp(nodo.ChildNodes[0].ChildNodes[0]);
                            if (g is nodoCondicion)
                            {
                                nodoCondicion condWhile = (nodoCondicion)g;
@@ -338,7 +399,7 @@ namespace Proyecto2_201122872.Generacion3D
                                ErrorA er = new ErrorA(Constantes.errorSemantico, "Condicion no valida para un ciclo while", nodo.FindToken());
                                Form1.errores.addError(er);
                            }
-
+                           ambitos.ambitos.Pop();
 
                            break;
 
@@ -360,9 +421,6 @@ namespace Proyecto2_201122872.Generacion3D
         #endregion
         /* --- Generaacion de codigo  Expresiones  -------*/
 
-
-
-
         #region evaluar int
         public object evaluarInt(ParseTreeNode nodo, Ambitos ambitos)
         {
@@ -372,6 +430,7 @@ namespace Proyecto2_201122872.Generacion3D
                 #region 
                 case Constantes.expresion:
                     {
+                        Console.WriteLine("entre a una exp");
                         foreach (ParseTreeNode exp in nodo.ChildNodes)
                         {
                             evaluarExp(exp);
@@ -454,6 +513,9 @@ namespace Proyecto2_201122872.Generacion3D
 
                     }
                 #endregion
+
+
+
 
                 #region valores primitivos
 
@@ -632,6 +694,549 @@ namespace Proyecto2_201122872.Generacion3D
 
 
 #endregion
+
+
+        #region evaluar double
+
+        public object evaluarDouble(ParseTreeNode nodo, Ambitos ambitos)
+        {
+            switch (nodo.Term.Name.ToString())
+            {
+
+                #region
+                case Constantes.expresion:
+                    {
+                        foreach (ParseTreeNode exp in nodo.ChildNodes)
+                        {
+                            evaluarExp(exp);
+                        }
+                        break;
+
+                    }
+
+                #endregion
+
+                #region id
+
+                case Constantes.id:
+                    {
+                        string nombre = nodo.ChildNodes[0].Token.ValueString;
+                        int pos = tablaSimbolos.getPosicion(nombre, ambitos);
+                        string tipo = tablaSimbolos.getTipo(nombre, ambitos);
+                        if (pos == -1)
+                        {
+                            pos = tablaSimbolos.getPosicionDeClase(nombre, ambitos);
+                            if (pos == -1)
+                            {
+                                ErrorA err = new ErrorA("semantico", "No existe la variable " + nombre, nodo.FindToken());
+                                Form1.errores.addError(err);
+                            }
+                            else
+                            {
+
+                                string temp1 = c3d.getTemporal();
+                                string temp2 = c3d.getTemporal();
+                                string temp3 = c3d.getTemporal();
+                                string temp4 = c3d.getTemporal();
+
+                                c3d.addCodigo(temp1 + " = P + 0; //pos this");
+                                c3d.addCodigo(temp2 + " = STACK[ " + temp1 + " ];");
+                                c3d.addCodigo(temp3 + " = " + temp2 + " + " + pos + ";");
+                                c3d.addCodigo(temp4 + " = HEAP[ " + temp3 + " ];");
+                                return temp4;
+
+                            }
+                        }
+                        else
+                        {
+                            if (string.Equals(tipo, Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase))
+                            {
+                                String temp1 = c3d.getTemporal();
+                                String temp2 = c3d.getTemporal();
+                                c3d.addCodigo(temp1 + " = P + " + pos + ";");
+                                c3d.addCodigo(temp2 + " = STACK[" + temp1 + "];     // valor de " + nombre);
+                                return temp2;
+                            }
+                            else if (string.Equals(tipo, Constantes.tipoChar, StringComparison.OrdinalIgnoreCase))
+                            {
+                                String temp1 = c3d.getTemporal();
+                                String temp2 = c3d.getTemporal();
+                                c3d.addCodigo(temp1 + " = P + " + pos + ";");
+                                c3d.addCodigo(temp2 + " = STACK[" + temp1 + "];     // valor de " + nombre);
+                                return temp2;
+
+                            }
+                            else if (string.Equals(tipo, Constantes.tipoBool, StringComparison.OrdinalIgnoreCase))
+                            {
+                                String temp1 = c3d.getTemporal();
+                                String temp2 = c3d.getTemporal();
+                                c3d.addCodigo(temp1 + " = P + " + pos + ";");
+                                c3d.addCodigo(temp2 + " = STACK[" + temp1 + "];     // valor de " + nombre);
+                                return temp2;
+
+                            }
+                            else
+                            {
+                                ErrorA er = new ErrorA(Constantes.errorSemantico, "Error, tipo no valido para asignacion int, " + tipo, nodo.FindToken());
+                                Form1.errores.addError(er);
+
+                            }
+
+                        }
+
+                        return "nulo";
+
+                    }
+                #endregion
+
+
+
+
+                #region valores primitivos
+
+                case Constantes.tipoEntero:
+                    {
+                        return int.Parse(nodo.ChildNodes[0].Token.ValueString);
+                    }
+
+                case Constantes.tipoChar:
+                    {
+                        char valor = char.Parse(nodo.ChildNodes[0].Token.ValueString);
+                        char caracter = valor.ToString()[0];
+                        int ascii = (int)caracter;
+                        return ascii;
+                    }
+
+                case Constantes.tipoDecimal:
+                    {
+                        return double.Parse(nodo.ChildNodes[0].Token.ValueString);
+                    }
+
+
+                case Constantes.tipoBool:
+                    {
+                        String val_bol = nodo.ChildNodes[0].Token.ValueString;
+
+                        if (string.Equals(val_bol, "true", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return 1;
+                        }
+                        else
+                        {
+                            return 0;
+                        }
+                    }
+
+                case Constantes.tipoCadena:
+                    {
+                        ErrorA er = new ErrorA("Semantico", "Asignacion de tipo entero, no es valido una cadena", nodo.FindToken());
+                        Form1.errores.addError(er);
+                        return "nulo";
+                    }
+
+
+                #endregion
+
+
+
+#region operaciones
+                case Constantes.suma:
+                    {
+                        object val1 = evaluarDouble(nodo.ChildNodes[0], ambitos);
+                        object val2 = evaluarDouble(nodo.ChildNodes[1], ambitos);
+                        string temp = c3d.getTemporal();
+                        c3d.addCodigo(temp + " = " + val1 + " + " + val2 + ";");
+                        return temp;
+                    }
+                case Constantes.resta:
+                    {
+
+                        object val1 = evaluarDouble(nodo.ChildNodes[0], ambitos);
+                        object val2 = evaluarDouble(nodo.ChildNodes[1], ambitos);
+                        string temp = c3d.getTemporal();
+                        c3d.addCodigo(temp + " = " + val1 + " - " + val2 + ";");
+                        return temp;
+                    }
+
+                case Constantes.multiplicacion:
+                    {
+
+                        object val1 = evaluarDouble(nodo.ChildNodes[0], ambitos);
+                        object val2 = evaluarDouble(nodo.ChildNodes[1], ambitos);
+                        string temp = c3d.getTemporal();
+                        c3d.addCodigo(temp + " = " + val1 + " * " + val2 + ";");
+                        return temp;
+                    }
+
+
+                case Constantes.potencia:
+                    {
+
+                        object val1 = evaluarDouble(nodo.ChildNodes[0], ambitos);
+                        object val2 = evaluarDouble(nodo.ChildNodes[1], ambitos);
+                        string temp = c3d.getTemporal();
+                        c3d.addCodigo(temp + " = " + val1 + " ^ " + val2 + ";");
+                        return temp;
+                    }
+
+                case Constantes.division:
+                    {
+                        object val1 = evaluarDouble(nodo.ChildNodes[0], ambitos);
+                        object val2 = evaluarDouble(nodo.ChildNodes[1], ambitos);
+                        string temp = c3d.getTemporal();
+                        c3d.addCodigo(temp + " = " + val1 + " / " + val2 + ";");
+                        return temp;
+                    }
+
+
+                #endregion
+                
+
+                #region unarios
+
+                case Constantes.negativo:
+                    {
+                        Object resultado = evaluarDouble(nodo.ChildNodes[0], ambitos);
+                        string et = c3d.getTemporal();
+                        c3d.addCodigo(et + " = " + resultado + " * -1;");
+                        return et;
+                    }
+
+                case Constantes.masmas://tree
+                    {
+                        string tipo = nodo.ChildNodes[0].Term.Name;
+                        if (string.Equals(tipo, Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase))
+                        {
+                            object uno = evaluarDouble(nodo.ChildNodes[0], ambitos);
+                            String temp = c3d.getTemporal();
+                            c3d.addCodigo(temp + " = " + uno + " + 1;");
+                            return temp;
+
+                        }
+                        else if (string.Equals(tipo, Constantes.tipoChar, StringComparison.OrdinalIgnoreCase))
+                        {
+                            object uno = evaluarDouble(nodo.ChildNodes[0], ambitos);
+                            String temp = c3d.getTemporal();
+                            c3d.addCodigo(temp + " = " + uno + " + 1;");
+                            return temp;
+
+                        }
+                        else
+                        {
+                            ErrorA er = new ErrorA(Constantes.errorSemantico, "Tipo " + tipo + ", no valido para un unario en tree", nodo.FindToken());
+                            Form1.errores.addError(er);
+                            return "nulo";
+                        }
+                    }
+
+                case Constantes.menosmenos: //tree
+                    {
+                        string tipo = nodo.ChildNodes[0].Term.Name;
+                        if (string.Equals(tipo, Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase))
+                        {
+                            object uno = evaluarDouble(nodo.ChildNodes[0], ambitos);
+                            String temp = c3d.getTemporal();
+                            c3d.addCodigo(temp + " = " + uno + " - 1;");
+                            return temp;
+
+                        }
+                        else if (string.Equals(tipo, Constantes.tipoChar, StringComparison.OrdinalIgnoreCase))
+                        {
+                            object uno = evaluarDouble(nodo.ChildNodes[0], ambitos);
+                            String temp = c3d.getTemporal();
+                            c3d.addCodigo(temp + " = " + uno + " - 1;");
+                            return temp;
+
+                        }
+                        else
+                        {
+                            ErrorA er = new ErrorA(Constantes.errorSemantico, "Tipo " + tipo + ", no valido para un unario en tree", nodo.FindToken());
+                            Form1.errores.addError(er);
+                            return "nulo";
+                        }
+
+
+                    }
+
+                #endregion
+
+
+            }
+
+
+            return "nulo";
+        }
+
+
+        #endregion
+
+
+
+        #region evaluar bool
+
+
+        public object evaluarBool(ParseTreeNode nodo, Ambitos ambitos)
+        {
+
+            switch(nodo.Term.Name)
+            {
+
+
+                #region
+                case Constantes.expresion:
+                    {
+                        Console.WriteLine("entre a una exp");
+                        foreach (ParseTreeNode exp in nodo.ChildNodes)
+                        {
+                            evaluarExp(exp);
+                        }
+                        break;
+
+                    }
+
+                #endregion
+
+                #region valoresPrimitivos
+
+                case Constantes.tipoEntero:
+                    {
+                        string valor = nodo.ChildNodes[0].Token.ValueString;
+                        if (valor.Equals("1"))
+                        {
+                            return valor;
+                        }
+                        else if(valor.Equals("0"))
+                        {
+                            return valor;
+                        }
+                        else
+                        {
+                            return "nulo";
+                        }
+
+                    }
+
+                case Constantes.tipoCadena:
+                    {
+                        ErrorA er = new ErrorA("Semantico", "Asignacion de tipo booleano, no es valido una cadena", nodo.FindToken());
+                        Form1.errores.addError(er);
+                        return "nulo";
+
+                    }
+
+
+                case Constantes.tipoChar:
+                    {
+                        ErrorA er = new ErrorA("Semantico", "Asignacion de tipo booleano, no es valido una char", nodo.FindToken());
+                        Form1.errores.addError(er);
+                        return "nulo";
+                    }
+
+                case Constantes.tipoDecimal:
+                    {
+                        ErrorA er = new ErrorA("Semantico", "Asignacion de tipo booleano, no es valido un decimal", nodo.FindToken());
+                        Form1.errores.addError(er);
+                        return "nulo";
+                    }
+
+
+                case Constantes.tipoBool:
+                    {
+                        String val_bol = nodo.ChildNodes[0].Token.ValueString;
+
+                        if (string.Equals(val_bol, "true", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return 1;
+                        }
+                        else
+                        {
+                            return 0;
+                        }
+                    }
+
+               
+
+
+
+
+
+                #endregion
+
+
+                #region operaciones
+                case Constantes.suma:
+                    {
+                        object uno = evaluarBool(nodo.ChildNodes[0],ambitos);
+                        object dos = evaluarBool(nodo.ChildNodes[1],ambitos);
+                        String temp = c3d.getTemporal();
+                        if (uno.ToString().Equals("0") && dos.ToString().Equals("0"))
+                        {
+                            c3d.addCodigo(temp + " = 0;");
+                            return temp;
+                        }
+                        else
+                        {
+                            c3d.addCodigo(temp + " = 1;");
+                            return temp;
+                        }
+                    }
+                case Constantes.resta:
+                    {
+                        ErrorA er = new ErrorA("Semantico", "Asignacion de tipo booleano, no es valido una resta", nodo.FindToken());
+                        Form1.errores.addError(er);
+                        return "nulo";
+
+                       
+                    }
+
+                case Constantes.multiplicacion:
+                    {
+                        object uno = evaluarBool(nodo.ChildNodes[0], ambitos);
+                        object dos = evaluarBool(nodo.ChildNodes[1], ambitos);
+                        String temp = c3d.getTemporal();
+                        if (uno.ToString().Equals("1") && dos.ToString().Equals("1"))
+                        {
+                            c3d.addCodigo(temp + " = 1;");
+                            return temp;
+                        }
+                        else
+                        {
+                            c3d.addCodigo(temp + " = 0;");
+                            return temp;
+                        }
+                    }
+
+
+                case Constantes.potencia:
+                    {
+                        ErrorA er = new ErrorA("Semantico", "Asignacion de tipo booleano, no es valido una potencia", nodo.FindToken());
+                        Form1.errores.addError(er);
+                        return "nulo";
+
+                        
+                    }
+
+                case Constantes.division:
+                    {
+                        ErrorA er = new ErrorA("Semantico", "Asignacion de tipo booleano, no es valido una division", nodo.FindToken());
+                        Form1.errores.addError(er);
+                        return "nulo";
+
+                    }
+
+
+                #endregion
+
+
+                #region unarios
+
+                case Constantes.negativo:
+                    {
+                        ErrorA er = new ErrorA("Semantico", "Asignacion de tipo booleano, no es valido un negativo", nodo.FindToken());
+                        Form1.errores.addError(er);
+                        return "nulo";
+                    }
+
+                case Constantes.masmas://tree
+                    {
+                        ErrorA er = new ErrorA("Semantico", "Asignacion de tipo booleano, no es valido un unario", nodo.FindToken());
+                        Form1.errores.addError(er);
+                        return "nulo";
+                    }
+
+                case Constantes.menosmenos: //tree
+                    {
+                        ErrorA er = new ErrorA("Semantico", "Asignacion de tipo booleano, no es valido un unario", nodo.FindToken());
+                        Form1.errores.addError(er);
+                        return "nulo";
+
+
+                    }
+
+                #endregion
+
+
+
+            }
+
+
+
+
+            return null;
+        }
+
+
+
+        #endregion
+
+
+        #region validaString
+
+        private object evaluarCadena(ParseTreeNode nodo, Ambitos ambitos)
+        {
+
+
+            switch(nodo.Term.Name){
+
+
+                #region
+                case Constantes.expresion:
+                    {
+                        Console.WriteLine("entre a una exp");
+                        foreach (ParseTreeNode exp in nodo.ChildNodes)
+                        {
+                            evaluarExp(exp);
+                        }
+                        break;
+
+                    }
+
+                #endregion
+
+
+                case Constantes.tipoCadena:
+                    {
+                        string id = nodo.ChildNodes[0].Token.ValueString;
+                        char caracter;
+                        int ascii;
+
+                        for (int i = 0; i < id.Length; i++)
+                        {
+                            caracter = id.ElementAt(i).ToString()[0];
+                            ascii = (int)caracter;
+                            c3d.addCodigo("HEAP[H] = " + ascii + ";");
+                            c3d.addCodigo("H = H + 1;");
+                        }
+                        return "nulo";
+                    }
+
+
+
+
+
+        }
+
+
+
+            return "nulo";
+        }
+
+
+        #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         #region evaluar Condicion
