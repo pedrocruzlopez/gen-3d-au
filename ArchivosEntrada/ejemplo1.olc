@@ -6,10 +6,16 @@ privado decimal diametro;
 privado decimal altura;
 privado Cadena idDeposito;
 privado entero h;
+publico entero atributo1Padre;
+protegido cadena atributo2Padre;
 
 //Constructor sin parámetros auxiliar
+publico decimal getAltura (entero a) {  entero a = 5+10;}
 
-Deposito () {
+
+
+
+/*Deposito () {
 
 
 } //Cierre del constructor
@@ -36,7 +42,15 @@ publico Cadena getIdDeposito () {  }
 
 publico decimal valorCapacidad () { //Método tipo función
 
-}
+}*/
 } //Cierre de la clase
 
+clase depos2 deposito{
 
+privado entero val1;
+publico cadena val2;
+
+
+publico decimal getAltura (entero h) {  entero b = 11-23; cadena g="pedrito lindo";}
+
+}

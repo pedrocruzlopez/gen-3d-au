@@ -66,7 +66,8 @@ namespace Proyecto2_201122872.Generacion3D
             }
             else if (extension.Equals(".olc", StringComparison.OrdinalIgnoreCase))
             {
-               uml= analizadorJava.parseConvertirUML2(contenido);
+              clasesDiagrama uml2= analizadorJava.parseConvertirUML2(contenido);
+              uml = uml2.agregarHerencia();
                generarTablaSimbolos();
                
             }
@@ -83,6 +84,21 @@ namespace Proyecto2_201122872.Generacion3D
                 }
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -367,11 +383,10 @@ namespace Proyecto2_201122872.Generacion3D
                 | REPETIR
                 | ELEGIR
                 | EXPRESION;*/
-           
-                    
+
+                   #region While
                    case Constantes.mientras: 
                        {
-                           // ola k ase?
                            // MIENTRAS.Rule = ToTerm(Constantes.mientras) + EXPRESION + ":" + Eos + CUERPO;
                            /*
                            L1: 
@@ -379,7 +394,7 @@ namespace Proyecto2_201122872.Generacion3D
                            goto L3; 
                            //codigo i = i + 1;
                            goto L1: 
-                       L3:
+                           L3:
                            */
                           
                            String etiqCiclo = c3d.getEtiqueta();
@@ -404,7 +419,7 @@ namespace Proyecto2_201122872.Generacion3D
                            break;
 
                        }
-
+#endregion
 
 
 

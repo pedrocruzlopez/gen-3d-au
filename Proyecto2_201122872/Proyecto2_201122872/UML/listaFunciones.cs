@@ -32,6 +32,39 @@ namespace Proyecto2_201122872.UML
         }
 
 
+        public void sobreEscribirFunciones(Funcion nueva)
+        {
+            Funcion funTemporal;
+            bool bandera=false;
+            int val=0;
+            for (int i = 0; i < funciones.Count; i++)
+            {
+                funTemporal = funciones.ElementAt(i);
+                if (funTemporal.firma.ToUpper().Equals(nueva.firma.ToUpper()) &&
+                    funTemporal.esHeredada)
+                {
+                    bandera=true;
+                    val=i;
+                    break;
+                }
+
+            }
+
+            if (bandera)
+            {
+                funciones.RemoveAt(val);
+                nueva.esSobreescrita = true;
+                nueva.esHeredada = true;
+                funciones.Add(nueva);
+            }
+            else
+            {
+                funciones.Add(nueva);
+            }
+
+        }
+
+
 
         public string getCadenaGrapvhiz()
         {

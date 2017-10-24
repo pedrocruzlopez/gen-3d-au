@@ -54,7 +54,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 52);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1065, 365);
+            this.tabControl1.Size = new System.Drawing.Size(1065, 117);
             this.tabControl1.TabIndex = 0;
             // 
             // menuStrip1
@@ -155,9 +155,9 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.dataGridView1);
-            this.groupBox1.Location = new System.Drawing.Point(4, 423);
+            this.groupBox1.Location = new System.Drawing.Point(4, 168);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1061, 247);
+            this.groupBox1.Size = new System.Drawing.Size(1061, 502);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tabla de Simbolos:  ";
@@ -169,7 +169,7 @@
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(3, 16);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(1055, 228);
+            this.dataGridView1.Size = new System.Drawing.Size(1055, 483);
             this.dataGridView1.TabIndex = 0;
             // 
             // openFileDialog1

@@ -10,19 +10,20 @@ using Irony.Interpreter;
 using Irony.Parsing;
 using Proyecto2_201122872.Generacion3D;
 using Proyecto2_201122872.Instrucciones;
+using Proyecto2_201122872.Errores;
 
 namespace Proyecto2_201122872.UML
 {
     public class Clase
     {
-        private string nombre;
-        private string herencia;
+        public string nombre;
+        public string herencia;
         public listaAtributos atributos;
         public listaFunciones funciones;
         public string lenguaje;
         public int tamanho;
 
-        int apuntador;
+        public int apuntador;
 
 
         public Boolean esNula()
@@ -620,10 +621,15 @@ namespace Proyecto2_201122872.UML
              * 5. ingresamos el return
              * 6. Calculamos el tamanho de metodo y lo vamos a actualizar en la lista
              */
-
+            this.tamanho= atributos.atributos.Count;
             List<Simbolo> retorno = new List<Simbolo>();
-
-            retorno = generarSimbolosAtributos();
+            Simbolo simClase = new Simbolo(Constantes.noTieneVisi, this.nombre, this.nombre, Constantes.clase, Constantes.noTieneVisi, Constantes.clase, -1, this.tamanho);
+            retorno.Add(simClase);
+            List<Simbolo> h = generarSimbolosAtributos();
+            foreach (Simbolo s in h)
+            {
+                retorno.Add(s);
+            }
             Ambitos ambitos;
             
             foreach (Funcion func in this.funciones.funciones)
@@ -661,12 +667,24 @@ namespace Proyecto2_201122872.UML
                 retorno.Add(simThis);
                 foreach (Simbolo item in simbolosParametros)
                 {
+                   if(!existe(retorno, item))
                     retorno.Add(item);
+                   else
+                   {
+                       ErrorA er = new ErrorA(Constantes.errorSemantico, 0, 0, 0, "Ya existe un simboo con ese nombre, " + item.nombreReal + ", en el ambito " + ambitos.ambitos.Peek());
+                       Form1.errores.addError(er);
+                   }
                 }
 
                 foreach (Simbolo item in lTemporalFuncion)
                 {
-                    retorno.Add(item);
+                    if (!existe(retorno, item))
+                        retorno.Add(item);
+                    else
+                    {
+                        ErrorA er = new ErrorA(Constantes.errorSemantico, 0, 0, 0, "Ya existe un simboo con ese nombre, " + item.nombreReal + ", en el ambito " + ambitos.ambitos.Peek());
+                        Form1.errores.addError(er);
+                    }
                 }
                 retorno.Add(simReturn);
                 ambitos.ambitos.Pop();
@@ -674,7 +692,19 @@ namespace Proyecto2_201122872.UML
             return retorno;
         }
 
+        private bool existe(List<Simbolo> simb, Simbolo nuevo)
+        {
+            foreach (Simbolo item in simb)
+            {
+                if(item.nombreReal.Equals(nuevo.nombreReal, StringComparison.OrdinalIgnoreCase) &&
+                    item.ambito.Equals(nuevo.ambito, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
 
+            return false;
+        }
 
     }
 }

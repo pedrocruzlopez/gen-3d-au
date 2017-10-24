@@ -12,6 +12,7 @@ namespace Proyecto2_201122872.UML
 {
     public class Funcion
     {
+        public Boolean esHeredada = false;
         public string clase;
         public string nombre;
         public string tipo;
@@ -59,15 +60,16 @@ namespace Proyecto2_201122872.UML
         }
 
 
-        private string generarFirma()
+        public string generarFirma()
         {
-            string retorno = tipo + "_" + nombre;
+            string retorno = clase+"_"+tipo + "_" + nombre;
             if (parametros.parametros.Count > 0)
             {
                 retorno += "_" + this.parametros.getFirma();
+                this.firma = retorno;
                 return retorno;
             }
-
+            this.firma = retorno;
             return retorno;
         }
 
