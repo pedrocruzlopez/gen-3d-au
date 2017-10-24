@@ -10,7 +10,9 @@ publico entero atributo1Padre;
 protegido cadena atributo2Padre;
 
 //Constructor sin parámetros auxiliar
-publico decimal getAltura (entero a) {  entero a = 5+10;}
+publico decimal getAltura (entero a) {  entero a = 5+10;
+entero arreglo[3][4][2]={{1,2,3,4},{1,2,3,4}};
+}
 
 
 

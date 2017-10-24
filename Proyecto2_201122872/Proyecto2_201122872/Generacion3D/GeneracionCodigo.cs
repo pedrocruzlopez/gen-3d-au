@@ -88,21 +88,6 @@ namespace Proyecto2_201122872.Generacion3D
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         /*------------------------------------- Generacion de codigo -------------------------------------*/
         
         public void escribirC3DClases()
@@ -174,6 +159,7 @@ namespace Proyecto2_201122872.Generacion3D
 
 
         #region generacion c3d cuerpo
+
 
         public void evaluarCuerpo(ParseTreeNode nodo, Ambitos ambitos)
         {
@@ -272,7 +258,7 @@ namespace Proyecto2_201122872.Generacion3D
                            /* 
             DECLARACION.Rule = TIPO + identificador + ToTerm(";")
                 
-                | TIPO + identificador + LPOSICIONES + ToTerm(";")
+                | 
                 | TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";";
                             */
                            int noHijos = nodo.ChildNodes.Count;
@@ -356,6 +342,7 @@ namespace Proyecto2_201122872.Generacion3D
                                else
                                {
                                    //es un arreglo
+                                   //TIPO + identificador + LPOSICIONES + ToTerm(";")
 
 
                                }
@@ -1242,18 +1229,6 @@ namespace Proyecto2_201122872.Generacion3D
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         #region evaluar Condicion
 
         public object evaluarExp(ParseTreeNode nodo)
@@ -1263,7 +1238,7 @@ namespace Proyecto2_201122872.Generacion3D
             {
 
 
-                #region 
+                #region expresion puntitos
                 case Constantes.expresion:
                     {
                         foreach (ParseTreeNode exp in nodo.ChildNodes)
@@ -1488,6 +1463,8 @@ namespace Proyecto2_201122872.Generacion3D
                 #endregion
 
 
+                
+
                 #region logicas
 
 
@@ -1573,6 +1550,44 @@ namespace Proyecto2_201122872.Generacion3D
 
                 #endregion 
 
+
+
+                #region llamadaMetodo
+
+                /* LEXPRESIONES.Rule = MakeStarRule(LEXPRESIONES, ToTerm(","), EXPRESION);
+
+            LLAMADA.Rule = identificador + ToTerm("[") + LEXPRESIONES + "]"
+                | identificador + ToTerm("[") + "]";*/
+
+                /*
+                 * LEXPRESIONES.Rule = MakePlusRule(LEXPRESIONES, ToTerm(","), EXPRESION);
+                 LLAMADA.Rule = identificador + ToTerm("(") + LEXPRESIONES + ")"
+            | identificador + ToTerm("(") + ")";
+
+                     
+                 */
+
+                case Constantes.llamada:
+                    {
+                        int noHijos = nodo.ChildNodes.Count;
+                        if (noHijos == 1)
+                        {//no tiene parametros
+
+                        }
+                        else
+                        {//si tiene parametros
+
+                        }
+
+
+
+
+                        break;
+                    }
+
+                #endregion
+
+
             }
 
 
@@ -1582,6 +1597,241 @@ namespace Proyecto2_201122872.Generacion3D
         }
 
         #endregion
+
+
+
+
+        #region validacionTipos
+
+        private object validarTipo(ParseTreeNode nodo, Ambitos ambito)
+        {
+            switch (nodo.Term.Name)
+            {
+
+                #region valores primitivos
+
+                case Constantes.tipoEntero:
+                    {
+                        return Constantes.tipoEntero;
+                    }
+                case Constantes.tipoBool:
+                    {
+                        return Constantes.tipoBool;
+                    }
+                case Constantes.tipoCadena:
+                    {
+                        return Constantes.tipoCadena;
+                    }
+                case Constantes.tipoChar:
+                    {
+                        return Constantes.tipoChar;
+                    }
+                case Constantes.tipoDecimal:
+                    {
+                        return Constantes.tipoDecimal;
+                    }
+
+                case Constantes.id:
+                    {
+                        string tipo= tablaSimbolos.getTipo(nodo.ChildNodes[0].Token.ValueString, ambito);
+                        if (tipo.Equals("nulo", StringComparison.OrdinalIgnoreCase))
+                        {
+                            ErrorA er = new ErrorA(Constantes.errorSemantico, "La variable " + nodo.ChildNodes[0].Token.ValueString + " no existe", nodo.FindToken());
+                            Form1.errores.addError(er);
+                            return "nulo";
+                        }
+                        else
+                        {
+                            return tipo;
+                        }
+                    }
+
+                #endregion
+
+                #region validacion Operaciones 
+
+                case Constantes.suma:
+                    {
+                        object tipo1 = validarTipo(nodo.ChildNodes[0], ambito);
+                        object tipo2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        return validarSuma(tipo1, tipo2);
+                    }
+
+
+                #endregion
+
+
+
+
+            }
+
+
+
+
+            return "nulo";
+        }
+
+
+        public object validarSuma(Object val1, Object val2)
+        {
+            if (!esNulo(val1) && !esNulo(val2))
+            {
+                /*retornos tipo double */
+                if (esInt(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esInt(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esChar(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esChar(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esBool(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esBool(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                //valiaciones  entero
+                else if (esInt(val1) && esChar(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else if (esChar(val1) && esInt(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else if (esBool(val1) && esInt(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else if (esInt(val1) && esBool(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else if (esInt(val1) && esInt(val2))
+                {
+                    return Constantes.tipoEntero;
+                }// validaciones de tipo cadena
+                else if (esCadena(val1) && esInt(val2))
+                {
+                    return Constantes.tipoCadena;
+                }
+                else if (esCadena(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoCadena;
+                }
+                else if (esDouble(val1) && esCadena(val2))
+                {
+                    return Constantes.tipoCadena;
+                }
+                else if (esInt(val1) && esCadena(val2))
+                {
+                    return Constantes.tipoCadena;
+                }
+                else if (esCadena(val1) && esChar(val2))
+                {
+                    return Constantes.tipoCadena;
+                }
+                else if (esChar(val1) && esCadena(val2))
+                {
+                    return Constantes.tipoCadena;
+                }
+                else if (esCadena(val1) && esCadena(val2))
+                {
+                    return Constantes.tipoCadena;
+                }//tipo bool
+                else if (esBool(val1) && esBool(val2))
+                {
+                    return Constantes.tipoBool;
+                }
+                else
+                {
+                    return "nulo";
+                }
+
+            }
+            else
+            {
+                return "nulo";
+
+            }           
+        }
+
+        public object validarResta(Object val1, Object val2)
+        {
+            if (!esNulo(val1) && !esNulo(val2))
+            {
+                if (esCadena(val1) && esInt(val2))
+                {
+                    return Constantes.tipoCadena;
+                }
+
+            }
+            else
+            {
+                return "nulo";
+            }
+
+
+
+        }
+
+
+        #endregion
+
+
+
+        #region terminales 
+
+        private Boolean esNulo(Object val)
+        {
+            return val.ToString().Equals("nulo", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private Boolean esInt(Object val)
+        {
+            return val.ToString().Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase);
+        }
+
+
+        private Boolean esDouble(Object val)
+        {
+            return val.ToString().Equals(Constantes.tipoDecimal, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private Boolean esCadena(Object val)
+        {
+            return val.ToString().Equals(Constantes.tipoCadena, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private Boolean esChar(Object val)
+        {
+            return val.ToString().Equals(Constantes.tipoChar, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private Boolean esBool(Object val)
+        {
+            return val.ToString().Equals(Constantes.tipoBool, StringComparison.OrdinalIgnoreCase);
+        }
+
+
+        #endregion
+
+
 
     }
 }

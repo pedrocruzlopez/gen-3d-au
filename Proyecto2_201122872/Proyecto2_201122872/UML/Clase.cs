@@ -11,6 +11,7 @@ using Irony.Parsing;
 using Proyecto2_201122872.Generacion3D;
 using Proyecto2_201122872.Instrucciones;
 using Proyecto2_201122872.Errores;
+using Proyecto2_201122872.Generacion3D.TablaSimbolos.Arreglos;
 
 namespace Proyecto2_201122872.UML
 {
@@ -203,6 +204,7 @@ namespace Proyecto2_201122872.UML
             }
         }
 
+       
 
 
         private List<Simbolo> generarSimbolosMetodo(ParseTreeNode nodo, List<Simbolo> lista, Ambitos ambitos)
@@ -242,6 +244,40 @@ namespace Proyecto2_201122872.UML
                     {
                         if (nodo.ChildNodes[2].Term.Name.Equals(Constantes.lposiciones, StringComparison.OrdinalIgnoreCase))
                         {//TIPO + identificador + LPOSICIONES + ToTerm(";")
+                            string tipo = nodo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                            string id = nodo.ChildNodes[1].Token.ValueString;
+                            ParseTreeNode nodoPosiciones = nodo.ChildNodes[2];
+                            listaDimensiones lDim;
+                            Simbolo nuevo;
+                            bool bandera = true;
+                            //varifico que todo sea int
+                            foreach (ParseTreeNode n in nodoPosiciones.ChildNodes)
+                            {
+                                bandera = bandera && (n.ChildNodes[0].Term.Name.Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase));
+                                
+                            }
+                            if (bandera)
+                            {
+                                List<int> valores = new List<int>();
+                                foreach (ParseTreeNode n in nodoPosiciones.ChildNodes)
+                                {
+                                    int g = int.Parse(n.ChildNodes[0].ChildNodes[0].Token.ValueString);// (n.Term.Name.Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase));
+                                    valores.Add(g);
+                                }
+                                lDim = new listaDimensiones(valores);
+                                int linealizado = lDim.getLinealizado();
+                                nuevo = new Simbolo(Constantes.noTieneVisi, id, tipo, Constantes.ARREGLO, ambitos.ambitos.Peek(), "arreglo local", apuntador, linealizado, valores.Count, lDim);
+                                apuntador++;
+                                lista.Add(nuevo);
+
+                            }
+                            else
+                            {
+                                ErrorA er = new ErrorA(Constantes.errorSemantico, "Para los arreglos unicamente se permites valores enteros", nodo.FindToken());
+                                Form1.errores.addError(er);
+                            }
+
+
 
                             return lista;
                         }
@@ -259,6 +295,39 @@ namespace Proyecto2_201122872.UML
                     else
                     {
                         //TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";";
+                        string tipo = nodo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                        string id = nodo.ChildNodes[1].Token.ValueString;
+                        ParseTreeNode nodoPosiciones = nodo.ChildNodes[2];
+                        listaDimensiones lDim;
+                        Simbolo nuevo;
+                        bool bandera = true;
+                        //varifico que todo sea int
+                        foreach (ParseTreeNode n in nodoPosiciones.ChildNodes)
+                        {
+                            bandera = bandera && (n.ChildNodes[0].Term.Name.Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase));
+
+                        }
+                        if (bandera)
+                        {
+                            List<int> valores = new List<int>();
+                            foreach (ParseTreeNode n in nodoPosiciones.ChildNodes)
+                            {
+                                int g = int.Parse(n.ChildNodes[0].ChildNodes[0].Token.ValueString);// (n.Term.Name.Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase));
+                                valores.Add(g);
+                            }
+                            lDim = new listaDimensiones(valores);
+                            int linealizado = lDim.getLinealizado();
+                            nuevo = new Simbolo(Constantes.noTieneVisi, id, tipo, Constantes.ARREGLO, ambitos.ambitos.Peek(), "arreglo local", apuntador, linealizado, valores.Count, lDim);
+                            apuntador++;
+                            lista.Add(nuevo);
+
+                        }
+                        else
+                        {
+                            ErrorA er = new ErrorA(Constantes.errorSemantico, "Para los arreglos unicamente se permites valores enteros", nodo.FindToken());
+                            Form1.errores.addError(er);
+                        }
+
                         return lista;
 
                     }
@@ -480,11 +549,47 @@ namespace Proyecto2_201122872.UML
                         /*DECLAARREGLO.Rule = identificador + POSICIONES;
 
             DECLRACION.Rule = TIPO + L_IDS
-                | TIPO + DECLAARREGLO;*/
+                | TIPO + DECLAARREGLO;
+                         POSICION.Rule = ToTerm("[") + EXPRESION + "]";
+
+            POSICIONES.Rule = MakePlusRule(POSICIONES, POSICION);
+                         
+                         */
 
                         string tipo = nodo.ChildNodes[0].ChildNodes[0].Token.ValueString;
                         if (nodo.ChildNodes[1].Term.Name.Equals(Constantes.lposiciones, StringComparison.OrdinalIgnoreCase))
                         {//es un arreglo
+                            //1. validar que todas las posiciones sean un int
+                            Simbolo nuevo;
+                            listaDimensiones lDim;
+                            string nombreArreglo = nodo.ChildNodes[1].ChildNodes[0].Token.Value.ToString();
+                            ParseTreeNode nodoPos = nodo.ChildNodes[1].ChildNodes[1];
+                            bool bandera = true;
+
+                            foreach (ParseTreeNode n in nodoPos.ChildNodes)
+                            {
+                                bandera = bandera && (n.ChildNodes[0].Term.Name.Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase));
+                                
+                            }
+                            if (bandera)
+                            {
+                                List<int> valores = new List<int>();
+                                foreach (ParseTreeNode n in nodoPos.ChildNodes)
+                                {
+                                    int g = int.Parse(n.ChildNodes[0].ChildNodes[0].Token.ValueString);// (n.Term.Name.Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase));
+                                    apuntador++;
+                                    valores.Add(g);
+                                }
+                                lDim = new listaDimensiones(valores);
+                                int linealizado = lDim.getLinealizado();
+                                nuevo = new Simbolo(Constantes.noTieneVisi, nombreArreglo, tipo, Constantes.ARREGLO, ambitos.ambitos.Peek(), "arreglo local", apuntador, linealizado, valores.Count, lDim);
+                                lista.Add(nuevo);
+                            }
+                            else
+                            {
+                                ErrorA n = new ErrorA(Constantes.errorSemantico, "Unicamente se aceptan enteros para dimensinoes de arreglos", nodo.FindToken());
+                                Form1.errores.addError(n);
+                            }
 
 
 
