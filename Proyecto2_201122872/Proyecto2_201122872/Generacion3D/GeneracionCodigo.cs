@@ -1771,7 +1771,7 @@ namespace Proyecto2_201122872.Generacion3D
             }           
         }
 
-        public object validarResta(Object val1, Object val2)
+        /*public object validarResta(Object val1, Object val2)
         {
             if (!esNulo(val1) && !esNulo(val2))
             {
@@ -1788,7 +1788,7 @@ namespace Proyecto2_201122872.Generacion3D
 
 
 
-        }
+        }*/
 
 
         #endregion
