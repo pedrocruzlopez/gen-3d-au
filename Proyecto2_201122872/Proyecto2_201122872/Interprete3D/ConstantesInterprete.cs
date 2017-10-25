@@ -19,6 +19,17 @@ namespace Proyecto2_201122872.Interprete3D
         public const String RELACIONAL = "RELACIONAL";
         public const string TERMINO = "TERMINO";
 
+        public const string GLOBAL = "GLOBAL";
+        public const string salto = "salto";
+        public const string  IF= "if";
+         public const string  stack= "STACK";
+         public const string  heap= "HEAP"; 
+        public const string  print= "print"; 
+        public const string  metodo= "metodo";
+        public const string  main= "main";
+         public const string  instruccin= "instruccion";
+
+
 
     }
 }

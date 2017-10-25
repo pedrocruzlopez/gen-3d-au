@@ -1771,13 +1771,61 @@ namespace Proyecto2_201122872.Generacion3D
             }           
         }
 
-        /*public object validarResta(Object val1, Object val2)
+        public object validarResta(Object val1, Object val2)
         {
             if (!esNulo(val1) && !esNulo(val2))
             {
-                if (esCadena(val1) && esInt(val2))
+                if (esInt(val1) && esDouble(val2))
                 {
-                    return Constantes.tipoCadena;
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esInt(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esChar(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esChar(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esBool(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esBool(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }//
+                else if (esInt(val1) && esChar(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else if (esChar(val1) && esInt(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else if (esBool(val1) && esInt(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else if (esInt(val1) && esBool(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else if (esInt(val1) && esInt(val2))
+                {
+                    return Constantes.tipoEntero;
+                }//
+                else
+                {
+                    return "nulo";
                 }
 
             }
@@ -1788,7 +1836,235 @@ namespace Proyecto2_201122872.Generacion3D
 
 
 
-        }*/
+        }
+
+
+        public object validarMultiplicacion(Object val1, Object val2)
+        {
+            if (!esNulo(val1) && !esNulo(val2))
+            {
+                if (esBool(val1) && esBool(val2))
+                {
+                    return Constantes.tipoBool;
+                }
+                else if (esInt(val1) && esChar(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else if (esChar(val1) && esInt(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else if (esBool(val1) && esInt(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else if (esInt(val1) && esBool(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else if (esInt(val1) && esInt(val2))
+                {
+                    return Constantes.tipoEntero;
+                }//
+                else if (esInt(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esInt(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esChar(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esChar(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esBool(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esBool(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else 
+                {
+                    return "nulo";
+                }
+
+            }
+            else
+            {
+                return "nulo";
+            }
+        }
+
+
+        public object validarDivision(Object val1, Object val2)
+        {
+            if (!esNulo(val1) && !esNulo(val2))
+            {
+                if (esInt(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esInt(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esChar(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esChar(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esBool(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esBool(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esInt(val1) && esChar(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esChar(val1) && esInt(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esBool(val1) && esInt(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esInt(val1) && esBool(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esInt(val1) && esInt(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else
+                {
+                    return "nulo";
+                }
+                
+            }
+            else
+            {
+                return "nulo";
+            }
+
+
+        }
+
+
+        public object validarPotencia(Object val1, Object val2)
+        {
+            if (!esNulo(val1) && !esNulo(val2))
+            {
+                if (esInt(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esInt(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esChar(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esChar(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esBool(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esBool(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esDouble(val1) && esDouble(val2))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esInt(val1) && esChar(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else if (esChar(val1) && esInt(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else if (esBool(val1) && esInt(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else if (esInt(val1) && esBool(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else if (esInt(val1) && esInt(val2))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else
+                {
+                    return "nulo";
+                }
+            }
+            else
+            {
+                return "nulo";
+            }
+
+
+        }
+
+
+        public object validarUnario(Object val1)
+        {
+            if (!esNulo(val1))
+            {
+                if (esDouble(val1))
+                {
+                    return Constantes.tipoDecimal;
+                }
+                else if (esInt(val1) || esChar(val1))
+                {
+                    return Constantes.tipoEntero;
+                }
+                else
+                {
+                    return "nulo";
+                }
+
+            }
+            else
+            {
+                return "nulo";
+            }
+        }
+
 
 
         #endregion
