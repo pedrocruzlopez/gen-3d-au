@@ -421,6 +421,9 @@ namespace Proyecto2_201122872.Generacion3D
         }
 
         #endregion
+
+
+
         /* --- Generaacion de codigo  Expresiones  -------*/
 
         #region evaluar int
@@ -696,7 +699,6 @@ namespace Proyecto2_201122872.Generacion3D
 
 
 #endregion
-
 
         #region evaluar double
 
@@ -1601,14 +1603,14 @@ namespace Proyecto2_201122872.Generacion3D
 
 
 
-        #region validacionTipos
+        #region validacionTipos Retorna de que tipo es la expresion
 
         private object validarTipo(ParseTreeNode nodo, Ambitos ambito)
         {
             switch (nodo.Term.Name)
             {
 
-                #region valores primitivos
+                #region valores primitivos y Id (leer la i en ingles jaja asi no se lee y i)
 
                 case Constantes.tipoEntero:
                     {
@@ -1656,12 +1658,129 @@ namespace Proyecto2_201122872.Generacion3D
                         object tipo2 = validarTipo(nodo.ChildNodes[1], ambito);
                         return validarSuma(tipo1, tipo2);
                     }
+                case Constantes.resta:
+                    {
+                        object tipo1 = validarTipo(nodo.ChildNodes[0], ambito);
+                        object tipo2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        return validarResta(tipo1, tipo2);
+                    }
 
+                case Constantes.multiplicacion:
+                    {
+                        object tipo1 = validarTipo(nodo.ChildNodes[0], ambito);
+                        object tipo2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        return validarMultiplicacion(tipo1, tipo2);
+                    }
+
+                case Constantes.division:
+                    {
+                        object tipo1 = validarTipo(nodo.ChildNodes[0], ambito);
+                        object tipo2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        return validarDivision(tipo1, tipo2);
+                    }
+
+                case Constantes.potencia:
+                    {
+                        object tipo1 = validarTipo(nodo.ChildNodes[0], ambito);
+                        object tipo2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        return validarPotencia(tipo1, tipo2);
+                    }
 
                 #endregion
 
+                #region Relacionales
+
+                case Constantes.mayor:
+                    {
+                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito);
+                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        return validarRelacional(val1, val2);
+                    }
+
+                case Constantes.menor:
+                    {
+                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito);
+                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        return validarRelacional(val1, val2);
+                    }
+
+                case Constantes.mayorIgual:
+                    {
+                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito);
+                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        return validarRelacional(val1, val2);
+                    }
 
 
+                case Constantes.menorIgual:
+                    {
+                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito);
+                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        return validarRelacional(val1, val2);
+                    }
+
+                case Constantes.distintoA:
+                    {
+                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito);
+                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        return validarRelacional(val1, val2);
+                    }
+
+                case Constantes.igualIgual:
+                    {
+                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito);
+                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        return validarRelacional(val1, val2);
+                    }
+                #endregion
+
+
+                #region Logicas
+
+                case Constantes.andJava:
+                    {
+                        Object val1= validarTipo(nodo.ChildNodes[0],ambito);
+                        Object val2= validarTipo(nodo.ChildNodes[1],ambito);
+                        return validarLogica(val1, val2);
+                    }
+                case Constantes.orJava:
+                    {
+                        Object val1= validarTipo(nodo.ChildNodes[0],ambito);
+                        Object val2= validarTipo(nodo.ChildNodes[1],ambito);
+                        return validarLogica(val1, val2);
+                    }
+                case Constantes.xorJava:
+                    {
+                        Object val1= validarTipo(nodo.ChildNodes[0],ambito);
+                        Object val2= validarTipo(nodo.ChildNodes[1],ambito);
+                        return validarLogica(val1, val2);
+                        //return validarUnario(validarTipo(nodo.ChildNodes[0],ambito));
+                    }
+
+                case Constantes.notJavaPython:
+                    {
+                        return validarNot(validarTipo(nodo.ChildNodes[0], ambito));
+                    }
+                #endregion
+
+                #region unarios
+
+                case Constantes.masmas:
+                    {
+                        return validarUnario(validarTipo(nodo.ChildNodes[0], ambito));
+                    }
+
+                case Constantes.menosmenos:
+                    {
+                        return validarUnario(validarTipo(nodo.ChildNodes[0], ambito));
+                    }
+
+                case Constantes.negativo:
+                    {
+                        return validarUnario(validarTipo(nodo.ChildNodes[0], ambito));
+                    }
+
+                #endregion
 
             }
 
@@ -1672,7 +1791,7 @@ namespace Proyecto2_201122872.Generacion3D
         }
 
 
-        public object validarSuma(Object val1, Object val2)
+        private object validarSuma(Object val1, Object val2)
         {
             if (!esNulo(val1) && !esNulo(val2))
             {
@@ -1771,7 +1890,7 @@ namespace Proyecto2_201122872.Generacion3D
             }           
         }
 
-        public object validarResta(Object val1, Object val2)
+        private object validarResta(Object val1, Object val2)
         {
             if (!esNulo(val1) && !esNulo(val2))
             {
@@ -1839,7 +1958,7 @@ namespace Proyecto2_201122872.Generacion3D
         }
 
 
-        public object validarMultiplicacion(Object val1, Object val2)
+        private object validarMultiplicacion(Object val1, Object val2)
         {
             if (!esNulo(val1) && !esNulo(val2))
             {
@@ -1908,7 +2027,7 @@ namespace Proyecto2_201122872.Generacion3D
         }
 
 
-        public object validarDivision(Object val1, Object val2)
+        private object validarDivision(Object val1, Object val2)
         {
             if (!esNulo(val1) && !esNulo(val2))
             {
@@ -1975,7 +2094,7 @@ namespace Proyecto2_201122872.Generacion3D
         }
 
 
-        public object validarPotencia(Object val1, Object val2)
+        private object validarPotencia(Object val1, Object val2)
         {
             if (!esNulo(val1) && !esNulo(val2))
             {
@@ -2041,7 +2160,7 @@ namespace Proyecto2_201122872.Generacion3D
         }
 
 
-        public object validarUnario(Object val1)
+        private object validarUnario(Object val1)
         {
             if (!esNulo(val1))
             {
@@ -2066,12 +2185,78 @@ namespace Proyecto2_201122872.Generacion3D
         }
 
 
+        private object validarRelacional(Object val1, Object val2)
+        {
+            if (!esNulo(val1) && !esNulo(val2))
+            {
 
-        #endregion
+                if((esDouble(val1) || esInt(val1) || esChar(val1)) &&
+                    esDouble(val2) || esInt(val2) || esChar(val2))
+                {
+                    return Constantes.tipoBool;
+                }
+                else if((esCadena(val1) || esChar(val1)) &&
+                    (esCadena(val2) || esChar(val2)))
+                {
+                    return Constantes.tipoBool;
+                }
+                else
+                {
+                    return "nulo";
+                }
+
+            }
+            else
+            {
+                return "nulo";
+            }
+        }
 
 
 
-        #region terminales 
+        private object validarLogica(Object val1, Object val2)
+        {
+            if (!esNulo(val1) && !esNulo(val2))
+            {
+                if (esBool(val1) && esBool(val2))
+                {
+                    return Constantes.tipoBool;
+                }
+                else
+                {
+                    return "nulo";
+                }
+
+            }
+            else
+            {
+                return "nulo";
+            }
+            
+        }
+
+        private object validarNot(Object val1)
+        {
+            if (!esNulo(val1))
+            {
+                if (esBool(val1))
+                {
+                    return Constantes.tipoBool;
+                }
+                else
+                {
+                    return "nulo";
+                }
+            }
+            else
+            {
+                return "nulo";
+            }
+        }
+
+
+
+        #region terminales
 
         private Boolean esNulo(Object val)
         {
@@ -2106,6 +2291,12 @@ namespace Proyecto2_201122872.Generacion3D
 
 
         #endregion
+
+        #endregion
+
+
+
+       
 
 
 
