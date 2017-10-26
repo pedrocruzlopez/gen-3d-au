@@ -13,6 +13,7 @@ using Proyecto2_201122872.AnalizadorPython;
 using System.IO;
 using Proyecto2_201122872.Errores;
 
+
 namespace Proyecto2_201122872.Generacion3D
 {
     public class GeneracionCodigo
@@ -22,6 +23,7 @@ namespace Proyecto2_201122872.Generacion3D
         public clasesDiagrama uml;
         private Arbol analizadorJava;
         private ArbolPy analizadorPython;
+        
         public Codigo c3d;
 
         public GeneracionCodigo()
@@ -30,6 +32,7 @@ namespace Proyecto2_201122872.Generacion3D
             uml = new clasesDiagrama();
             analizadorJava = new Arbol();
             analizadorPython = new ArbolPy();
+           
             c3d = new Codigo();
         }
 
@@ -123,7 +126,7 @@ namespace Proyecto2_201122872.Generacion3D
                 if (principal != null)
                 {
                     ambito.addAmbito(principal.firma);
-                    c3d.addCodigo(Constantes.tipoVoid + " " + principal.firma + "{");
+                    c3d.addCodigo(Constantes.tipoVoid + " " + principal.firma + "(){");
                     evaluarCuerpo(principal.cuerpo, ambito);
                     c3d.addCodigo("}");
                     ambito.ambitos.Pop();
@@ -149,7 +152,7 @@ namespace Proyecto2_201122872.Generacion3D
             foreach (Funcion constructor in constructores)
             {
                 ambito.addAmbito(constructor.firma);//ingresando el ambito del constructor
-                c3d.addCodigo(Constantes.tipoVoid + " " + constructor.firma + "{");
+                c3d.addCodigo(Constantes.tipoVoid + " " + constructor.firma + "(){");
                 evaluarCuerpo(constructor.cuerpo, ambito);
                 c3d.addCodigo("}");
                 ambito.ambitos.Pop();//saliendo del ambito del constructor

@@ -112,6 +112,8 @@
     <Compile Include="Interprete3D\AccionInterprete.cs" />
     <Compile Include="Interprete3D\Arbol3D.cs" />
     <Compile Include="Interprete3D\ConstantesInterprete.cs" />
+    <Compile Include="Interprete3D\Ejecucion3D\ListaTemporales.cs" />
+    <Compile Include="Interprete3D\Ejecucion3D\Temporal.cs" />
     <Compile Include="Interprete3D\Sintactico.cs" />
     <Compile Include="Principal.cs">
       <SubType>Form</SubType>

@@ -159,6 +159,15 @@ namespace Proyecto2_201122872.Interprete3D
              this.Root = cuerpoArchivo;
 
 
+             MarkPunctuation("=", "STACK", "HEAP", "[", "]", ";", ":", "(", ")", "goto", "if", "'", "%", ",", ConstantesInterprete.print, Constantes.tipoVoid, "{", "}");
+
+
+
+             MarkTransient();
+
+
+
+
         }
 
         

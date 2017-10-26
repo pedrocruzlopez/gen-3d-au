@@ -1,6 +1,9 @@
 ﻿using FastColoredTextBoxNS;
+using Irony.Parsing;
+using Proyecto2_201122872.AnalizadorJava;
 using Proyecto2_201122872.Generacion3D;
 using Proyecto2_201122872.Generacion3D.TablaSimbolos;
+using Proyecto2_201122872.Interprete3D;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +23,7 @@ namespace Proyecto2_201122872.Formularios
 
         ArrayList ArrayTab;
         ArrayList ArrayTxt;
+        Arbol3D analizador3D;
         int cont;
         public GeneracionCodigo generador;
         
@@ -32,10 +36,11 @@ namespace Proyecto2_201122872.Formularios
 
         private void inicializar()
         {
+            analizador3D = new Arbol3D();
             this.ArrayTab = new ArrayList();
             this.ArrayTxt = new ArrayList();
             cont = 0;
-
+            /*
             this.dataGridView1.Columns.Add("acceso", "Acceso");
             this.dataGridView1.Columns.Add("nombre", "Nombre");
             this.dataGridView1.Columns.Add("tipo", "Tipo");
@@ -43,7 +48,7 @@ namespace Proyecto2_201122872.Formularios
             this.dataGridView1.Columns.Add("ambito", "Ambito");
             this.dataGridView1.Columns.Add("rol", "Rol");
             this.dataGridView1.Columns.Add("apuntador", "Apuntador");
-            this.dataGridView1.Columns.Add("tamanho", "Tamanho");
+            this.dataGridView1.Columns.Add("tamanho", "Tamanho");*/
 
         }
 
@@ -228,16 +233,22 @@ namespace Proyecto2_201122872.Formularios
             foreach (Simbolo s in generador.tablaSimbolos.tabla)
             {
                string [] row0={s.visibilidad,s.nombreReal,s.tipo,s.tipoElemento,s.ambito,s.rol,s.apuntador+"",s.tamanho+""};
-               dataGridView1.Rows.Add(row0);
+               //dataGridView1.Rows.Add(row0);
             }
 
             Console.WriteLine("-------- Inicio codigo -----------");
 
             escribir3D(generador.c3d.codigo3D);
+           
+            
+
 
             Console.WriteLine("------- fin codigo --------------");
+            Console.WriteLine("------ Inicio ejecucion 3d--------");
+            fastColoredTextBox1.Text = generador.c3d.codigo3D;
+            analizador3D.parse(generador.c3d.codigo3D);
 
-
+            Console.WriteLine("------- fin ejecucion 3d------");
         }
 
 
@@ -262,6 +273,49 @@ namespace Proyecto2_201122872.Formularios
             {
                 Console.WriteLine("Executing finally block.");
             }
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripButton7_Click(object sender, EventArgs e)
+        {
+            Arbol analizadorJava = new Arbol();
+            generador = new GeneracionCodigo();
+            String contenido = getCadenaArchivo(@"C:\Users\Alina\Documents\Repositorios\CompiProyecto2\ArchivosEntrada\ejemplo2.txt");
+            //clasesDiagrama uml = analizadorPython.parseConvertirUML2(contenido);
+            ParseTreeNode raiz = analizadorJava.parse(contenido);
+            Object g = "";
+            if (raiz != null)
+            {
+                g = generador.evaluarExp(raiz);
+
+            }
+
+            Console.WriteLine("------ Inicio codigo -------");
+            Console.WriteLine(g);
+            Console.WriteLine(generador.c3d.codigo3D);
+            analizador3D.parse(generador.c3d.codigo3D);
+            Console.WriteLine("------ fin codigo  -------");
+            
+
+        }
+
+        private string getCadenaArchivo(String ruta)
+        {
+            StreamReader archivo = new StreamReader(ruta);
+            string linea;
+            string contenido = "";
+            while ((linea = archivo.ReadLine()) != null)
+            {
+                contenido += linea + "\n";
+            }
+
+            archivo.Close();
+            return contenido;
+
         }
 
 

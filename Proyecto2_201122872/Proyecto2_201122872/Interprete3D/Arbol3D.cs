@@ -43,7 +43,7 @@ namespace Proyecto2_201122872.Interprete3D
             if (s_tree.Root != null)
             {
                 Console.WriteLine("========ACCIONES AL EVVALUAR EL ARBOL=============");
-                // accion.Evaluar(s_tree.Root);//EVALUO EL ARBOL
+                 accion.Evaluar(s_tree.Root);//EVALUO EL ARBOL
                 Console.WriteLine("==================================================");
                 dispTree(s_tree.Root, 0);//IMPRIMO EL ARBOL
                 graficarArbol(s_tree.Root);//GRAFICO EL ARBOL
