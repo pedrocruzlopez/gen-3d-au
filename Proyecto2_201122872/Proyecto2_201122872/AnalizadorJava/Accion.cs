@@ -503,7 +503,7 @@ namespace Proyecto2_201122872.AnalizadorJava
 
                     case Constantes.principal:
                         {
-                            if (claseModificar.funciones.hayPrincipal())
+                            if (!claseModificar.funciones.hayPrincipal())
                             {
                                 Funcion principal = getPrincipal(item, claseModificar.getNombre());
                                 claseModificar.addFuncion(principal);

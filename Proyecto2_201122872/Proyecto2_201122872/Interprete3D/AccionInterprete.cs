@@ -11,11 +11,23 @@ namespace Proyecto2_201122872.Interprete3D
 {
     class AccionInterprete
     {
+        public static double[] Pila = new double[1000];         
+        public static double[] Heap = new double[1000];
+        public static String Imprimir = "";
 
-        public void Evaluar(ParseTreeNode raiz){
+        private void imprimir(String cadena){
+            Imprimir += cadena + "\n";
+        }
+
+
+
+
+        public void Evaluar(ParseTreeNode raiz, String nombreMain){
 
 
 
         }
+
+
     }
 }

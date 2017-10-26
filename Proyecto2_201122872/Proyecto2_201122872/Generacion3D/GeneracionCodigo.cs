@@ -126,7 +126,7 @@ namespace Proyecto2_201122872.Generacion3D
                 if (principal != null)
                 {
                     ambito.addAmbito(principal.firma);
-                    c3d.addCodigo(Constantes.tipoVoid + " " + principal.firma + "(){");
+                    c3d.addCodigo("Principal  "+principal.firma + "(){");
                     evaluarCuerpo(principal.cuerpo, ambito);
                     c3d.addCodigo("}");
                     ambito.ambitos.Pop();

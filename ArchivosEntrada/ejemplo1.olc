@@ -14,6 +14,10 @@ publico decimal getAltura (entero a) {  entero a = 5+10;
 entero arreglo[3][4][2]={{1,2,3,4},{1,2,3,4}};
 }
 
+principal(){
+
+entero j=7*9;
+}
 
 
 
@@ -52,6 +56,9 @@ clase depos2 deposito{
 privado entero val1;
 publico cadena val2;
 
+principal(){
+entero a=5*4;
+}
 
 publico decimal getAltura (entero h) {  entero b = 11-23; cadena g="pedrito lindo";}
 

@@ -56,7 +56,7 @@ namespace Proyecto2_201122872.Interprete3D
              NonTerminal instruccion = new NonTerminal("instruccion");
              NonTerminal instrucciones = new NonTerminal("instruccicones");
              NonTerminal cuerpoArchivo = new NonTerminal("cuerpoArchivo");
-
+             NonTerminal nueva = new NonTerminal("p");
             #endregion
 
 
@@ -103,9 +103,13 @@ namespace Proyecto2_201122872.Interprete3D
 
              instrucciones.Rule = MakeStarRule(instrucciones, instruccion);
 
+             main.Rule = ToTerm("principal") + identificador + "(" + ")" + "{" + instrucciones + "}";
              metodo.Rule = ToTerm(Constantes.tipoVoid) + identificador + "(" + ")" + "{" + instrucciones + "}";
 
-             cuerpoArchivo.Rule = MakeStarRule(cuerpoArchivo, metodo);
+             
+             nueva.Rule = main
+                 | metodo;
+             cuerpoArchivo.Rule = MakeStarRule(cuerpoArchivo, nueva);
 
 
 
@@ -142,7 +146,7 @@ namespace Proyecto2_201122872.Interprete3D
                  | TERMINO;
 
              RELACINAL.Rule = EXPRESION + RELACIONALES + EXPRESION;
-
+             
 
 
 
@@ -163,7 +167,7 @@ namespace Proyecto2_201122872.Interprete3D
 
 
 
-             MarkTransient();
+             MarkTransient(instruccion,EXPRESION,nueva);
 
 
 

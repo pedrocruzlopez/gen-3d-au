@@ -36,7 +36,7 @@ namespace Proyecto2_201122872.Formularios
 
         private void inicializar()
         {
-            analizador3D = new Arbol3D();
+            
             this.ArrayTab = new ArrayList();
             this.ArrayTxt = new ArrayList();
             cont = 0;
@@ -236,6 +236,7 @@ namespace Proyecto2_201122872.Formularios
                //dataGridView1.Rows.Add(row0);
             }
 
+            analizador3D = new Arbol3D("");
             Console.WriteLine("-------- Inicio codigo -----------");
 
             escribir3D(generador.c3d.codigo3D);

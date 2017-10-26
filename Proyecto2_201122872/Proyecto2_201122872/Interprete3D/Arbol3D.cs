@@ -18,9 +18,11 @@ namespace Proyecto2_201122872.Interprete3D
         private LanguageData lenguaje;
         private Parser p;
         private String path;
+        private string nombreMain;
 
-        public Arbol3D()
+        public Arbol3D(string nombreMain)
         {
+            this.nombreMain = nombreMain;
             accion = new AccionInterprete();
             lenguaje = new LanguageData(new Sintactico());//clase de la gramatica
             p = new Parser(lenguaje);
@@ -43,7 +45,7 @@ namespace Proyecto2_201122872.Interprete3D
             if (s_tree.Root != null)
             {
                 Console.WriteLine("========ACCIONES AL EVVALUAR EL ARBOL=============");
-                 accion.Evaluar(s_tree.Root);//EVALUO EL ARBOL
+                 accion.Evaluar(s_tree.Root, nombreMain);//EVALUO EL ARBOL
                 Console.WriteLine("==================================================");
                 dispTree(s_tree.Root, 0);//IMPRIMO EL ARBOL
                 graficarArbol(s_tree.Root);//GRAFICO EL ARBOL

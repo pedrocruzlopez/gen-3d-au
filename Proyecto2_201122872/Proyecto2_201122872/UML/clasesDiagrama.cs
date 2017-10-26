@@ -186,8 +186,9 @@ namespace Proyecto2_201122872.UML
 
         private Funcion esValidoFuncHerencia(Funcion func, String nombreClase)
         {
-            if(func.visibilidad.Equals(Constantes.publico, StringComparison.OrdinalIgnoreCase) ||
-                func.visibilidad.Equals(Constantes.protegido, StringComparison.OrdinalIgnoreCase))
+            if((func.visibilidad.Equals(Constantes.publico, StringComparison.OrdinalIgnoreCase) ||
+                func.visibilidad.Equals(Constantes.protegido, StringComparison.OrdinalIgnoreCase)) &&
+                !func.esPrincipal)
             {
                 Funcion nueva = new Funcion(nombreClase, func.nombre, func.tipo, func.parametros, func.visibilidad, func.cuerpo);
                 nueva.esHeredada = true;
@@ -283,138 +284,12 @@ namespace Proyecto2_201122872.UML
         }
 
 
-       /*
-
-        private void agregarHerencias()
-        {
-            clasesDiagrama nuevoDiagrama = new clasesDiagrama();
-
-            foreach (Clase actual in this.listaClases)
-            {
-                if (actual.herencia != null || !actual.herencia.Equals(""))
-                {
-                    Clase clasePadre = getClase(actual.herencia);
-                    if (clasePadre.lenguaje.Equals(actual.lenguaje, StringComparison.OrdinalIgnoreCase))
-                    {
-                        listaAtributos nuevosAtributos = new listaAtributos();
-                        Atributo temporal;
-                        //obtener atributos
-                        foreach (Atributo atrTemporal in clasePadre.atributos.atributos)
-                        {
-                            temporal = esValidoAtriHerencia(atrTemporal, actual.nombre);
-                            if (temporal != null)
-                            {
-                                nuevosAtributos.addAtributo(temporal);
-                            }
-                            
-                        }
-
-                        //obtener funciones
-
-
-
-
-
-                    }
-                    else
-                    {//no se puede heredar una clase a otra de otro tipo
-                        ErrorA er = new ErrorA(Constantes.errorSemantico,0,0,0, "La clase " + actual.nombre + " es de otro lenguaje a la clase " + clasePadre.nombre);
-                        Form1.errores.addError(er);
-                    }
-
-                }
-                else
-                {
-                    //no posee herencia, solo se guarda
-                    nuevoDiagrama.insertarClase(actual);
-
-                }
-                
-            }
-
-
-
-        }
-
-       */
+    
        
 
-        private listaAtributos getAtributosConHerencia(listaAtributos Padre, listaAtributos hijo)
-        {
-            foreach (Atributo atr in hijo.atributos)
-            {
-                Padre.addAtributo(atr);
-            }
-            return Padre;
-
-        }
+     
 
 
-        private listaFunciones getFuncionesconHerencia(listaFunciones padre, listaFunciones hijo, string nombreHijo)
-        {
-           
-
-            foreach (Funcion itemPadre in padre.funciones)
-            {
-                itemPadre.clase = nombreHijo;
-                itemPadre.generarFirma();
-                foreach (Funcion itemHijo in hijo.funciones)
-                {
-                    if (itemHijo.firma.Equals(itemPadre.firma, StringComparison.OrdinalIgnoreCase))
-                    {//se debe sobreescirbir
-                        itemHijo.setCuerpo(itemPadre.cuerpo);
-                        padre.addFuncion(itemHijo);
-                    }
-                    else
-                    {
-                        padre.addFuncion(itemHijo);
-                    }
-                }
-            }
-
-            return null;
-        }
-
-
-
-       /*
-
-        public void agregarHerencia()
-        {
-            string nombreHerencia;
-            Clase padre,actual;
-
-            for (int i = 0; i < this.listaClases.Count; i++)
-            {
-                actual= listaClases.ElementAt(i);
-                
-                if (actual.herencia != null && !actual.herencia.Equals(""))
-                {
-                    nombreHerencia = actual.herencia;
-                    padre = getClase(nombreHerencia);
-                    if (padre != null)
-                    {
-                        listaAtributos atrPadre = padre.atributos;
-                        listaAtributos atrHijo = actual.atributos;
-                        listaAtributos nuevosAtributos = getAtributosConHerencia(atrPadre, atrHijo);
-                        listaFunciones funcPadre = padre.funciones;
-                        listaFunciones funcHijo = actual.funciones;
-
-                        
-                        
-
-                    }
-                    else
-                    {
-
-                    }
-
-
-                }
-            }
-        }
-
-       */
 
         private Clase getClase(String nombre)
         {
