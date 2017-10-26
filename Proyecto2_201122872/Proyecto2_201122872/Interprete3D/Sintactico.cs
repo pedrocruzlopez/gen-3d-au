@@ -54,7 +54,7 @@ namespace Proyecto2_201122872.Interprete3D
              NonTerminal llamada = new NonTerminal("llamada");
              NonTerminal parametro = new NonTerminal("parametro");
              NonTerminal instruccion = new NonTerminal("instruccion");
-             NonTerminal instrucciones = new NonTerminal("instruccicones");
+             NonTerminal instrucciones = new NonTerminal("instrucciones");
              NonTerminal cuerpoArchivo = new NonTerminal("cuerpoArchivo");
              NonTerminal nueva = new NonTerminal("p");
             #endregion
