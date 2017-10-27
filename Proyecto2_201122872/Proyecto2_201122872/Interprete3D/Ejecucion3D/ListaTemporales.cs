@@ -31,7 +31,7 @@ namespace Proyecto2_201122872.Interprete3D.Ejecucion3D
                     return item.valor;
                 }
             }
-            return null;
+            return "nulo";
         }
 
         public Boolean exiteTemp(Temporal temp)
