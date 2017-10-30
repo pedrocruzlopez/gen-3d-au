@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="Generacion3D\Ambitos.cs" />
     <Compile Include="Generacion3D\Codigo.cs" />
+    <Compile Include="Generacion3D\Codigo3D.cs" />
     <Compile Include="Generacion3D\GeneracionCodigo.cs" />
     <Compile Include="Generacion3D\nodoCondicion.cs" />
     <Compile Include="Generacion3D\TablaSimbolos\Arreglos\Dimension.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="UML\Atributo.cs" />
     <Compile Include="UML\Clase.cs" />
     <Compile Include="UML\clasesDiagrama.cs" />
+    <Compile Include="UML\Ejemplo.cs" />
     <Compile Include="UML\elementoVarArreglo.cs" />
     <Compile Include="UML\Funcion.cs" />
     <Compile Include="UML\listaAtributos.cs" />

@@ -10,17 +10,22 @@ publico entero atributo1Padre;
 protegido cadena atributo2Padre;
 
 //Constructor sin parámetros auxiliar
-publico decimal getAltura (entero a) {  entero a = 5+10;
-entero arreglo[3][4][2]={{1,2,3,4},{1,2,3,4}};
+publico decimal getAltura (entero a) { 
+
+
 }
 
 principal(){
 
 entero j=7*9;
+deposito dep = new deposito(9,88);
 }
 
+deposito(){
+}
 
-
+deposito(entero a, entero b){
+}
 /*Deposito () {
 
 
@@ -61,5 +66,12 @@ entero a=5*4;
 }
 
 publico decimal getAltura (entero h) {  entero b = 11-23; cadena g="pedrito lindo";}
+
+ depos2(){
+}
+
+ depos2(entero valor1, entero valor2){
+	deposito dep = new deposito(); 
+}
 
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
 {
     public class tablaDeSimbolos
@@ -34,8 +35,54 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
         }
 
 
+        public int sizeClase(String nombre)
+        {
+            foreach (Simbolo simb in this.tabla)
+            {
+                if(simb.tipoElemento.Equals("clase", StringComparison.OrdinalIgnoreCase) &&
+                    simb.rol.Equals("clase", StringComparison.OrdinalIgnoreCase) &&
+                    simb.nombreReal.Equals(nombre, StringComparison.OrdinalIgnoreCase))
+                {
+                    return simb.tamanho;
+                }
+            }
+            return -1;
+        }
 
-        public int getPosicionDeClase(string id, Ambitos ambito)
+
+        public int sizeFuncion(String nombreClase, String firmaMetodo)
+        {
+            foreach ( Simbolo item in this.tabla)
+            {
+                if(item.ambito.Equals(nombreClase, StringComparison.OrdinalIgnoreCase) &&
+                    item.nombreReal.Equals(firmaMetodo, StringComparison.OrdinalIgnoreCase))
+                {
+                    return item.tamanho;
+                }
+                
+            }
+            return -1;
+        }
+
+
+        public List<List<String>> existeConstructor(string nombreClase, int noParametros)
+        {
+            List<List<String>> listas = new List<List<string>>();
+            foreach (Simbolo item in this.tabla)
+            {
+                if (item.rol.Equals(Constantes3D.constructor, StringComparison.OrdinalIgnoreCase) &&
+                    item.nombreReal.Equals(nombreClase,StringComparison.OrdinalIgnoreCase) &&
+                    item.tamanhoParametros==noParametros)
+                {
+                    //listas.Add(item.tipoParametros);
+                }
+                
+            }
+            return listas;
+        }
+      
+
+        public int getPosicionDeClase(string id, Ambitos ambito)//buca la posicion de un id dentro de los atributos
         {
             for (int i = 0; i < ambito.ambitos.Count; i++)
             {
@@ -60,7 +107,7 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
             return -1;
 
         }
-        public int getPosicion(string id, Ambitos ambito)
+        public int getPosicion(string id, Ambitos ambito) //busca la posicion de un id dentro de un ambiente local
         {
             for (int i = 0; i < ambito.ambitos.Count; i++)
             {
@@ -85,7 +132,28 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
             return -1;
         }
 
-        public string getTipo(string id, Ambitos ambito)
+
+        public string getFirmaMetodo(String nombreClase, String cadenaParametros, string nombreMetodo)
+        {
+            Console.WriteLine("kkkkkkkkkkkkkkkkkkkkkkk");
+            Console.WriteLine(nombreClase + "   " + cadenaParametros + "  " + nombreMetodo);
+            Console.WriteLine("kkkkkkkkkkkkkkkkkkkkkkk");
+            foreach (Simbolo item in tabla)
+            {
+               
+                Console.WriteLine(item.ambito + " " + item.tipoParametrosCadena + "  " + item.nombreFuncion);
+                if(item.ambito.Equals(nombreClase,StringComparison.OrdinalIgnoreCase) &&
+                    item.tipoParametrosCadena.ToUpper().Equals(cadenaParametros.ToUpper(),StringComparison.OrdinalIgnoreCase) &&
+                    item.nombreFuncion.Equals(item.ambito, StringComparison.OrdinalIgnoreCase))
+                {
+                    return item.nombreReal;
+                }
+                
+            }
+            return "";
+        }
+
+        public string getTipo(string id, Ambitos ambito) //obtiene el tipo de una variable
         {
             foreach (String amb in ambito.ambitos)
             {

@@ -23,7 +23,8 @@ namespace Proyecto2_201122872.UML
         public Boolean esPrincipal = false;
         public Boolean esConstructor = false;
         ///public Cuerpo instrucciones;
-        public ParseTreeNode cuerpo; 
+        public ParseTreeNode cuerpo;
+        public string tiposParametrosCadena;
         
 
         public void setSobreescrita(bool val)
@@ -51,6 +52,7 @@ namespace Proyecto2_201122872.UML
             this.visibilidad = visibilidad;
             this.firma = generarFirma();
             this.cuerpo = cuerpo;
+            this.tiposParametrosCadena = parametros.identificadorParametros();
         }
 
 

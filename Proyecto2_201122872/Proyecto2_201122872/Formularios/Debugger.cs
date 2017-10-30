@@ -40,7 +40,7 @@ namespace Proyecto2_201122872.Formularios
             this.ArrayTab = new ArrayList();
             this.ArrayTxt = new ArrayList();
             cont = 0;
-            /*
+            
             this.dataGridView1.Columns.Add("acceso", "Acceso");
             this.dataGridView1.Columns.Add("nombre", "Nombre");
             this.dataGridView1.Columns.Add("tipo", "Tipo");
@@ -48,7 +48,9 @@ namespace Proyecto2_201122872.Formularios
             this.dataGridView1.Columns.Add("ambito", "Ambito");
             this.dataGridView1.Columns.Add("rol", "Rol");
             this.dataGridView1.Columns.Add("apuntador", "Apuntador");
-            this.dataGridView1.Columns.Add("tamanho", "Tamanho");*/
+            this.dataGridView1.Columns.Add("tamanho", "Tamanho");
+            this.dataGridView1.Columns.Add("noParametros", "Parametros");
+
 
         }
 
@@ -232,8 +234,8 @@ namespace Proyecto2_201122872.Formularios
            // generador.generarTablaSimbolos();
             foreach (Simbolo s in generador.tablaSimbolos.tabla)
             {
-               string [] row0={s.visibilidad,s.nombreReal,s.tipo,s.tipoElemento,s.ambito,s.rol,s.apuntador+"",s.tamanho+""};
-               //dataGridView1.Rows.Add(row0);
+               string [] row0={s.visibilidad,s.nombreReal,s.tipo,s.tipoElemento,s.ambito,s.rol,s.apuntador+"",s.tamanho+"",s.tamanhoParametros+""};
+               dataGridView1.Rows.Add(row0);
             }
 
             analizador3D = new Arbol3D("");
@@ -247,7 +249,7 @@ namespace Proyecto2_201122872.Formularios
             Console.WriteLine("------- fin codigo --------------");
             Console.WriteLine("------ Inicio ejecucion 3d--------");
             fastColoredTextBox1.Text = generador.c3d.codigo3D;
-            analizador3D.parse(generador.c3d.codigo3D);
+           // analizador3D.parse(generador.c3d.codigo3D);
 
             Console.WriteLine("------- fin ejecucion 3d------");
         }
@@ -319,6 +321,42 @@ namespace Proyecto2_201122872.Formularios
 
         }
 
+        private void toolStripButton8_Click(object sender, EventArgs e)
+        {
+            Codigo c3d = new Codigo();
+            String cadena = "hola mundo!\n";
+             string punteroHeapCadena = c3d.getTemporal();
+                        c3d.addCodigo(punteroHeapCadena+" = H;");
+                       // string cadena = nodo.ChildNodes[0].Token.ValueString;
+                        string nuevoTemp;
+                        char caracter;
+                        int ascii;
 
-    }
+
+                        for (int i = 0; i < cadena.Length; i++)
+                        { 
+                            caracter = cadena.ElementAt(i).ToString()[0];
+                            ascii= (int) caracter;
+                            nuevoTemp= c3d.getTemporal();
+                            c3d.addCodigo(nuevoTemp+" = "+punteroHeapCadena+" + "+i+";");
+                            c3d.addCodigo("HEAP["+nuevoTemp+"] = "+ascii+"; // "+caracter);
+                        }
+                        Console.WriteLine(cadena.Length);
+
+            Console.WriteLine(c3d.codigo3D);
+            Console.WriteLine("H = H + " + cadena.Length + ";");
+  
+            }
+
+        private void Debugger_Load(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+        }
+
+
+    
 }

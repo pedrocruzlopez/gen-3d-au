@@ -17,6 +17,19 @@ namespace Proyecto2_201122872.UML
             this.parametros= new List<variable>();
         }
 
+
+        public string identificadorParametros()
+        {
+            string re = "";
+            foreach (variable item in parametros)
+            {
+                re += item.tipo.ToUpper();
+                
+            }
+
+            return re;
+        }
+
         public Boolean addParametro(variable n)
         {
             variable actual;

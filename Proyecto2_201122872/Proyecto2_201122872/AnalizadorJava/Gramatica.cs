@@ -159,8 +159,7 @@ namespace Proyecto2_201122872.AnalizadorJava
             CLASE.Rule = ToTerm(clase) + identificador + identificador + CUERPO_CLASE
               | ToTerm(clase) + identificador + CUERPO_CLASE;
 
-            INSTRUCCION.ErrorRule = SyntaxError + "}";
-            INSTRUCCION.ErrorRule = SyntaxError + ";";
+           
 
             CUERPO_CLASE.Rule = ToTerm("{") + L_ELEMENTOS + ToTerm("}");
 
@@ -283,13 +282,14 @@ namespace Proyecto2_201122872.AnalizadorJava
 
             INSTRUCCIONES.Rule = MakeStarRule(INSTRUCCIONES, INSTRUCCION);
 
-         
-            
+
+
 
             DECLARACION.Rule = TIPO + identificador + ToTerm(";")
                 | TIPO + identificador + ToTerm("=") + EXPRESION + ";"
                 | TIPO + identificador + LPOSICIONES + ToTerm(";")
-                | TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";";
+                | TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";"
+                | TIPO + identificador + ToTerm("=") + INSTANCIA + ";"; 
 
 
             ASIGNACION.Rule = EXPRESION + ToTerm("=") + EXPRESION + ";";
@@ -391,8 +391,10 @@ namespace Proyecto2_201122872.AnalizadorJava
                 | UNARIO
                 | ToTerm("(") + TERMINO + ")"//no es necesario en python
                 | NEGATIVO
-                | "{" + LFILAS + "}"//no existe en python
-                | INSTANCIA;//
+                | "{" + LFILAS + "}";//no existe en python;
+               // | INSTANCIA;//
+
+
 
             LLAMADA.Rule = identificador + ToTerm("(") + LEXPRESIONES + ")"
                 | identificador + ToTerm("(") + ")";

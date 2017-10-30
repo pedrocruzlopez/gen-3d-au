@@ -71,7 +71,7 @@ namespace Proyecto2_201122872.UML
             return this.nombre;
         }
 
-
+       
 
         /*------------ Atibutos ----------------------*/
 
@@ -739,7 +739,8 @@ namespace Proyecto2_201122872.UML
             
             foreach (Funcion func in this.funciones.funciones)
             {
-                
+                int noParametros=0;
+                List<String> tipoParametros = new List<String>();
                 ambitos = new Ambitos();
                 ambitos.addAmbito(func.firma);
                 apuntador = 0;
@@ -753,6 +754,8 @@ namespace Proyecto2_201122872.UML
                 Simbolo simTemporal;
                 foreach (variable var in func.parametros.parametros)
                 {
+                    noParametros++;
+                    tipoParametros.Add(var.tipo);
                     simTemporal = new Simbolo(Constantes.noTieneVisi, var.nombre, var.tipo, getTipoAtributo(var.tipo), ambitos.getAmbito(), Constantes3D.parametro, apuntador, 1);
                     simbolosParametros.Add(simTemporal);
                     apuntador++;
@@ -767,7 +770,7 @@ namespace Proyecto2_201122872.UML
 
                 int sizeFun = 1 + simbolosParametros.Count + lTemporalFuncion.Count + 1;
                 //paso 1
-                Simbolo simFuncion = new Simbolo(func.visibilidad, func.nombre, func.tipo, "", this.nombre, func.getRol(), -1, sizeFun);
+                Simbolo simFuncion = new Simbolo(func.visibilidad, func.firma, func.tipo,"",this.nombre, func.getRol(), -1, sizeFun, noParametros, func.tiposParametrosCadena,func.nombre);
                 retorno.Add(simFuncion);
                 retorno.Add(simThis);
                 foreach (Simbolo item in simbolosParametros)

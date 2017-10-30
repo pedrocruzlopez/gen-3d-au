@@ -13,13 +13,13 @@ namespace Proyecto2_201122872.Interprete3D
 {
     class AccionInterprete
     {
-        public  double[] Pila = new double[1000];         
+        public double[] Pila = new double[1000];
         public double[] Heap = new double[1000];
-        public  String Imprimir ;
+        public String Imprimir;
         public ListaTemporales temporales;
-        private string ir_a ;
-        private string etiqueta ;
-        private int bandera ;
+        private string ir_a;
+        private string etiqueta;
+        private int bandera;
 
         public AccionInterprete()
         {
@@ -33,11 +33,13 @@ namespace Proyecto2_201122872.Interprete3D
 
         }
 
-        private void imprimir(String cadena){
+        private void imprimir(String cadena)
+        {
             Imprimir += cadena + "\n";
         }
 
-        public void Evaluar(ParseTreeNode raiz, String nombreMain){
+        public void Evaluar(ParseTreeNode raiz, String nombreMain)
+        {
             Temporal p = new Temporal("P", 0);
             Temporal H = new Temporal("h", 0);
             //buscamos principal
@@ -76,31 +78,31 @@ namespace Proyecto2_201122872.Interprete3D
                 string id = nodo.ChildNodes[0].Token.ValueString;
                 Object val = resolverExp(nodo.ChildNodes[1]);
                 int aux = (int)val;
-                if(!val.ToString().Equals("nulo"))
-                temporales.agregarTemp(new Temporal(id, Pila[aux]));
+                if (!val.ToString().Equals("nulo"))
+                    temporales.agregarTemp(new Temporal(id, Pila[aux]));
                 else
                 {
                     ErrorA er = new ErrorA("Semantico", "Ocurrio un error a realizar la opeacino", nodo.FindToken());
                     Form1.errores.addError(er);
                 }
             }
-            else if (modo ==1)
+            else if (modo == 1)
             {// stack.Rule = ToTerm("STACK") + "[" + EXPRESION + "]" + "=" + EXPRESION + ";";
                 Object indice = resolverExp(nodo.ChildNodes[0]);
                 Object valor = resolverExp(nodo.ChildNodes[1]);
-                 if(!valor.ToString().Equals("nulo") &&
-                     !indice.ToString().Equals("nulo"))
-                 {
-                     int ind = (int)indice;
-                     Pila[ind] =(double) valor;
+                if (!valor.ToString().Equals("nulo") &&
+                    !indice.ToString().Equals("nulo"))
+                {
+                    int ind = (int)indice;
+                    Pila[ind] = (double)valor;
 
-                 }
-                 else
-                 {
-                     ErrorA er = new ErrorA("Semantico", "Ocurrio un error a realizar la opeacino", nodo.FindToken());
-                     Form1.errores.addError(er);
-                 }
-                
+                }
+                else
+                {
+                    ErrorA er = new ErrorA("Semantico", "Ocurrio un error a realizar la opeacino", nodo.FindToken());
+                    Form1.errores.addError(er);
+                }
+
             }
 
 
@@ -114,7 +116,8 @@ namespace Proyecto2_201122872.Interprete3D
                 //asignacionHeap.Rule = identificador + ToTerm("=") + "HEAP" + "[" + EXPRESION + "]" + ";";
                 string id = nodo.ChildNodes[0].Token.ValueString;
                 Object val = resolverExp(nodo.ChildNodes[1]);
-                if (!esNula(val)){
+                if (!esNula(val))
+                {
                     int indice = (int)val;
                     temporales.agregarTemp(new Temporal(id, indice));
 
@@ -174,62 +177,85 @@ namespace Proyecto2_201122872.Interprete3D
                             asignacionNormal(nodo);
                             break;
                         }
-                       
-                            break;
-                    
-                       
-                        
+
+                        break;
                     }
 
                 case "asignacionStack":
                     {
                         //asignacionStack.Rule = identificador + ToTerm("=") + "STACK" + "[" + EXPRESION + "]" + ";";
-             if (esIrAEtiqueta())
-             {
-                 pila(nodo, 0);
-                 break;
-             }
-             break;
-                       
+                        if (esIrAEtiqueta())
+                        {
+                            pila(nodo, 0);
+                            break;
+                        }
+                        break;
+
                     }
 
                 case "asignacionHeap":
                     {
                         //asignacionHeap.Rule = identificador + ToTerm("=") + "HEAP" + "[" + EXPRESION + "]" + ";";
 
+                        
                         break;
                     }
 
                 case "etiqueta":
                     {
+                        //etiqueta.Rule = identificador + ToTerm(":");
+
+                        string nombreEtiqueta = nodo.ChildNodes[0].Token.ValueString;
+                        if (nombreEtiqueta.Equals(etiqueta, StringComparison.OrdinalIgnoreCase))
+                        {
+
+                        }
+                        
+                        /*if (aux_Global.toString().equals("Etiqueta")) {
+                    String id = nodo.jjtGetChild(0).toString();
+                    if (ir_a.equals("")) {
+                        etiqueta = id;
+                        ir_a = etiqueta;
+                    } else {
+                        etiqueta = id;
+                    }
+                    break;*/
+
+                        
                         break;
                     }
 
                 case "llamada":
                     {
+
                         break;
                     }
 
                 case ConstantesInterprete.salto:
                     {
+
                         break;
                     }
 
                 case ConstantesInterprete.IF:
                     {
+
                         break;
                     }
 
                 case ConstantesInterprete.stack:
                     {
+
                         break;
                     }
                 case ConstantesInterprete.heap:
                     {
+
                         break;
                     }
                 case ConstantesInterprete.print:
                     {
+
                         break;
                     }
 
@@ -438,11 +464,13 @@ namespace Proyecto2_201122872.Interprete3D
 
         }
 
-            private bool esDouble(Object val){
-                return val is Double;
-            }
+        private bool esDouble(Object val)
+        {
+            return val is Double;
+        }
 
-        private bool esInt(Object val){
+        private bool esInt(Object val)
+        {
             return val is int;
         }
 

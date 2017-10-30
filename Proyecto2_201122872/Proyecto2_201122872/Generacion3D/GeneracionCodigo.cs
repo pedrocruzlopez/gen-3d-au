@@ -38,7 +38,6 @@ namespace Proyecto2_201122872.Generacion3D
 
 
       
-
         private string getCadenaArchivo(String ruta)
         {
             StreamReader archivo = new StreamReader(ruta);
@@ -59,23 +58,19 @@ namespace Proyecto2_201122872.Generacion3D
             String contenido = getCadenaArchivo(ruta);
             if (extension.Equals(".tree", StringComparison.OrdinalIgnoreCase))
             {
-                
                     uml = analizadorPython.parseConvertirUML2(contenido);
-                    generarTablaSimbolos();
-
-               
-                
-                
+                    generarTablaSimbolos();     
             }
             else if (extension.Equals(".olc", StringComparison.OrdinalIgnoreCase))
             {
-              clasesDiagrama uml2= analizadorJava.parseConvertirUML2(contenido);
-              uml = uml2.agregarHerencia();
+               clasesDiagrama uml2= analizadorJava.parseConvertirUML2(contenido);
+               uml = uml2.agregarHerencia();
                generarTablaSimbolos();
                
             }
 
         }
+
 
         public void generarTablaSimbolos()
         {
@@ -111,7 +106,7 @@ namespace Proyecto2_201122872.Generacion3D
                 List<Funcion> funcionesMetodos;
                 if (constructores.Count > 0)
                 {
-                    escribirConstructores(constructores, ambito);
+                    escribirConstructores(constructores, ambito,claseActual.getNombre());
 
                 }
                 else
@@ -127,7 +122,7 @@ namespace Proyecto2_201122872.Generacion3D
                 {
                     ambito.addAmbito(principal.firma);
                     c3d.addCodigo("Principal  "+principal.firma + "(){");
-                    evaluarCuerpo(principal.cuerpo, ambito);
+                    evaluarCuerpo(principal.cuerpo, ambito,principal.firma,claseActual.getNombre());
                     c3d.addCodigo("}");
                     ambito.ambitos.Pop();
                 }
@@ -135,7 +130,7 @@ namespace Proyecto2_201122872.Generacion3D
                 //3. escribir los demas metodos y funciones
 
                 funcionesMetodos = claseActual.getFunciones();
-                escribirConstructores(funcionesMetodos, ambito);
+                escribirConstructores(funcionesMetodos, ambito,claseActual.getNombre());
                 ambito.ambitos.Pop();
 
             }
@@ -147,13 +142,13 @@ namespace Proyecto2_201122872.Generacion3D
 
         
 
-        private void escribirConstructores(List<Funcion> constructores, Ambitos ambito)
+        private void escribirConstructores(List<Funcion> constructores, Ambitos ambito, String nombreClase)
         {
             foreach (Funcion constructor in constructores)
             {
                 ambito.addAmbito(constructor.firma);//ingresando el ambito del constructor
                 c3d.addCodigo(Constantes.tipoVoid + " " + constructor.firma + "(){");
-                evaluarCuerpo(constructor.cuerpo, ambito);
+                evaluarCuerpo(constructor.cuerpo, ambito,constructor.firma,nombreClase);
                 c3d.addCodigo("}");
                 ambito.ambitos.Pop();//saliendo del ambito del constructor
             }
@@ -161,10 +156,23 @@ namespace Proyecto2_201122872.Generacion3D
 
 
 
+
+
         #region generacion c3d cuerpo
 
+        
+        private bool sonNulos(List<String> tipos)
+        {
+            bool res = true;
+            for (int i = 0; i < tipos.Count; i++)
+            {
+                res = res && (tipos.ElementAt(i).Equals("nulo", StringComparison.OrdinalIgnoreCase));    
+            }
+            return res;
+        }
 
-        public void evaluarCuerpo(ParseTreeNode nodo, Ambitos ambitos)
+
+        public void evaluarCuerpo(ParseTreeNode nodo, Ambitos ambitos, String nombreMetodo, String nombreClase)
         {
 
             switch (nodo.Term.Name)
@@ -174,7 +182,7 @@ namespace Proyecto2_201122872.Generacion3D
                 case Constantes.cuerpo:
                     {
                         if (nodo.ChildNodes.Count > 0)
-                            evaluarCuerpo(nodo.ChildNodes[0], ambitos);
+                            evaluarCuerpo(nodo.ChildNodes[0], ambitos, nombreMetodo, nombreClase);
                         else
                             break;
                         break;
@@ -183,13 +191,13 @@ namespace Proyecto2_201122872.Generacion3D
                     {
                         foreach (ParseTreeNode nodoHijo in nodo.ChildNodes)
                         {
-                            evaluarCuerpo(nodoHijo, ambitos);
+                            evaluarCuerpo(nodoHijo, ambitos, nombreMetodo, nombreClase);
                         }
                         break;
                     }
                 case Constantes.instruccion:
                     {
-                        evaluarCuerpo(nodo.ChildNodes[0], ambitos);
+                        evaluarCuerpo(nodo.ChildNodes[0], ambitos, nombreMetodo, nombreClase);
                         break;
                     }
 
@@ -258,108 +266,350 @@ namespace Proyecto2_201122872.Generacion3D
 
                    case Constantes.decla2:
                        {
-                           /* 
-            DECLARACION.Rule = TIPO + identificador + ToTerm(";")
-                
-                | 
-                | TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";";
-                            */
                            int noHijos = nodo.ChildNodes.Count;
-
                            if (noHijos == 3)
                            {
-                               if (!nodo.ChildNodes[2].Term.Name.Equals(Constantes.lposiciones, StringComparison.OrdinalIgnoreCase) &&
-                                   nodo.ChildNodes[2].ChildNodes.Count==1)
+                               if (nodo.ChildNodes[2].Term.Name.Equals(Constantes.instancia, StringComparison.OrdinalIgnoreCase))
                                {
-                                   //| TIPO + identificador + ToTerm("=") + EXPRESION + ";
-                                   ParseTreeNode nodoExpresion = nodo.ChildNodes[2];
-                                   string nombreVar = nodo.ChildNodes[1].Token.ValueString;
-                                   string tipo = nodo.ChildNodes[0].ChildNodes[0].Token.ValueString;
-                                   int posVar = tablaSimbolos.getPosicion(nombreVar, ambitos);
+                                   //es una instancia
+                                   String nombreObjetoInstanciar = nodo.ChildNodes[1].Token.ValueString;
+                                   string tipoInstancia = nodo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                                   ParseTreeNode nodoInstancia = nodo.ChildNodes[2];
+                                   string tipoInstacia2 = nodoInstancia.ChildNodes[0].Token.ValueString;
 
-                                   //es un int
-                                   if (tipo.Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase))
+                                   if (tipoInstancia.Equals(tipoInstacia2, StringComparison.OrdinalIgnoreCase))
                                    {
-                                       string et1 = c3d.getTemporal();
-                                       c3d.addCodigo(et1 + " = P + " + posVar + ";");
-                                       object exp = evaluarInt(nodoExpresion.ChildNodes[0],ambitos);
-                                       c3d.addCodigo("STACK[ " + et1 + " ] = " + exp + ";");
-                                   }
-                                   //es un double
-                                   else if (tipo.Equals(Constantes.tipoDecimal, StringComparison.OrdinalIgnoreCase))
-                                   {
-                                       string et1 = c3d.getTemporal();
-                                       c3d.addCodigo(et1 + " = P + " + posVar + ";");
-                                       object exp = evaluarDouble(nodoExpresion.ChildNodes[0], ambitos);
-                                       c3d.addCodigo("STACK[ " + et1 + " ] = " + exp + ";");
+                                       int sizeObjeto = tablaSimbolos.sizeClase(tipoInstancia);
+                                       if (sizeObjeto != -1)
+                                       {//objeto a instanciar si existe
+                                           if (nodoInstancia.ChildNodes.Count == 2)
+                                           {//posee parametros
+                                               int posObjInstanciar = tablaSimbolos.getPosicion(nombreObjetoInstanciar,ambitos);
+                                               if (posObjInstanciar != -1)
+                                               {
 
-                                   }
-                                   //es un char
-                                   else if (tipo.Equals(Constantes.tipoChar, StringComparison.OrdinalIgnoreCase))
-                                   {
-                                       String val = nodoExpresion.ChildNodes[0].Term.Name.ToString();
-                                       if (val.Equals(Constantes.tipoChar, StringComparison.OrdinalIgnoreCase))
-                                       {
-                                           char caracter = (nodoExpresion.ChildNodes[0].ChildNodes[0].Token.ValueString).ToString()[0];
-                                           int ascii = (int)caracter;
-                                           string temp = c3d.getTemporal();
-                                           c3d.addCodigo(temp + " =  P +" + posVar + ";");
-                                           c3d.addCodigo("STACK[" + temp + "] = " + ascii + ";");
+                                                   //resolvemos el tipo de parametros
+                                                   string cad = "";
+                                                   for (int i = 0; i < nodoInstancia.ChildNodes[1].ChildNodes.Count; i++)
+                                                   {
+                                                       cad += validarTipo(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambitos);//resolverExpresiones(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambitos, nombreClase, nombreMetodo);
+
+
+                                                   }
+
+                                                   string firmaMetodo = tablaSimbolos.getFirmaMetodo(nombreClase, cad, nombreMetodo);
+                                                   if (!firmaMetodo.Equals(""))
+                                                   {
+                                                       string temp1 = c3d.getTemporal();
+                                                       string l1 = temp1 + "= P + " + posObjInstanciar + "; //pos del obj " + nombreObjetoInstanciar;
+                                                       string temp2 = c3d.getTemporal();
+                                                       string l2 = temp2 + " = STACK[" + temp1 + "];";
+                                                       string temp3 = c3d.getTemporal();
+                                                       int tamanhoFuncActual = tablaSimbolos.sizeFuncion(nombreClase, nombreMetodo);
+                                                       string l3 = temp3 + " = P + " + tamanhoFuncActual + ";";
+                                                       int posThis = tablaSimbolos.getPosicion("this", ambitos);
+                                                       string firmaLlamada = tablaSimbolos.getFirmaMetodo(nombreClase, cad, tipoInstacia2);
+                                                       string temp4 = c3d.getTemporal();
+                                                       string l4 = temp4 + " = " + temp3 + " + " + posThis + "; //posicion del this";
+                                                       string l5 = "STACK[" + temp4 + "] = " + temp2 + ";";
+                                                       String lParametros = "";
+
+                                                       for (int i = 0; i < nodoInstancia.ChildNodes[1].ChildNodes.Count; i++)
+                                                       {
+                                                           Object temp = resolverExpresiones(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambitos, nombreClase, nombreMetodo);
+                                                           String tempT = c3d.getTemporal();
+                                                           string lTemp = tempT + " = P + " + tamanhoFuncActual + ";\n";
+                                                           string tempT2 = c3d.getTemporal();
+                                                           int val = 1 + i;
+                                                           string lTemp2 = tempT2 + " = " + tempT + " + " +val + ";\n";
+                                                           string lTemp3 = "STACK[" + tempT2 + "] = " + temp + "; // asignamos al parametro\n";
+                                                           lParametros += lTemp;
+                                                           lParametros += lTemp2;
+                                                           lParametros += lTemp3;
+                                                       }
+
+
+                                                       string l6 = "P = P + " + tamanhoFuncActual + ";";
+                                                       string l7 = "call " + firmaLlamada + "();";
+                                                       string l8 = "P = P - " + tamanhoFuncActual + ";";
+                                                       c3d.addCodigo(l1);
+                                                       c3d.addCodigo(l2);
+                                                       c3d.addCodigo(l3);
+                                                       c3d.addCodigo(l4);
+                                                       c3d.addCodigo(l5);
+                                                       c3d.addCodigo(lParametros);
+                                                       c3d.addCodigo(l6);
+                                                       c3d.addCodigo(l7);
+                                                       c3d.addCodigo(l8);
+                                                   }
+                                                      
+
+                                                   }
+                                               
+                                               else
+                                               {
+                                                   posObjInstanciar = tablaSimbolos.getPosicionDeClase(nombreObjetoInstanciar, ambitos);
+                                                   if (posObjInstanciar != -1)
+                                                   {
+                                                       //es un atributo al cual vamos a instanciar
+                                                   }
+                                                   else
+                                                   {
+                                                       ErrorA nue = new ErrorA(Constantes.errorSemantico, "El objeto " + nombreObjetoInstanciar + ", no existe.", nodo.FindToken());
+                                                       Form1.errores.addError(nue);
+
+                                                   }
+
+                                               }
+                                           }
+                                           else
+                                           {//no tiene parametros
+                                               int posObjInstanciar = tablaSimbolos.getPosicion(nombreObjetoInstanciar,ambitos);
+                                               if (posObjInstanciar != -1)
+                                               {//si existe y es una vairable local
+                                                   string temp1 = c3d.getTemporal();
+                                                   string l1= temp1+"= P + "+posObjInstanciar+"; //pos del obj "+nombreObjetoInstanciar;
+                                                   string temp2= c3d.getTemporal();
+                                                   string l2 = temp2 + " = STACK[" + temp1 + "];";
+                                                   string temp3 = c3d.getTemporal();
+                                                   int tamanhoFuncActual = tablaSimbolos.sizeFuncion(nombreClase,nombreMetodo);
+                                                   string l3 = temp3 + " = P + " + tamanhoFuncActual + ";";
+                                                   int posThis = tablaSimbolos.getPosicion("this", ambitos);
+                                                   string firmaLlamada = tablaSimbolos.getFirmaMetodo(nombreClase, "", tipoInstacia2); 
+                                                   string temp4 = c3d.getTemporal();
+                                                   string l4 = temp4 + " = " + temp3 + " + " + posThis + "; //posicion del this";
+                                                   string l5= "STACK["+temp4+"] = "+temp2+";";
+                                                   string l6 = "P = P + " + tamanhoFuncActual + ";";
+                                                   string l7 = "call " + firmaLlamada + "();";
+                                                   string l8 = "P = P - " + tamanhoFuncActual + ";";
+                                                   c3d.addCodigo(l1);
+                                                   c3d.addCodigo(l2); 
+                                                   c3d.addCodigo(l3);
+                                                   c3d.addCodigo(l4);
+                                                   c3d.addCodigo(l5);
+                                                   c3d.addCodigo(l6);
+                                                   c3d.addCodigo(l7);
+                                                   c3d.addCodigo(l8);
+                                               }
+                                               else
+                                               {
+                                                   posObjInstanciar = tablaSimbolos.getPosicionDeClase(nombreObjetoInstanciar, ambitos);
+                                                   if (posObjInstanciar != -1)
+                                                   {
+                                                       //es un atributo al cual vamos a instanciar
+                                                   }
+                                                   else
+                                                   {
+                                                       ErrorA nue = new ErrorA(Constantes.errorSemantico, "El objeto " +nombreObjetoInstanciar+ ", no existe.", nodo.FindToken());
+                                                       Form1.errores.addError(nue);
+
+                                                   }
+                                               }
+
+                                              
+                                           }
+
+
                                        }
                                        else
-                                       {
-                                           ErrorA er = new ErrorA(Constantes.errorSemantico, "Valor no valido para un asignacion de tipo char", nodoExpresion.FindToken());
-                                           Form1.errores.addError(er);
-
+                                       {//objeto a instaincair no existe
+                                           ErrorA nue = new ErrorA(Constantes.errorSemantico,"El objeto "+ tipoInstancia + ", no existe.", nodo.FindToken());
+                                           Form1.errores.addError(nue);
                                        }
-                                   }
-                                   //es un bool
-                                   else if (tipo.Equals(Constantes.tipoBool, StringComparison.OrdinalIgnoreCase))
-                                   {
-                                       string et1 = c3d.getTemporal();
-                                       c3d.addCodigo(et1 + " = P + " + posVar + ";");
-                                       object exp = evaluarBool(nodoExpresion.ChildNodes[0], ambitos);
-                                       c3d.addCodigo("STACK[ " + et1 + " ] = " + exp + ";");
 
                                    }
-                                   //es un string
-                                   else if (tipo.Equals(Constantes.tipoCadena, StringComparison.OrdinalIgnoreCase))
-                                   {
-                                       string temp1 = c3d.getTemporal();
-                                       c3d.addCodigo(temp1 + " = H;");
-                                       Object val = evaluarCadena(nodoExpresion.ChildNodes[0],ambitos);
-                                       c3d.addCodigo("HEAP[H] = -1;");
-                                       c3d.addCodigo("H = H + 1;");
-                                       String temp = c3d.getTemporal();
-                                       c3d.addCodigo( temp + " = P + " + posVar + ";");
-                                       c3d.addCodigo("STACK[" + temp + "]=" + temp1 + ";");
-
-                                   }
-                                   //es un objeto
                                    else
                                    {
-
+                                       ErrorA nue = new ErrorA(Constantes.errorSemantico, tipoInstancia + ", no es igual a " + tipoInstacia2 + ", no se puede realizar la instancia.", nodo.FindToken());
+                                       Form1.errores.addError(nue);
                                    }
-
-                               }
-                               else
-                               {
-                                   //es un arreglo
-                                   //TIPO + identificador + LPOSICIONES + ToTerm(";")
-
 
                                }
                            }
 
 
 
-
-
                            break;
                        }
+                   case "":
+                       {
+                           /* DECLARACION.Rule = TIPO + identificador + ToTerm(";")
+                           | TIPO + identificador + ToTerm("=") + EXPRESION + ";"
+                           | TIPO + identificador + LPOSICIONES + ToTerm(";")
+                           | TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";"
+                           | TIPO + identificador + ToTerm("=") + INSTANCIA + ";"; */
+
+                           int noHijos = nodo.ChildNodes.Count;
+
+                           if (noHijos == 3)
+                           {
+                               if (nodo.ChildNodes[2].Term.Name.Equals(Constantes.instancia, StringComparison.OrdinalIgnoreCase))
+                               {
+                                   String nombreObjetoInstanciar = nodo.ChildNodes[1].Token.ValueString;
+                                   string tipoInstancia = nodo.ChildNodes[0].Token.ValueString;
+                                   ParseTreeNode nodoInstancia = nodo.ChildNodes[2];
+                                   string tipoInstacia2 = nodoInstancia.ChildNodes[0].Token.ValueString;
+
+                                   if (tipoInstancia.Equals(tipoInstacia2, StringComparison.OrdinalIgnoreCase))
+                                   {// si son del mismo tipo al que quiero instancia
+                                       int hijosInstancia = nodoInstancia.ChildNodes.Count;
+                                       if (hijosInstancia == 2)
+                                       {// si posee parametros
+                                           ParseTreeNode nodoParametros = nodoInstancia.ChildNodes[1];
+                                           int noParametros = nodoParametros.ChildNodes.Count;
+                                           List<List<String>> tipoParametros = tablaSimbolos.existeConstructor(tipoInstacia2, noParametros);
+                                           if (tipoParametros.Count>0)
+                                           {
+                                               List<String> parametrosConstructor = new List<string>();
+                                               for (int i = 0; i < nodoParametros.ChildNodes.Count; i++)
+                                               {
+                                                   Object tipoParametro = validarTipo(nodoParametros.ChildNodes[i], ambitos);
+                                                   parametrosConstructor.Add(tipoParametro.ToString());
+                                               }
+                                               bool resParametros = sonNulos(parametrosConstructor);
+                                               if (resParametros)
+                                               {
+                                                   bool bandera;
+                                                   int cont = 0;
+                                                   
+                                                   List<String> lTemporal;
+                                                   for (int i = 0; i < tipoParametros.Count; i++)
+                                                   {
+                                                       bandera = true;
+                                                       lTemporal = tipoParametros.ElementAt(i);
+                                                       if (lTemporal.Count == parametrosConstructor.Count)
+                                                       {
+                                                           for (int j = 0; j < lTemporal.Count; j++)
+                                                           {
+                                                               bandera = bandera && lTemporal.ElementAt(j).Equals(parametrosConstructor.ElementAt(j), StringComparison.OrdinalIgnoreCase);
+
+                                                           }
+                                                           if (bandera)
+                                                           {
+                                                               cont++;
+                                                           }
+                                                       }
+                                                   }
+
+                                                   if (cont > 0)
+                                                   {
+                                                       //si existe
+                                                       string cad = "";
+                                                       foreach (String item in parametrosConstructor)
+                                                       {
+                                                           cad += item.ToUpper();
+                                                       }
+
+                                                       
+
+                                                   }
+                                                   else
+                                                   {
+                                                       //no existe un constructor con esos parametros
+                                                   }
+                                               }
+                                               else
+                                               {
+                                                   //error los parametros devuelven algun nulo
+                                               }
+
+                                           }
+                                          /* {//si exite un constructor con ese numero de parametros
+                                               List<String> parametrosConstructor = new List<string>();
+                                               for (int i = 0; i < nodoParametros.ChildNodes.Count; i++)
+                                               {
+                                                   Object tipoParametro = validarTipo(nodoParametros.ChildNodes[i], ambitos);
+                                                   parametrosConstructor.Add(tipoParametro.ToString());
+                                               }
+                                               bool resParametros = sonNulos(tipoParametros);
+                                               if (resParametros)
+                                               {//sus parametros no devuelven algun nulo
+
+                                                   if (parametrosConstructor.Count == tipoParametros.Count)
+                                                   {
+                                                       bool bandera = true;
+                                                       for (int i = 0; i < tipoParametros.Count; i++)
+                                                       {
+                                                           bandera = bandera && tipoParametros.ElementAt(i).Equals(parametrosConstructor.ElementAt(i), StringComparison.OrdinalIgnoreCase);
+                                                       }
+                                                       if (bandera)
+                                                       {
+
+                                                       }
+                                                       else
+                                                       {
+
+                                                       }
+
+                                                   }
+
+                                               }
+                                               else
+                                               {
+                                                   //error los parametros devuelven algun nulo
+                                               }
+
+                                           }*/
+                                           else
+                                           {
+                                               //error, no exite un constructor cone se nuermer de parametros
+                                           }
+                                          
+                                           
+                                           
+                                           
+                                           
+                                          
+
+
+                                       }
+                                       else
+                                       {//no posee parametros
+
+
+
+                                       }
+                                           
+                                   }
+                                   else
+                                   {
+                                       //error el elemento que declara no es del mismo tipo al que quier instacia
+                                   }
+
+
+                                   //es un instancia
+                                   int noHijosInst = nodo.ChildNodes[2].ChildNodes.Count;
+                                   string objetoInstanciar = nodo.ChildNodes[0].Token.ValueString;
+                                   //1. verificamos si existe el objeto que queresmos instanciar
+                                   int sizeObjeto = tablaSimbolos.sizeClase(objetoInstanciar);
+                                   if (sizeObjeto != -1)
+                                   {//objeto a instanciar si existe
+
+
+
+                                   }
+                                   else
+                                   {//objeto a instaincair no existe
+
+                                   }
+
+
+                               }
+                           }
+
+                           break;
+
+                       }
+
+
+                   
+                 
 
                     
                    #endregion
+
+
+
 
                    /*INSTRUCCION.Rule = DECLRACION + Eos
                 | ASIGNACION + Eos
@@ -394,7 +644,7 @@ namespace Proyecto2_201122872.Generacion3D
                            if (g is nodoCondicion)
                            {
                                nodoCondicion condWhile = (nodoCondicion)g;
-                               evaluarCuerpo(nodo.ChildNodes[1], ambitos);
+                               evaluarCuerpo(nodo.ChildNodes[1], ambitos,nombreMetodo,nombreClase);
                                c3d.addCodigo(Constantes3D.goto_ + " " + etiqCiclo + ";");
                                c3d.addCodigo(condWhile.getEtiquetasFalsas());
 
@@ -411,6 +661,11 @@ namespace Proyecto2_201122872.Generacion3D
                        }
 #endregion
 
+                   case Constantes.llamada:
+                       {
+                           break;
+                       }
+
 
 
 
@@ -423,11 +678,80 @@ namespace Proyecto2_201122872.Generacion3D
 
         }
 
+
+
         #endregion
 
 
 
         /* --- Generaacion de codigo  Expresiones  -------*/
+
+
+
+
+
+        #region resolverExpresiones 
+
+        private Object resolverExpresion(ParseTreeNode nodo, Ambitos ambiente)
+        {
+
+            switch (nodo.Term.Name)
+            {
+                case Constantes.llamada:
+                    {
+                        int noHijos = nodo.ChildNodes.Count;
+                        string nombreFunc = nodo.ChildNodes[0].Token.ValueString;
+                        if (noHijos == 1)
+                        {//no posee parametros
+
+                        }
+                        else
+                        {//si posee parametros
+
+
+                        }
+
+
+
+                        return null;
+                    }
+
+                case Constantes.instancia:
+                    {
+                        /*INSTANCIA.Rule = Constantes.nuevo + identificador + "(" + LEXPRESIONES + ")"
+                             | Constantes.nuevo + identificador + "(" + ")";*/
+
+
+
+
+                        return null;
+                    }
+
+            }
+            return null;
+        }
+
+           
+
+        #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #region generacion expresion c3d
 
         #region evaluar int
         public object evaluarInt(ParseTreeNode nodo, Ambitos ambitos)
@@ -978,7 +1302,6 @@ namespace Proyecto2_201122872.Generacion3D
         #endregion
 
 
-
         #region evaluar bool
 
 
@@ -1176,7 +1499,7 @@ namespace Proyecto2_201122872.Generacion3D
 
         #endregion
 
-
+        
         #region validaString
 
         private object evaluarCadena(ParseTreeNode nodo, Ambitos ambitos)
@@ -1232,8 +1555,6 @@ namespace Proyecto2_201122872.Generacion3D
         #endregion
 
 
-
-
         #region evaluar Condicion
 
         public object evaluarExp(ParseTreeNode nodo)
@@ -1255,6 +1576,40 @@ namespace Proyecto2_201122872.Generacion3D
                     }
 
                 #endregion
+
+                #region llamadaFuncion
+                case Constantes.llamada:
+                    {
+                        /*
+                         * LLAMADA.Rule = identificador + ToTerm("(") + LEXPRESIONES + ")"
+                                | identificador + ToTerm("(") + ")";
+                         */
+                        int noHijos = nodo.ChildNodes.Count;
+                        string nombreFuncion = nodo.ChildNodes[0].Token.ValueString;
+                        if (noHijos == 1) {
+                            /* Pasos a seguir
+                             * 1. buscamos si existe la funcion a la cual queremos llamar
+                             * 
+                             */
+
+
+                        }
+                        else
+                        {//posee paramatros
+
+                        }
+
+
+
+
+                        return "nulo";
+
+                    }
+
+
+
+                #endregion
+
 
                 #region id
 
@@ -1556,6 +1911,7 @@ namespace Proyecto2_201122872.Generacion3D
                 #endregion 
 
 
+                    /*
 
                 #region llamadaMetodo
 
@@ -1570,7 +1926,7 @@ namespace Proyecto2_201122872.Generacion3D
             | identificador + ToTerm("(") + ")";
 
                      
-                 */
+                \
 
                 case Constantes.llamada:
                     {
@@ -1592,7 +1948,7 @@ namespace Proyecto2_201122872.Generacion3D
 
                 #endregion
 
-
+                    */
             }
 
 
@@ -1604,6 +1960,7 @@ namespace Proyecto2_201122872.Generacion3D
         #endregion
 
 
+#endregion
 
 
         #region validacionTipos Retorna de que tipo es la expresion
@@ -2299,6 +2656,128 @@ namespace Proyecto2_201122872.Generacion3D
 
 
 
+        /*
+          TERMINO.Rule = ARITMETICA//
+                | RELACIONAL//
+                | LOGICA//
+                | DECIMAL//
+                | ENTERO //
+                | ID//
+                | CADENA//
+                | BOOLEANO//
+                | CHAR//
+                | LLAMADA//
+                | POSVECTOR //
+                | UNARIO
+                | ToTerm("(") + TERMINO + ")"//no es necesario en python
+                | NEGATIVO
+                | "{" + LFILAS + "}"//no existe en python
+                | INSTANCIA;//
+         */
+
+
+
+        public object resolverExpresiones(ParseTreeNode nodo, Ambitos ambiente, String nombreClase, String nommbreMetodo)
+        {
+            string nombreNodo = nodo.Term.Name;
+            switch (nombreNodo)
+            {
+
+                #region int, double, char, bool
+                case Constantes.tipoEntero:
+                    {
+                        return int.Parse(nodo.ChildNodes[0].Token.ValueString);
+                    }
+
+                case Constantes.tipoDecimal:
+                    {
+                        return double.Parse(nodo.ChildNodes[0].Token.ValueString);
+                    }
+
+                case Constantes.tipoBool:
+                    {
+                        string val = nodo.ChildNodes[0].Token.ValueString;
+                        if (val.Equals("true", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return 1;
+                        }
+                        else
+                        {
+                            return 0;
+                        }
+                    }
+
+                case Constantes.tipoChar:
+                    {
+                        char valor = char.Parse(nodo.ChildNodes[0].Token.ValueString);
+                        char caracter = valor.ToString()[0];
+                        int ascii = (int)caracter;
+                        return ascii;
+                    }
+                #endregion
+
+                #region cadenas
+                case Constantes.tipoCadena:
+                    {
+                        string punteroHeapCadena = c3d.getTemporal();
+                        c3d.addCodigo(punteroHeapCadena + " = H;");
+                        string cadena = nodo.ChildNodes[0].Token.ValueString;
+                        string nuevoTemp;
+                        char caracter;
+                        int ascii;
+
+
+                        for (int i = 0; i < cadena.Length; i++)
+                        {
+                            caracter = cadena.ElementAt(i).ToString()[0];
+                            ascii = (int)caracter;
+                            nuevoTemp = c3d.getTemporal();
+                            c3d.addCodigo(nuevoTemp + " = " + punteroHeapCadena + " + " + i + ";");
+                            c3d.addCodigo("HEAP[" + nuevoTemp + "] = " + ascii + "; // " + caracter);
+                        }
+                        nuevoTemp = c3d.getTemporal();
+                        c3d.addCodigo(nuevoTemp + " = " + punteroHeapCadena + " + " + cadena.Length + ";// pos fin cadena");
+                        c3d.addCodigo("HEAP[" + nuevoTemp + "] = -1; //fin cadena ");
+
+                        return punteroHeapCadena;
+                    }
+
+
+                #endregion
+
+                #region instancia
+
+                case Constantes.instancia:
+                    {
+                        /*INSTANCIA.Rule = Constantes.nuevo + identificador + "(" + LEXPRESIONES + ")"
+                 | Constantes.nuevo + identificador + "(" + ")";*/
+
+                        int noHijos = nodo.ChildNodes.Count;
+                        string objetoInstanciar = nodo.ChildNodes[0].Token.ValueString;
+                        //1. verificamos si existe el objeto que queresmos instanciar
+                        int sizeObjeto = tablaSimbolos.sizeClase(objetoInstanciar);
+                        if (sizeObjeto != -1)
+                        {//objeto a instanciar si existe
+
+
+
+                        }
+                        else
+                        {//objeto a instaincair no existe
+
+                        }
+
+                        return "nulo";
+
+                    }
+
+                #endregion
+
+
+            }
+            return "nulo";
+
+        }
        
 
 
