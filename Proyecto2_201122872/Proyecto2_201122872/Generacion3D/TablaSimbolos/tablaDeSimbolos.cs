@@ -133,6 +133,24 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
         }
 
 
+
+        public List<Simbolo> obtenerAtributosClase(String nombreClase)
+        {
+            List<Simbolo> listaRetorno = new List<Simbolo>();
+            foreach (Simbolo item in this.tabla)
+            {
+                if(item.rol.Equals(Constantes3D.variableDeClase, StringComparison.OrdinalIgnoreCase) &&
+                    item.ambito.Equals(nombreClase, StringComparison.OrdinalIgnoreCase))
+                {
+                    listaRetorno.Add(item);
+                }
+                
+            }
+            return listaRetorno;
+        }
+
+
+
         public string getFirmaMetodo(String nombreClase, String cadenaParametros, string nombreMetodo)
         {
             Console.WriteLine("kkkkkkkkkkkkkkkkkkkkkkk");

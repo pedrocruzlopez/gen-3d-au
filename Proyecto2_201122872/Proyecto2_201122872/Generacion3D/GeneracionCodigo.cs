@@ -122,7 +122,8 @@ namespace Proyecto2_201122872.Generacion3D
                 {
                     ambito.addAmbito(principal.firma);
                     c3d.addCodigo("Principal  "+principal.firma + "(){");
-                    evaluarCuerpo(principal.cuerpo, ambito,principal.firma,claseActual.getNombre());
+                    if (principal.cuerpo != null)
+                        evaluarCuerpo(principal.cuerpo, ambito, principal.firma, claseActual.getNombre());
                     c3d.addCodigo("}");
                     ambito.ambitos.Pop();
                 }
@@ -148,7 +149,8 @@ namespace Proyecto2_201122872.Generacion3D
             {
                 ambito.addAmbito(constructor.firma);//ingresando el ambito del constructor
                 c3d.addCodigo(Constantes.tipoVoid + " " + constructor.firma + "(){");
-                evaluarCuerpo(constructor.cuerpo, ambito,constructor.firma,nombreClase);
+                if (constructor.cuerpo != null)
+                    evaluarCuerpo(constructor.cuerpo, ambito, constructor.firma, nombreClase);
                 c3d.addCodigo("}");
                 ambito.ambitos.Pop();//saliendo del ambito del constructor
             }
@@ -294,20 +296,97 @@ namespace Proyecto2_201122872.Generacion3D
                                                int posObjInstanciar = tablaSimbolos.getPosicion(nombreObjetoInstanciar,ambitos);
                                                if (posObjInstanciar != -1)
                                                {
-
                                                    //resolvemos el tipo de parametros
                                                    string cad = "";
                                                    for (int i = 0; i < nodoInstancia.ChildNodes[1].ChildNodes.Count; i++)
                                                    {
                                                        cad += validarTipo(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambitos);//resolverExpresiones(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambitos, nombreClase, nombreMetodo);
-
-
                                                    }
 
                                                    string firmaMetodo = tablaSimbolos.getFirmaMetodo(nombreClase, cad, nombreMetodo);
                                                    if (!firmaMetodo.Equals(""))
                                                    {
+                                                       //1. Crear apuntador en el stack de heap para el nuevo objeto
                                                        string temp1 = c3d.getTemporal();
+                                                       string l1 = temp1 + " = P + " + posObjInstanciar + "; //pos de " + nombreObjetoInstanciar;
+                                                       string l2 = "STACK[" + temp1 + "] = H; //apuntador del heap en el stack del nuevo obj";
+
+                                                       //2. Reservo espacio en el heap para el nuevo objeto
+                                                       string l3 = "H = H + " + sizeObjeto + "; //reservar espacio para atributos";
+                                                       c3d.addCodigo(l1);
+                                                       c3d.addCodigo(l2);
+                                                       c3d.addCodigo(l3);
+
+                                                       //3. Verifico si atributos posee asignacion ej publico a = 4;
+                                                       List<Simbolo> atributosClase = tablaSimbolos.obtenerAtributosClase(tipoInstancia);
+                                                       foreach (Simbolo item in atributosClase)
+                                                       {
+                                                           if (item.expresionAtributo != null)
+                                                           {//genero el codigo3d para el atributo
+                                                               Object tipoExpAtributo = validarTipo(item.expresionAtributo, ambitos);
+                                                               if (tipoExpAtributo.ToString().Equals(item.tipo, StringComparison.OrdinalIgnoreCase))
+                                                               {
+                                                                   string temp1_1 = c3d.getTemporal();
+                                                                   c3d.addCodigo(temp1_1 + " = P + " + posObjInstanciar + "; //pos de " + nombreObjetoInstanciar);
+                                                                   string temp2_1 = c3d.getTemporal();
+                                                                   c3d.addCodigo(temp2_1 + " = STACK[" + temp1_1 + "];//apuntador del this en el heap");
+                                                                   string temp3_1 = c3d.getTemporal();
+                                                                   c3d.addCodigo(temp3_1 + " = " + temp2_1 + " + " + item.apuntador + ";//this + pos de " + item.nombreReal);
+
+                                                                   Object val = resolverExpresiones(item.expresionAtributo, ambitos, nombreClase, nombreMetodo);
+                                                                   c3d.addCodigo("HEAP[" + temp3_1 + "] = " + val.ToString() + ";");
+                                                               }
+                                                               else
+                                                               {
+                                                                   ErrorA er = new ErrorA(Constantes.errorSemantico, "Operacion no valida para el tipo de " + item.tipo + ", " + tipoExpAtributo, item.expresionAtributo.FindToken());
+                                                                   Form1.errores.addError(er);
+                                                               }
+                                                           }
+                                                       }
+                                                       string temp2 = c3d.getTemporal();
+                                                       string l4 = temp2 + " = P + " + posObjInstanciar + "; //pos de " + nombreObjetoInstanciar;
+                                                       string temp3 = c3d.getTemporal();
+                                                       string l5 = temp3 + " = STACK[" + temp2 + "]; //pos this del apuntador del heap";
+                                                       int tamanhoFuncActual = tablaSimbolos.sizeFuncion(nombreClase, nombreMetodo);
+                                                       string temp4 = c3d.getTemporal();
+                                                       string l6 = temp4 + " = P + " + tamanhoFuncActual + "; //p+ size funcion actual";
+                                                       string temp5 = c3d.getTemporal();
+                                                       string l7 = temp5 + " = " + temp4 + " + 0; //pos this en el constructor";
+                                                       string l8 = "STACK[" + temp5 + "] = " + temp3 + "; //guardo en el this del constructor el ap del heap";
+                                                       // Asignar Parametros
+                                                       c3d.addCodigo(l4);
+                                                       c3d.addCodigo(l5);
+                                                       c3d.addCodigo(l6);
+                                                       c3d.addCodigo(l7);
+                                                       c3d.addCodigo(l8);
+                                                       ParseTreeNode nodoParametros = nodoInstancia.ChildNodes[1];
+                                                       int cont=1;
+                                                       foreach (ParseTreeNode item in nodoParametros.ChildNodes)
+                                                       {
+                                                           Object val = resolverExpresiones(item, ambitos, nombreClase, nombreMetodo);
+                                                           string temp1_1 = c3d.getTemporal();
+                                                           string l1_1 = temp1_1 + " = P + " + tamanhoFuncActual + "; // p + size func actual";
+                                                           c3d.addCodigo(l1_1);
+                                                           string temp2_1 = c3d.getTemporal();
+                                                           l1_1 = temp2_1 + " = " + temp1_1 + " + " + cont + "; //pos del parametro";
+                                                           c3d.addCodigo(l1_1);
+                                                           l1_1 = "STACK[" + temp2_1 + "] = " + val + "; //paso por valor del parametro";
+                                                           c3d.addCodigo(l1_1);
+                                                           cont++;
+                                                       }
+                                                       
+                                                       string l9 = "P = P + " + tamanhoFuncActual + ";";
+                                                       string firmaLlamada = tablaSimbolos.getFirmaMetodo(nombreClase, "", tipoInstacia2);
+                                                       string l10 = "call " + firmaLlamada + "();";
+                                                       string l11 = "P = P - " + tamanhoFuncActual + ";";
+                                                       
+                                                       c3d.addCodigo(l9);
+                                                       c3d.addCodigo(l10);
+                                                       c3d.addCodigo(l11);
+                                                       
+                                                       
+                                                       
+                                                       /* string temp1 = c3d.getTemporal();
                                                        string l1 = temp1 + "= P + " + posObjInstanciar + "; //pos del obj " + nombreObjetoInstanciar;
                                                        string temp2 = c3d.getTemporal();
                                                        string l2 = temp2 + " = STACK[" + temp1 + "];";
@@ -347,7 +426,11 @@ namespace Proyecto2_201122872.Generacion3D
                                                        c3d.addCodigo(lParametros);
                                                        c3d.addCodigo(l6);
                                                        c3d.addCodigo(l7);
-                                                       c3d.addCodigo(l8);
+                                                       c3d.addCodigo(l8);*/
+                                                   }
+                                                   else
+                                                   {
+                                                       //no existe un constructor con esos parametros
                                                    }
                                                       
 
@@ -374,29 +457,65 @@ namespace Proyecto2_201122872.Generacion3D
                                                int posObjInstanciar = tablaSimbolos.getPosicion(nombreObjetoInstanciar,ambitos);
                                                if (posObjInstanciar != -1)
                                                {//si existe y es una vairable local
+                                                   //1. Crear apuntador en el stack de heap para el nuevo objeto
                                                    string temp1 = c3d.getTemporal();
-                                                   string l1= temp1+"= P + "+posObjInstanciar+"; //pos del obj "+nombreObjetoInstanciar;
-                                                   string temp2= c3d.getTemporal();
-                                                   string l2 = temp2 + " = STACK[" + temp1 + "];";
-                                                   string temp3 = c3d.getTemporal();
-                                                   int tamanhoFuncActual = tablaSimbolos.sizeFuncion(nombreClase,nombreMetodo);
-                                                   string l3 = temp3 + " = P + " + tamanhoFuncActual + ";";
-                                                   int posThis = tablaSimbolos.getPosicion("this", ambitos);
-                                                   string firmaLlamada = tablaSimbolos.getFirmaMetodo(nombreClase, "", tipoInstacia2); 
-                                                   string temp4 = c3d.getTemporal();
-                                                   string l4 = temp4 + " = " + temp3 + " + " + posThis + "; //posicion del this";
-                                                   string l5= "STACK["+temp4+"] = "+temp2+";";
-                                                   string l6 = "P = P + " + tamanhoFuncActual + ";";
-                                                   string l7 = "call " + firmaLlamada + "();";
-                                                   string l8 = "P = P - " + tamanhoFuncActual + ";";
+                                                   string l1 = temp1 + " = P + " + posObjInstanciar + "; //pos de " + nombreObjetoInstanciar;
+                                                   string l2 = "STACK[" + temp1 + "] = H; //apuntador del heap en el stack del nuevo obj";
+
+                                                   //2. Reservo espacio en el heap para el nuevo objeto
+                                                   string l3 = "H = H + " + sizeObjeto + "; //reservar espacio para atributos";
                                                    c3d.addCodigo(l1);
-                                                   c3d.addCodigo(l2); 
+                                                   c3d.addCodigo(l2);
                                                    c3d.addCodigo(l3);
+                                                  
+                                                   //3. Verifico si atributos posee asignacion ej publico a = 4;
+                                                   List<Simbolo> atributosClase = tablaSimbolos.obtenerAtributosClase(tipoInstancia);
+                                                   foreach (Simbolo item in atributosClase)
+                                                   {
+                                                       if (item.expresionAtributo != null)
+                                                       {//genero el codigo3d para el atributo
+                                                           Object tipoExpAtributo = validarTipo(item.expresionAtributo, ambitos);
+                                                           if (tipoExpAtributo.ToString().Equals(item.tipo, StringComparison.OrdinalIgnoreCase))
+                                                           {
+                                                               string temp1_1 = c3d.getTemporal();
+                                                               c3d.addCodigo(temp1_1 + " = P + " + posObjInstanciar + "; //pos de " + nombreObjetoInstanciar);
+                                                               string temp2_1 = c3d.getTemporal();
+                                                               c3d.addCodigo(temp2_1 + " = STACK[" + temp1_1 + "];//apuntador del this en el heap");
+                                                               string temp3_1 = c3d.getTemporal();
+                                                               c3d.addCodigo(temp3_1 + " = " + temp2_1 + " + " + item.apuntador + ";//this + pos de " + item.nombreReal);
+
+                                                               Object val = resolverExpresiones(item.expresionAtributo, ambitos, nombreClase, nombreMetodo);
+                                                               c3d.addCodigo("HEAP[" + temp3_1 + "] = " + val.ToString() + ";");
+                                                           }
+                                                           else
+                                                           {
+                                                               ErrorA er = new ErrorA(Constantes.errorSemantico, "Operacion no valida para el tipo de " + item.tipo + ", " + tipoExpAtributo, item.expresionAtributo.FindToken());
+                                                               Form1.errores.addError(er);
+                                                           }                                                      
+                                                       }  
+                                                   }
+                                                   string temp2 = c3d.getTemporal();
+                                                   string l4 = temp2 + " = P + " + posObjInstanciar + "; //pos de " + nombreObjetoInstanciar;
+                                                   string temp3 = c3d.getTemporal();
+                                                   string l5 = temp3 + " = STACK[" + temp2 + "]; //pos this del apuntador del heap";
+                                                   int tamanhoFuncActual = tablaSimbolos.sizeFuncion(nombreClase, nombreMetodo);
+                                                   string temp4 = c3d.getTemporal();
+                                                   string l6 = temp4 + " = P + " + tamanhoFuncActual + "; //p+ size funcion actual";
+                                                   string temp5 = c3d.getTemporal();
+                                                   string l7 = temp5 + " = " + temp4 + " + 0; //pos this en el constructor";
+                                                   string l8 = "STACK["+temp5+"] = "+temp3+"; //guardo en el this del constructor el ap del heap";
+                                                   string l9 = "P = P + " + tamanhoFuncActual + ";";
+                                                   string firmaLlamada = tablaSimbolos.getFirmaMetodo(nombreClase, "", tipoInstacia2);
+                                                   string l10 = "call " + firmaLlamada + "();";
+                                                   string l11 = "P = P - " + tamanhoFuncActual + ";";
                                                    c3d.addCodigo(l4);
                                                    c3d.addCodigo(l5);
                                                    c3d.addCodigo(l6);
                                                    c3d.addCodigo(l7);
                                                    c3d.addCodigo(l8);
+                                                   c3d.addCodigo(l9);
+                                                   c3d.addCodigo(l10);
+                                                   c3d.addCodigo(l11);
                                                }
                                                else
                                                {
@@ -436,8 +555,10 @@ namespace Proyecto2_201122872.Generacion3D
 
 
                                #region instancias
-
-
+                              
+                               
+                                
+                               
 
                                #endregion
 
@@ -775,6 +896,8 @@ namespace Proyecto2_201122872.Generacion3D
 
             switch (nodo.Term.Name)
             {
+                
+                
                 case Constantes.llamada:
                     {
                         int noHijos = nodo.ChildNodes.Count;
@@ -2047,6 +2170,10 @@ namespace Proyecto2_201122872.Generacion3D
         {
             switch (nodo.Term.Name)
             {
+                case Constantes.expresion:
+                    {
+                        return validarTipo(nodo.ChildNodes[0], ambito);
+                    }
 
                 #region valores primitivos y Id (leer la i en ingles jaja asi no se lee y i)
 
@@ -2761,6 +2888,13 @@ namespace Proyecto2_201122872.Generacion3D
             switch (nombreNodo)
             {
 
+
+                    case Constantes.expresion:
+                    {
+                        return resolverExpresiones(nodo.ChildNodes[0], ambiente, nombreClase, nommbreMetodo);
+                    }
+
+
                 #region int, double, char, bool
                 case Constantes.tipoEntero:
                     {
@@ -2800,7 +2934,7 @@ namespace Proyecto2_201122872.Generacion3D
                         string punteroHeapCadena = c3d.getTemporal();
                         c3d.addCodigo(punteroHeapCadena + " = H;");
                         string cadena = nodo.ChildNodes[0].Token.ValueString;
-                        string nuevoTemp;
+                        
                         char caracter;
                         int ascii;
 
@@ -2809,13 +2943,12 @@ namespace Proyecto2_201122872.Generacion3D
                         {
                             caracter = cadena.ElementAt(i).ToString()[0];
                             ascii = (int)caracter;
-                            nuevoTemp = c3d.getTemporal();
-                            c3d.addCodigo(nuevoTemp + " = " + punteroHeapCadena + " + " + i + ";");
-                            c3d.addCodigo("HEAP[" + nuevoTemp + "] = " + ascii + "; // " + caracter);
+                            c3d.addCodigo("HEAP[H] = " + ascii + "; // " + caracter);
+                            c3d.addCodigo("H = H + 1;");
                         }
-                        nuevoTemp = c3d.getTemporal();
-                        c3d.addCodigo(nuevoTemp + " = " + punteroHeapCadena + " + " + cadena.Length + ";// pos fin cadena");
-                        c3d.addCodigo("HEAP[" + nuevoTemp + "] = -1; //fin cadena ");
+                        
+                        c3d.addCodigo("HEAP[H] = -1; //fin cadena ");
+                        c3d.addCodigo("H = H + 1;");
 
                         return punteroHeapCadena;
                     }

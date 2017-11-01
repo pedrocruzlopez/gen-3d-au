@@ -252,10 +252,10 @@ namespace Proyecto2_201122872.Formularios
             analizador3D.nombreMain="depos2_void_depos2_entero_entero";
            analizador3D.parse(generador.c3d.codigo3D);
            Console.WriteLine("------- fin ejecucion 3d------");
-           Console.WriteLine("------- heap ------");
-            string heap= analizador3D.accion.imprimir_heap();
-            Console.WriteLine("\n------- pila------");
-            string stack = analizador3D.accion.imprimir_pila();
+          // Console.WriteLine("------- heap ------");
+           // string heap= analizador3D.accion.imprimir_heap();
+            //Console.WriteLine("\n------- pila------");
+            //string stack = analizador3D.accion.imprimir_pila();
 
             
         }

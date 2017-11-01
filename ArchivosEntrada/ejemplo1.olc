@@ -1,77 +1,20 @@
- clase Deposito {
+clase Persona{
+	entero edad = 15;
+	cadena nombre = "pablo";
 
- //Campos de la clase
+	 Persona(entero a, entero b){
+		//entero temp = 25;
+		//this.edad = temp;
+	}
+	
 
-privado decimal diametro;
-privado decimal altura;
-privado Cadena idDeposito;
-privado entero h;
-publico entero atributo1Padre;
-protegido cadena atributo2Padre;
+	publico void crecer (entero anios){
+		//this.edad = this.edad + anios;
+	}
 
-//Constructor sin parámetros auxiliar
-publico decimal getAltura (entero a) { 
-
-
-}
-
-principal(){
-
-entero j=7*9;
-deposito dep = new deposito(9,88);
-}
-
-deposito(){
-}
-
-deposito(entero a, entero b){
-}
-/*Deposito () {
-
-
-} //Cierre del constructor
-  
-  Deposito (decimal valor_diametro, decimal valor_altura, Cadena valor_idDeposito) {
-  
-  cadena g = "hola mundo";
-  mientras (5<10){
-  entero val = 5*10;
-  }
-  
-  
-
- 
-} //Cierre del constructor
-publico void setValoresDeposito (Cadena valor_idDeposito, decimal valor_diametro, decimal valor_altura) {
- 
-} //Cierre del método
-publico decimal getDiametro () { return g; return h; return k;}
-
-publico decimal getAltura () { }
-
-publico Cadena getIdDeposito () {  }
-
-publico decimal valorCapacidad () { //Método tipo función
-
-}*/
-} //Cierre de la clase
-
-clase depos2 deposito{
-
-privado entero val1;
-publico cadena val2;
-
-principal(){
-entero a=5*4;
-}
-
-publico decimal getAltura (entero h) {  entero b = 11-23; cadena g="pedrito lindo";}
-
- depos2(){
-}
-
- depos2(entero valor1, entero valor2){
-	deposito dep = new deposito(); 
-}
-
+	publico void main(){
+		Persona pablo = new Persona(5,10);
+		//print(pablo.edad);
+		//pablo.crecer(2);
+	}
 }

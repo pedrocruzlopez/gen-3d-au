@@ -11,6 +11,7 @@ namespace Proyecto2_201122872.UML
 {
    public  class Atributo
     {
+        public ParseTreeNode expresionAtributo = null; 
         public string visibilidad;
         public string nombre;
         public string tipo;
@@ -40,7 +41,9 @@ namespace Proyecto2_201122872.UML
         }
 
 
-
+       public void setExpresionAtributo(ParseTreeNode nodo){
+           this.expresionAtributo=nodo;
+       }
         private int getLinealizado()
         {
             return 0;

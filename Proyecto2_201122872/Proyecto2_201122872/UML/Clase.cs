@@ -679,6 +679,7 @@ namespace Proyecto2_201122872.UML
                 
                 if(item.tipoAtributo.Equals(Constantes.ARREGLO,StringComparison.OrdinalIgnoreCase)){
                     nuevo = new Simbolo(item.visibilidad, item.nombre, item.tipo, Constantes.ARREGLO, this.nombre, Constantes3D.variableDeClase, apuntador, 1);
+                    nuevo.setExpresionAtributo(item.expresionAtributo);
                     listado.Add(nuevo);
                     apuntador++;
 
@@ -686,6 +687,7 @@ namespace Proyecto2_201122872.UML
                 else if (item.tipoAtributo.Equals(Constantes.OBJETO, StringComparison.OrdinalIgnoreCase))
                 {
                     nuevo = new Simbolo(item.visibilidad, item.nombre, item.tipo, Constantes.OBJETO, this.nombre, Constantes3D.variableDeClase, apuntador, 1);
+                    nuevo.setExpresionAtributo(item.expresionAtributo);
                     listado.Add(nuevo);
                     apuntador++;
 
@@ -693,6 +695,7 @@ namespace Proyecto2_201122872.UML
                 else
                 {
                     nuevo = new Simbolo(item.visibilidad, item.nombre, item.tipo, Constantes.VARNORMAL, this.nombre, Constantes3D.variableDeClase, apuntador, 1);
+                    nuevo.setExpresionAtributo(item.expresionAtributo);
                     listado.Add(nuevo);
                     apuntador++;
 
@@ -709,7 +712,44 @@ namespace Proyecto2_201122872.UML
 
 
 
+        private void agregarConstructorPorDefecto()
+        {
+            /*    public void setConstructor(bool val)
+        {
+            this.esConstructor = val;
+        }
 
+        public Funcion(string clase, string nombre, string tipo, ListaParametro parametros, string visibilidad, ParseTreeNode cuerpo)
+        {
+            this.clase = clase;
+            this.nombre = nombre;
+            this.tipo = tipo;
+            this.parametros = parametros;
+            this.visibilidad = visibilidad;
+            this.firma = generarFirma();
+            this.cuerpo = cuerpo;
+            this.tiposParametrosCadena = parametros.identificadorParametros();
+        }
+*/
+            bool bandera = false;
+            Funcion nuevoConstructor;
+            foreach (Funcion item in this.funciones.funciones)
+            {
+                if (item.esConstructor && item.parametros.parametros.Count == 0)
+                {
+                    bandera = true;
+                }
+                
+            }
+            if (!bandera)
+            {//no existe el constructor
+                nuevoConstructor = new Funcion(this.nombre, this.nombre, this.nombre, new ListaParametro(), Constantes.publico, null);
+                nuevoConstructor.setConstructor(true);
+                this.funciones.addFuncion(nuevoConstructor);
+            }
+
+
+        }
 
 
 
@@ -718,8 +758,9 @@ namespace Proyecto2_201122872.UML
 
         public List<Simbolo> getSimbolosClase()
         {
+            agregarConstructorPorDefecto();
             /*Pasos para simboos de fucniones y metodos: 
-             * 1.Ingresamos a la tabla de simblos el simbolo de la funcion o metodo
+             * 1. Ingresamos a la tabla de simblos el simbolo de la funcion o metodo
              * 2. Ingresamos el this 
              * 3. Ingresamos los parametros
              * 4. ingresamos las declaraciones que se hayan realizado en la funcion
@@ -763,7 +804,8 @@ namespace Proyecto2_201122872.UML
 
                 //paso 4
                 List<Simbolo> lTemporalFuncion= new List<Simbolo>();
-                lTemporalFuncion = generarSimbolosMetodo(func.cuerpo, lTemporalFuncion, ambitos);
+                if (func.cuerpo != null)
+                    lTemporalFuncion = generarSimbolosMetodo(func.cuerpo, lTemporalFuncion, ambitos);
 
                 //paso 5
                 Simbolo simReturn = new Simbolo(Constantes.noTieneVisi, Constantes3D.retorno, Constantes3D.retorno, "", ambitos.getAmbito(), Constantes3D.retorno, apuntador, 1);

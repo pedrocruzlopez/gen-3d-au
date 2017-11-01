@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Irony.Ast;
+using Irony.Interpreter;
+using Irony.Parsing;
 
 namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
 {
@@ -24,6 +27,8 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
         public int tamanhoParametros = -1;
         public String tipoParametrosCadena ="";
         public string  nombreFuncion = "";
+        public ParseTreeNode expresionAtributo = null;
+        
        
 
 
@@ -77,9 +82,12 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
             this.dimenesiones = dimensiones;
 
         }
-      
 
 
+        public void setExpresionAtributo(ParseTreeNode nodo)
+        {
+            this.expresionAtributo = nodo;
+        }
 
 
 

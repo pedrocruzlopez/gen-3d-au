@@ -210,7 +210,6 @@ namespace Proyecto2_201122872.AnalizadorJava
             if (noHijos == 5)
             {//arreglo con filas declaradas y visibilidad
                 // VISIBILIDAD + TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";"
-             
                 visibilidad = nodoAtributo.ChildNodes[0].ChildNodes[0].Token.ValueString;
                 tipo = nodoAtributo.ChildNodes[1].ChildNodes[0].Token.ValueString;
                 nombre = nodoAtributo.ChildNodes[2].Token.ValueString;
@@ -219,6 +218,7 @@ namespace Proyecto2_201122872.AnalizadorJava
                 if (noPosiciones == expresionesDimensiones.Length && noPosiciones == nodoAtributo.ChildNodes[4].ChildNodes.Count)
                 {//si se puede crear el arreglo
                     nuevo = new Atributo(visibilidad, nombre, tipo, Constantes.ARREGLO, noPosiciones, expresionesDimensiones);
+                    nuevo.setExpresionAtributo(nodoAtributo.ChildNodes[4]);
                     lista.Add(nuevo);
                 }
                 else
@@ -247,6 +247,7 @@ namespace Proyecto2_201122872.AnalizadorJava
                     if (expresionesDimensiones.Length == noPosiciones && noPosiciones == noFilasExpresion)
                     {
                         nuevo = new Atributo(visibilidad, nombre, tipo, Constantes.ARREGLO, noPosiciones, expresionesDimensiones);
+                        nuevo.setExpresionAtributo(nodoAtributo.ChildNodes[3]);
                         lista.Add(nuevo);
 
                     }
@@ -288,6 +289,7 @@ namespace Proyecto2_201122872.AnalizadorJava
                     tipo = nodoAtributo.ChildNodes[1].ChildNodes[0].Token.ValueString;
                     nombre = nodoAtributo.ChildNodes[2].Token.ValueString;
                     nuevo = new Atributo(visibilidad, nombre, tipo, getTipoAtributo(tipo));
+                    nuevo.setExpresionAtributo(nodoAtributo.ChildNodes[3]);
                     lista.Add(nuevo);
 
                 }
@@ -339,6 +341,7 @@ namespace Proyecto2_201122872.AnalizadorJava
                     nombre = nodoAtributo.ChildNodes[1].Token.ValueString;
                     tipo = nodoAtributo.ChildNodes[0].ChildNodes[0].Token.ValueString;
                     nuevo = new Atributo(visibilidad, nombre, tipo, getTipoAtributo(tipo));
+                    nuevo.setExpresionAtributo(nodoAtributo.ChildNodes[2]);
                     lista.Add(nuevo);
                 }
 
