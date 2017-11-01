@@ -265,18 +265,20 @@ namespace Proyecto2_201122872.Generacion3D
 
                            break;
                        }
-
+                    
                    case Constantes.decla2:
                        {
-                           /* DECLARACION.Rule = TIPO + identificador + ToTerm(";")
+                           /* DECLARACION.Rule = TIPO + identificador + ToTerm(";") no se hace
                 | TIPO + identificador + ToTerm("=") + EXPRESION + ";"
-                | TIPO + identificador + LPOSICIONES + ToTerm(";")
+                | TIPO + identificador + LPOSICIONES + ToTerm(";") no se hace
                 | TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";"
                 | TIPO + identificador + ToTerm("=") + INSTANCIA + ";"; */
                            
                            int noHijos = nodo.ChildNodes.Count;
                            if (noHijos == 3)
                            {
+                               //TIPO + identificador + ToTerm("=") + INSTANCIA + ";";
+
                                #region instancias
                                if (nodo.ChildNodes[2].Term.Name.Equals(Constantes.instancia, StringComparison.OrdinalIgnoreCase))
                                {
@@ -630,181 +632,7 @@ namespace Proyecto2_201122872.Generacion3D
 
                            break;
                        }
-                   case "":
-                       {
-                           /* DECLARACION.Rule = TIPO + identificador + ToTerm(";")
-                           | TIPO + identificador + ToTerm("=") + EXPRESION + ";"
-                           | TIPO + identificador + LPOSICIONES + ToTerm(";")
-                           | TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";"
-                           | TIPO + identificador + ToTerm("=") + INSTANCIA + ";"; */
-
-                           int noHijos = nodo.ChildNodes.Count;
-
-                           if (noHijos == 3)
-                           {
-                               if (nodo.ChildNodes[2].Term.Name.Equals(Constantes.instancia, StringComparison.OrdinalIgnoreCase))
-                               {
-                                   String nombreObjetoInstanciar = nodo.ChildNodes[1].Token.ValueString;
-                                   string tipoInstancia = nodo.ChildNodes[0].Token.ValueString;
-                                   ParseTreeNode nodoInstancia = nodo.ChildNodes[2];
-                                   string tipoInstacia2 = nodoInstancia.ChildNodes[0].Token.ValueString;
-
-                                   if (tipoInstancia.Equals(tipoInstacia2, StringComparison.OrdinalIgnoreCase))
-                                   {// si son del mismo tipo al que quiero instancia
-                                       int hijosInstancia = nodoInstancia.ChildNodes.Count;
-                                       if (hijosInstancia == 2)
-                                       {// si posee parametros
-                                           ParseTreeNode nodoParametros = nodoInstancia.ChildNodes[1];
-                                           int noParametros = nodoParametros.ChildNodes.Count;
-                                           List<List<String>> tipoParametros = tablaSimbolos.existeConstructor(tipoInstacia2, noParametros);
-                                           if (tipoParametros.Count>0)
-                                           {
-                                               List<String> parametrosConstructor = new List<string>();
-                                               for (int i = 0; i < nodoParametros.ChildNodes.Count; i++)
-                                               {
-                                                   Object tipoParametro = validarTipo(nodoParametros.ChildNodes[i], ambitos);
-                                                   parametrosConstructor.Add(tipoParametro.ToString());
-                                               }
-                                               bool resParametros = sonNulos(parametrosConstructor);
-                                               if (resParametros)
-                                               {
-                                                   bool bandera;
-                                                   int cont = 0;
-                                                   
-                                                   List<String> lTemporal;
-                                                   for (int i = 0; i < tipoParametros.Count; i++)
-                                                   {
-                                                       bandera = true;
-                                                       lTemporal = tipoParametros.ElementAt(i);
-                                                       if (lTemporal.Count == parametrosConstructor.Count)
-                                                       {
-                                                           for (int j = 0; j < lTemporal.Count; j++)
-                                                           {
-                                                               bandera = bandera && lTemporal.ElementAt(j).Equals(parametrosConstructor.ElementAt(j), StringComparison.OrdinalIgnoreCase);
-
-                                                           }
-                                                           if (bandera)
-                                                           {
-                                                               cont++;
-                                                           }
-                                                       }
-                                                   }
-
-                                                   if (cont > 0)
-                                                   {
-                                                       //si existe
-                                                       string cad = "";
-                                                       foreach (String item in parametrosConstructor)
-                                                       {
-                                                           cad += item.ToUpper();
-                                                       }
-
-                                                       
-
-                                                   }
-                                                   else
-                                                   {
-                                                       //no existe un constructor con esos parametros
-                                                   }
-                                               }
-                                               else
-                                               {
-                                                   //error los parametros devuelven algun nulo
-                                               }
-
-                                           }
-                                          /* {//si exite un constructor con ese numero de parametros
-                                               List<String> parametrosConstructor = new List<string>();
-                                               for (int i = 0; i < nodoParametros.ChildNodes.Count; i++)
-                                               {
-                                                   Object tipoParametro = validarTipo(nodoParametros.ChildNodes[i], ambitos);
-                                                   parametrosConstructor.Add(tipoParametro.ToString());
-                                               }
-                                               bool resParametros = sonNulos(tipoParametros);
-                                               if (resParametros)
-                                               {//sus parametros no devuelven algun nulo
-
-                                                   if (parametrosConstructor.Count == tipoParametros.Count)
-                                                   {
-                                                       bool bandera = true;
-                                                       for (int i = 0; i < tipoParametros.Count; i++)
-                                                       {
-                                                           bandera = bandera && tipoParametros.ElementAt(i).Equals(parametrosConstructor.ElementAt(i), StringComparison.OrdinalIgnoreCase);
-                                                       }
-                                                       if (bandera)
-                                                       {
-
-                                                       }
-                                                       else
-                                                       {
-
-                                                       }
-
-                                                   }
-
-                                               }
-                                               else
-                                               {
-                                                   //error los parametros devuelven algun nulo
-                                               }
-
-                                           }*/
-                                           else
-                                           {
-                                               //error, no exite un constructor cone se nuermer de parametros
-                                           }
-                                          
-                                           
-                                           
-                                           
-                                           
-                                          
-
-
-                                       }
-                                       else
-                                       {//no posee parametros
-
-
-
-                                       }
-                                           
-                                   }
-                                   else
-                                   {
-                                       //error el elemento que declara no es del mismo tipo al que quier instacia
-                                   }
-
-
-                                   //es un instancia
-                                   int noHijosInst = nodo.ChildNodes[2].ChildNodes.Count;
-                                   string objetoInstanciar = nodo.ChildNodes[0].Token.ValueString;
-                                   //1. verificamos si existe el objeto que queresmos instanciar
-                                   int sizeObjeto = tablaSimbolos.sizeClase(objetoInstanciar);
-                                   if (sizeObjeto != -1)
-                                   {//objeto a instanciar si existe
-
-
-
-                                   }
-                                   else
-                                   {//objeto a instaincair no existe
-
-                                   }
-
-
-                               }
-                           }
-
-                           break;
-
-                       }
-
-
-                   
-                 
-
-                    
+                  
                    #endregion
 
 
