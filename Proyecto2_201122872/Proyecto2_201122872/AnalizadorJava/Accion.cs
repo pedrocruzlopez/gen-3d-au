@@ -14,7 +14,7 @@ namespace Proyecto2_201122872.AnalizadorJava
 {
     
 
-    class Accion
+   public class Accion
     {
         private List<ParseTreeNode> clasesUML;
 

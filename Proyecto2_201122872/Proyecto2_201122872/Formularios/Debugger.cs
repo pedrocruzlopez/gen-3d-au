@@ -238,7 +238,7 @@ namespace Proyecto2_201122872.Formularios
                dataGridView1.Rows.Add(row0);
             }
 
-            analizador3D = new Arbol3D("");
+            analizador3D = new Arbol3D();
             Console.WriteLine("-------- Inicio codigo -----------");
 
             escribir3D(generador.c3d.codigo3D);
@@ -249,9 +249,15 @@ namespace Proyecto2_201122872.Formularios
             Console.WriteLine("------- fin codigo --------------");
             Console.WriteLine("------ Inicio ejecucion 3d--------");
             fastColoredTextBox1.Text = generador.c3d.codigo3D;
-           // analizador3D.parse(generador.c3d.codigo3D);
+            analizador3D.nombreMain="depos2_void_depos2_entero_entero";
+           analizador3D.parse(generador.c3d.codigo3D);
+           Console.WriteLine("------- fin ejecucion 3d------");
+           Console.WriteLine("------- heap ------");
+            string heap= analizador3D.accion.imprimir_heap();
+            Console.WriteLine("\n------- pila------");
+            string stack = analizador3D.accion.imprimir_pila();
 
-            Console.WriteLine("------- fin ejecucion 3d------");
+            
         }
 
 
@@ -349,6 +355,11 @@ namespace Proyecto2_201122872.Formularios
             }
 
         private void Debugger_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage3_Click(object sender, EventArgs e)
         {
 
         }

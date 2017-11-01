@@ -8,20 +8,25 @@ using Irony.Interpreter;
 using Irony.Ast;
 using Proyecto2_201122872.Interprete3D.Ejecucion3D;
 using Proyecto2_201122872.Errores;
+using Proyecto2_201122872.AnalizadorJava;
 
 namespace Proyecto2_201122872.Interprete3D
 {
-    class AccionInterprete
+    public class AccionInterprete
     {
-        public double[] Pila = new double[1000];
-        public double[] Heap = new double[1000];
+        public double[] Pila;
+        public double[] Heap ;//= new double[1000];
         public String Imprimir;
         public ListaTemporales temporales;
         private string ir_a;
         private string etiqueta;
         private int bandera;
+        public ParseTreeNode raiz3D;
+        public string metodoInicio = "";
+        public String IMPRIMIR_STACK = "";
+        public String IMPRIMIR_HEAP = "";
 
-        public AccionInterprete()
+        public AccionInterprete(ParseTreeNode raiz)
         {
             this.temporales = new ListaTemporales();
             Pila = new double[10000];
@@ -30,13 +35,92 @@ namespace Proyecto2_201122872.Interprete3D
             ir_a = "";
             etiqueta = "";
             bandera = 0;
+            this.raiz3D = raiz;
 
         }
+
+        
+
+        public void setMetodoInicio(String val)
+        {
+            this.metodoInicio = val;
+        }
+
+        /* Pasos de ejecucuin:
+         * 1. Buscar el metodo princiapl el cual sera indicado por el usuario
+         * 
+         
+         */
+
+
+
+         /*for (int i = 0; i < Raiz.jjtGetNumChildren(); i++) {
+                SimpleNode aux = (SimpleNode) Raiz.jjtGetChild(i);
+                if (aux.toString().equalsIgnoreCase("MAIN")) {
+                    Actual = (SimpleNode) aux.jjtGetChild(0);
+                    for (int j = 0; j < Actual.jjtGetNumChildren(); j++) {
+                        if (bandera == 1) {
+                            break;
+                        }
+                        Instruccion((SimpleNode) aux.jjtGetChild(0).jjtGetChild(j));
+                    }
+                }
+            }*/
+
+        public void ejecutarCodigo()
+        {
+            Temporal p = new Temporal("P", 0);
+            Temporal H = new Temporal("h", 0);
+            temporales.agregarTemp(p);
+            temporales.agregarTemp(H);
+
+            ParseTreeNode metodoTemporal, cuerpoTemporal;
+            for (int i = 0; i < raiz3D.ChildNodes.Count; i++)
+            {
+                metodoTemporal = raiz3D.ChildNodes[i];
+                if (metodoTemporal.ChildNodes[0].Token.ValueString.Equals(metodoInicio, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("entre");
+                    cuerpoTemporal = metodoTemporal.ChildNodes[1];
+                    for (int j = 0; j <cuerpoTemporal.ChildNodes.Count; j++)
+                    {
+                        if (bandera == 1)
+                        {
+                            break;
+                        }
+                        ejecutarInstruccion(cuerpoTemporal.ChildNodes[j]);
+                        
+                    }
+
+                }
+                
+            }
+           
+        }
+
+
 
         private void imprimir(String cadena)
         {
             Imprimir += cadena + "\n";
         }
+
+
+        public string imprimir_pila() {
+        for (int i = 50; i >= 0; i--) {
+            Console.Write(i + ": " + Pila[i]);
+            IMPRIMIR_STACK += (i + ":      " + Pila[i] + "\n");
+        }
+        return IMPRIMIR_STACK;
+    }
+
+        public  string imprimir_heap() {
+        for (int i = 50; i >= 0; i--) {
+            Console.Write(i + ": " + Heap[i]);
+            IMPRIMIR_HEAP += (i + ":      " + Heap[i] + "\n");
+        }
+        return IMPRIMIR_HEAP;
+    }
 
         public void Evaluar(ParseTreeNode raiz, String nombreMain)
         {
@@ -160,6 +244,12 @@ namespace Proyecto2_201122872.Interprete3D
         }
 
 
+
+        private void EvaluarCuerpo()
+        {
+
+        }
+
         private void ejecutarInstruccion(ParseTreeNode nodo)
         {
             switch (nodo.Term.Name)
@@ -196,7 +286,11 @@ namespace Proyecto2_201122872.Interprete3D
                 case "asignacionHeap":
                     {
                         //asignacionHeap.Rule = identificador + ToTerm("=") + "HEAP" + "[" + EXPRESION + "]" + ";";
-
+                        if (esIrAEtiqueta())
+                        {
+                            heap(nodo, 0);
+                            break;
+                        }
                         
                         break;
                     }
@@ -206,23 +300,18 @@ namespace Proyecto2_201122872.Interprete3D
                         //etiqueta.Rule = identificador + ToTerm(":");
 
                         string nombreEtiqueta = nodo.ChildNodes[0].Token.ValueString;
-                        if (nombreEtiqueta.Equals(etiqueta, StringComparison.OrdinalIgnoreCase))
+                        if (ir_a.Equals(""))
                         {
-
+                            etiqueta = nombreEtiqueta;
+                            ir_a = etiqueta;
                         }
-                        
-                        /*if (aux_Global.toString().equals("Etiqueta")) {
-                    String id = nodo.jjtGetChild(0).toString();
-                    if (ir_a.equals("")) {
-                        etiqueta = id;
-                        ir_a = etiqueta;
-                    } else {
-                        etiqueta = id;
-                    }
-                    break;*/
-
-                        
+                        else
+                        {
+                            etiqueta = nombreEtiqueta;
+                        }
                         break;
+                        
+ 
                     }
 
                 case "llamada":
@@ -233,6 +322,13 @@ namespace Proyecto2_201122872.Interprete3D
 
                 case ConstantesInterprete.salto:
                     {
+                        string salto = nodo.ChildNodes[0].Token.ValueString;
+                        if (esIrAEtiqueta())
+                        {
+                            ir_a = salto;
+                            EvaluarCuerpo();
+                            bandera = 1;
+                        }
 
                         break;
                     }
@@ -245,12 +341,19 @@ namespace Proyecto2_201122872.Interprete3D
 
                 case ConstantesInterprete.stack:
                     {
+                        if (esIrAEtiqueta())
+                        {
+                            pila(nodo, 1);
+                        }
 
                         break;
                     }
                 case ConstantesInterprete.heap:
                     {
-
+                        if (esIrAEtiqueta())
+                        {
+                            heap(nodo, 1);
+                        }
                         break;
                     }
                 case ConstantesInterprete.print:
@@ -287,6 +390,10 @@ namespace Proyecto2_201122872.Interprete3D
         {
             switch (nodo.Term.Name)
             {
+                case "TERMINO":
+                    {
+                        return resolverExp(nodo.ChildNodes[0]);
+                    }
                 case ConstantesInterprete.ENTERO:
                     {
                         return int.Parse(nodo.ChildNodes[0].Token.ValueString);
@@ -296,7 +403,7 @@ namespace Proyecto2_201122872.Interprete3D
                         return double.Parse(nodo.ChildNodes[0].Token.ValueString);
                     }
 
-                case ConstantesInterprete.ID:
+                case "ID":
                     {
                         string id = nodo.ChildNodes[0].Token.ValueString;
                         return temporales.getValorTemp(id);
@@ -324,7 +431,7 @@ namespace Proyecto2_201122872.Interprete3D
                         Object val1 = resolverExp(nodo.ChildNodes[0]);
                         Object val2 = resolverExp(nodo.ChildNodes[2]);
 
-                        switch (nodo.ChildNodes[1].Term.Name)
+                        switch (nodo.ChildNodes[1].ChildNodes[0].Term.Name)
                         {
 
                             case "+":

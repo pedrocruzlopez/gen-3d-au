@@ -21,6 +21,10 @@ namespace Proyecto2_201122872.Interprete3D
              var doble = new RegexBasedTerminal("doble", "[0-9]+[.][0-9]+");
             var entero = new RegexBasedTerminal("entero", "[0-9]+");
             var identificador = TerminalFactory.CreateCSharpIdentifier("identificador");
+            CommentTerminal COMENT_BLOQUE = new CommentTerminal("COMENTARIO BLOQUE", "/*", "*/");
+            CommentTerminal COMENT_LINEA = new CommentTerminal("COMENTARIO LINEA", "//", "\n", "\r\n");
+            NonGrammarTerminals.Add(COMENT_BLOQUE);
+            NonGrammarTerminals.Add(COMENT_LINEA);
 #endregion
 
 
@@ -75,7 +79,7 @@ namespace Proyecto2_201122872.Interprete3D
 
              etiqueta.Rule = identificador + ToTerm(":");
 
-             llamada.Rule = identificador + ToTerm("(") + ")" + ";";
+             llamada.Rule = ToTerm("call")+ identificador + ToTerm("(") + ")" + ";";
 
              GLOBAL.Rule = asignacionNormal
                  | asignacionHeap
@@ -163,7 +167,7 @@ namespace Proyecto2_201122872.Interprete3D
              this.Root = cuerpoArchivo;
 
 
-             MarkPunctuation("=", "STACK", "HEAP", "[", "]", ";", ":", "(", ")", "goto", "if", "'", "%", ",", ConstantesInterprete.print, Constantes.tipoVoid, "{", "}");
+             MarkPunctuation("call","=", "STACK", "HEAP", "[", "]", ";", ":", "(", ")", "goto", "if", "'", "%", ",", ConstantesInterprete.print, Constantes.tipoVoid, "{", "}");
 
 
 

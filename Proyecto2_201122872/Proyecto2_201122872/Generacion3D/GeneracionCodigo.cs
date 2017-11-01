@@ -266,9 +266,16 @@ namespace Proyecto2_201122872.Generacion3D
 
                    case Constantes.decla2:
                        {
+                           /* DECLARACION.Rule = TIPO + identificador + ToTerm(";")
+                | TIPO + identificador + ToTerm("=") + EXPRESION + ";"
+                | TIPO + identificador + LPOSICIONES + ToTerm(";")
+                | TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";"
+                | TIPO + identificador + ToTerm("=") + INSTANCIA + ";"; */
+                           
                            int noHijos = nodo.ChildNodes.Count;
                            if (noHijos == 3)
                            {
+                               #region instancias
                                if (nodo.ChildNodes[2].Term.Name.Equals(Constantes.instancia, StringComparison.OrdinalIgnoreCase))
                                {
                                    //es una instancia
@@ -425,6 +432,77 @@ namespace Proyecto2_201122872.Generacion3D
                                    }
 
                                }
+#endregion
+
+
+                               #region instancias
+
+
+
+                               #endregion
+
+
+                               #region expresion normal
+                               if (nodo.ChildNodes[2].Term.Name.Equals(Constantes.expresion, StringComparison.OrdinalIgnoreCase))
+                               {
+                                   //TIPO + identificador + ToTerm("=") + EXPRESION + ";"
+                                   string tipo = nodo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                                   string nombreDeclaracion = nodo.ChildNodes[1].Token.ValueString;
+                                   ParseTreeNode nodoExpresion = nodo.ChildNodes[2];
+                                   int posId;
+                                   int noAmbiente = ambitos.ambitos.Count;
+                                   if (noAmbiente > 1)
+                                   {
+                                       //ando en un ambiente local
+                                       posId = tablaSimbolos.getPosicion(nombreDeclaracion, ambitos);
+                                       if (posId != -1)
+                                       {
+                                           //es una variabel local
+                                           string temp1 = c3d.getTemporal();
+                                           string l1 = temp1 + " = P + " + posId + "; //pos de " + nombreDeclaracion;
+                                           Object tipoExp = validarTipo(nodoExpresion, ambitos);
+                                           if (tipoExp.ToString().Equals(tipo, StringComparison.OrdinalIgnoreCase))
+                                           {
+                                               Object val = resolverExpresiones(nodoExpresion, ambitos, nombreClase, nombreMetodo);
+                                               string l2 = "STACK[" + temp1 + "] = " + val.ToString() + ";";
+
+                                           }
+                                       }
+                                       else
+                                       {
+                                           posId = tablaSimbolos.getPosicionDeClase(nombreDeclaracion, ambitos);
+                                           if (posId != -1)
+                                           {
+                                               // es un atributo de clase
+
+
+                                           }
+                                           else
+                                           {
+                                               //variabe no existe
+
+                                           }
+                                       }
+                                   }
+                                   else if(noAmbiente==1)
+                                   {//ando eun ambiente global
+                                       /*
+                                       String temp1 = tabla.Obtener_Temporal();
+                                       String tem2 = tabla.Obtener_Temporal();
+                                       String temp3 = tabla.Obtener_Temporal();
+                                       Codigo += temp1 + " = P + 0;\n";
+                                       Codigo += tem2 + " = STACK[" + temp1 + "];\n";
+                                       Codigo += temp3 + " = " + tem2 + " + " + pos + ";\n";
+                                       Object val = Expresion_bool(nodo.ChildNodes[2]);
+                                       Codigo += "HEAP[" + temp3 + "]= " + val + " ;\n";*/
+
+                                   }
+
+
+                               }
+
+                               
+                               #endregion
                            }
 
 
@@ -2745,33 +2823,164 @@ namespace Proyecto2_201122872.Generacion3D
 
                 #endregion
 
-                #region instancia
+                #region id
 
-                case Constantes.instancia:
+                case Constantes.id:
                     {
-                        /*INSTANCIA.Rule = Constantes.nuevo + identificador + "(" + LEXPRESIONES + ")"
-                 | Constantes.nuevo + identificador + "(" + ")";*/
+                        string nombreId = nodo.ChildNodes[0].Token.ValueString;
+                        int posId = tablaSimbolos.getPosicion(nombreId,ambiente);
+                        string tipoId = tablaSimbolos.getTipo(nombreId, ambiente);
+                        if (posId != -1)
+                        {
+                            // es una variable local
+                            if(tipoId.Equals(Constantes.tipoBool, StringComparison.OrdinalIgnoreCase) ||
+                                tipoId.Equals(Constantes.tipoDecimal, StringComparison.OrdinalIgnoreCase) ||
+                                tipoId.Equals(Constantes.tipoChar, StringComparison.OrdinalIgnoreCase) ||
+                                tipoId.Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase))
+                            {
+                                string temp1 = c3d.getTemporal();
+                                string l1 = temp1 + " = P + " + posId + ";//pos de " + nombreId;
+                                string temp2 = c3d.getTemporal();
+                                string l2 = temp2 + " = STACK[" + temp1 + "]; //valor de " + nombreId;
+                                c3d.addCodigo(l1);
+                                c3d.addCodigo(l2);
+                                return temp2;
+                            }
+                            else if (tipoId.Equals(Constantes.tipoCadena, StringComparison.OrdinalIgnoreCase))
+                            {
+                                //es una cadena
+                                string eti1 = c3d.getEtiqueta();
+                                string eti2 = c3d.getEtiqueta();
+                                string eti3 = c3d.getEtiqueta();
+                                string eti4 = c3d.getEtiqueta();
+                                string temp1 = c3d.getTemporal();
+                                string l1 = temp1 + " = P + " + posId + "; //pos de " + nombreId;
+                                string temp2 = c3d.getTemporal();
+                                string l2 = temp2 + " =  STACK[" + temp1 + "];//apuntador de la cadenana en el heap";
+                                string l3 = "goto " + eti1 + ":";
+                                string l15= eti1 + ":\n";
+                                string temp3 = c3d.getTemporal();
+                                string l4 = temp3 + " = HEAP[" + temp2 + "];";
+                                string l5 = "if( " + temp3 + " == -1 ) then goto " + eti2 + ";";
+                                string l6 = "goto " + eti3 + ";";
+                                string l7= eti2+":";
+                                string l8 = "goto "+ eti4+";";
+                                string l9 = eti3 + ":";
+                                string l10 = "HEAP[H] = " + temp3 + ";";
+                                string l11 = "H = H + 1;";
+                                string l12 = temp2 + " = " + temp2 + " + 1" + ";";
+                                string l13= "goto " + eti1 + ";";
+                                string l14 = eti4 + ":";
+                                c3d.addCodigo(l1);
+                                c3d.addCodigo(l2); 
+                                c3d.addCodigo(l3);
+                                c3d.addCodigo(l15);
+                                c3d.addCodigo(l4);
+                                c3d.addCodigo(l5);
+                                c3d.addCodigo(l6);
+                                c3d.addCodigo(l7);
+                                c3d.addCodigo(l8);
+                                c3d.addCodigo(l9);
+                                c3d.addCodigo(l10);
+                                c3d.addCodigo(l11);
+                                c3d.addCodigo(l12);
+                                c3d.addCodigo(l13);
+                                c3d.addCodigo(l14);
+                                return temp3;
 
-                        int noHijos = nodo.ChildNodes.Count;
-                        string objetoInstanciar = nodo.ChildNodes[0].Token.ValueString;
-                        //1. verificamos si existe el objeto que queresmos instanciar
-                        int sizeObjeto = tablaSimbolos.sizeClase(objetoInstanciar);
-                        if (sizeObjeto != -1)
-                        {//objeto a instanciar si existe
 
 
-
+                            }
+                            else
+                            {
+                                // es un objeto
+                            }
                         }
                         else
-                        {//objeto a instaincair no existe
+                        {
+                            posId = tablaSimbolos.getPosicionDeClase(nombreId, ambiente);
+                            if (posId != -1)
+                            {
+                                //es un atributo
+                                 // es una variable local
+                            if(tipoId.Equals(Constantes.tipoBool, StringComparison.OrdinalIgnoreCase) ||
+                                tipoId.Equals(Constantes.tipoDecimal, StringComparison.OrdinalIgnoreCase) ||
+                                tipoId.Equals(Constantes.tipoChar, StringComparison.OrdinalIgnoreCase) ||
+                                tipoId.Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase))
+                            {
+                                string temp1 = c3d.getTemporal();
+                                string l1 = temp1 + " = P + " + posId + ";//pos de " + nombreId;
+                                string temp2 = c3d.getTemporal();
+                                string l2 = temp2 + " = STACK[" + temp1 + "]; //valor de " + nombreId;
+                                c3d.addCodigo(l1);
+                                c3d.addCodigo(l2);
+                                return temp2;
+                            }
+                            else if (tipoId.Equals(Constantes.tipoCadena, StringComparison.OrdinalIgnoreCase))
+                            {
+                                //es una cadena
+                                //es una cadena
+                                string eti1 = c3d.getEtiqueta();
+                                string eti2 = c3d.getEtiqueta();
+                                string eti3 = c3d.getEtiqueta();
+                                string eti4 = c3d.getEtiqueta();
+                                string temp1 = c3d.getTemporal();
+                                string l1 = temp1 + " = P + " + posId + "; //pos de " + nombreId;
+                                string temp2 = c3d.getTemporal();
+                                string l2 = temp2 + " =  STACK[" + temp1 + "];//apuntador de la cadenana en el heap";
+                                string l3 = "goto " + eti1 + ":";
+                                string l15 = eti1 + ":\n";
+                                string temp3 = c3d.getTemporal();
+                                string l4 = temp3 + " = HEAP[" + temp2 + "];";
+                                string l5 = "if( " + temp3 + " == -1 ) then goto " + eti2 + ";";
+                                string l6 = "goto " + eti3 + ";";
+                                string l7 = eti2 + ":";
+                                string l8 = "goto " + eti4 + ";";
+                                string l9 = eti3 + ":";
+                                string l10 = "HEAP[H] = " + temp3 + ";";
+                                string l11 = "H = H + 1;";
+                                string l12 = temp2 + " = " + temp2 + " + 1" + ";";
+                                string l13 = "goto " + eti1 + ";";
+                                string l14 = eti4 + ":";
+                                c3d.addCodigo(l1);
+                                c3d.addCodigo(l2);
+                                c3d.addCodigo(l3);
+                                c3d.addCodigo(l15);
+                                c3d.addCodigo(l4);
+                                c3d.addCodigo(l5);
+                                c3d.addCodigo(l6);
+                                c3d.addCodigo(l7);
+                                c3d.addCodigo(l8);
+                                c3d.addCodigo(l9);
+                                c3d.addCodigo(l10);
+                                c3d.addCodigo(l11);
+                                c3d.addCodigo(l12);
+                                c3d.addCodigo(l13);
+                                c3d.addCodigo(l14);
+                                return temp3;
+                            }
+                            else
+                            {
+                                //es un objeto
+                            }
 
+                            }
+                            else
+                            {
+                                //la variable no existe
+
+                            }
                         }
-
                         return "nulo";
-
                     }
 
                 #endregion
+
+
+
+
+
+
 
 
             }
