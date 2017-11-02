@@ -209,48 +209,111 @@ namespace Proyecto2_201122872.Generacion3D
 
 
                    case Constantes.asignacion:{
-                       /*
-                       int noHijos1 = nodo.ChildNodes[0].ChildNodes.Count;
-                       int noHijos2 = nodo.ChildNodes[1].ChildNodes.Count;
-                       if (noHijos1 == 1)
-                       {//debe ser una variable o un arreglo
-                           ParseTreeNode nodoVar= nodo.ChildNodes[0]; 
-                           if (string.Equals(nodoVar.ChildNodes[0].Term.Name, Constantes.id, StringComparison.OrdinalIgnoreCase))
+                       /*ASIGNACION.Rule = EXPRESION + ToTerm("=") + EXPRESION + ";"
+               | EXPRESION + ToTerm("=") + INSTANCIA;
+                        NonTerminal THIS = new NonTerminal("THIS");
+            NonTerminal SUPER = new NonTerminal("SUPER");
+            NonTerminal LLAMADAOBJETO = new NonTerminal("LLAMADA_OBJETO") O UN ID O ASIG POS VECTOR;
+                        */
+                       string nombreExpresion = nodo.ChildNodes[0].ChildNodes[0].Term.Name;
+                       if (nombreExpresion.Equals("THIS") ||
+                           nombreExpresion.Equals("SUPER") ||
+                           nombreExpresion.Equals("LLAMADA_OBJETO") ||
+                           nombreExpresion.Equals(Constantes.id) ||
+                           nombreExpresion.Equals(Constantes.posvector))
+                       {
+                           if (nombreExpresion.Equals("THIS"))
                            {
-                               string nombre = nodoVar.ChildNodes[0].Token.ValueString;
-                               int pos = tablaSimbolos.getPosicion(nombre, ambitos);
-                               string tipo = tablaSimbolos.getTipo(nombre, ambitos);
-                               if (pos == -1)
-                               {//buscar si es una variable de clase
-                                   pos = tablaSimbolos.getPosicionDeClase(nombre, ambitos);
-                                   tipo = tablaSimbolos.getTipo(nombre, ambitos);
-                                   if (pos == -1)
+                               #region asignar a un this
+                               ParseTreeNode nodoThis= nodo.ChildNodes[0].ChildNodes[0];
+                               ParseTreeNode nodoExpThis = nodo.ChildNodes[1];
+                               string temp1 = c3d.getTemporal();
+                               string l1 = temp1 + " = P + 0; //pos this";
+                               string temp2 = c3d.getTemporal();
+                               string l2 = temp2 + " = STACK[" + temp1 + "]; //apuntador del this en el heap";
+                               int noHijos = nodoThis.ChildNodes.Count;
+                               //es un this.id
+                               if (noHijos == 1 && nodoThis.ChildNodes[0].Term.Name.Equals(Constantes.id))
+                               {
+                                   string id = nodoThis.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                                   int posId = tablaSimbolos.getPosicionDeClase(id, ambitos);
+                                   string tipoId = tablaSimbolos.getTipo(id, ambitos);
+                                   if (posId != -1)
                                    {
-                                       //vairable no existe
+                                       if (tipoId.Equals(Constantes.tipoBool, StringComparison.OrdinalIgnoreCase) ||
+                                          tipoId.Equals(Constantes.tipoCadena, StringComparison.OrdinalIgnoreCase) ||
+                                           tipoId.Equals(Constantes.tipoChar, StringComparison.OrdinalIgnoreCase) ||
+                                           tipoId.Equals(Constantes.tipoDecimal, StringComparison.OrdinalIgnoreCase) ||
+                                           tipoId.Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase))
+                                       {
+                                           string temp1_1 = c3d.getTemporal(); //pos que necesito asginar
+                                           string l1_1 = temp1_1 + " = " + temp2 + " + " + posId + "; //pos de " + id;
+                                           string temp2_1 = c3d.getTemporal();
+                                           string l1_2 = temp2_1 + " = HEAP[ " + temp1_1 + "];//valor de " + id;
+                                           
+                                           if (!nodo.ChildNodes[1].Term.Name.Equals(Constantes.instancia))
+                                           {
+                                               Object tipoExpresion = validarTipo(nodoExpThis, ambitos);
+                                               if (tipoExpresion.ToString().Equals(tipoId, StringComparison.OrdinalIgnoreCase))
+                                               {
+                                                   c3d.addCodigo(l1);
+                                                   c3d.addCodigo(l2);
+                                                   c3d.addCodigo(l1_1);
+                                                   c3d.addCodigo(l1_2);
+                                                   Object val = resolverExpresiones(nodoExpThis, ambitos, nombreClase, nombreMetodo);
+                                                   string l3 = "HEAP[" + temp1_1 + "] = " + val.ToString() + ";";
+                                                   c3d.addCodigo(l3);
+                                               }
+
+                                           }
+                                           else
+                                           {
+                                               ErrorA er = new ErrorA(Constantes.errorSemantico, "El atributo " + id + ", no posee un tipo valido para una instancia", nodo.FindToken());
+                                               Form1.errores.addError(er);
+                                           }
+
+                                       }
+                                       else
+                                       {
+                                           //es un objeto
+                                           if (nodo.ChildNodes[1].Term.Name.Equals(Constantes.instancia))
+                                           {
+
+                                           }
+                                           else
+                                           {
+                                               ErrorA er = new ErrorA(Constantes.errorSemantico, "El atributo " + id + ", debe posee una instancia", nodo.FindToken());
+                                               Form1.errores.addError(er);
+                                           }
+
+
+                                       }
                                    }
                                    else
                                    {
-
+                                       ErrorA er = new ErrorA(Constantes.errorSemantico, "El atributo " + id + ", no existe", nodo.FindToken());
+                                       Form1.errores.addError(er);
                                    }
-                               }
-                               else
-                               {
 
                                }
+                               #endregion
                            }
-                           else if (string.Equals(nodoVar.ChildNodes[0].Term.Name, Constantes.declaArreglo, StringComparison.OrdinalIgnoreCase))
+                           else if (nombreExpresion.Equals(Constantes.id))
                            {
+                               #region asinganar a un id
+                               ParseTreeNode opIzq = nodo.ChildNodes[0].ChildNodes[0];
+                               ParseTreeNode nodoExpThis = nodo.ChildNodes[1];
+                               string nombreId = opIzq.ChildNodes[0].Token.ValueString;
 
+                               #endregion
                            }
-                           else
-                           {
-                               //error
-                           }
-
                        }
-                       else { }
+                       else
+                       {
+                           ErrorA er = new ErrorA(Constantes.errorSemantico, "Expresion no validad para una asignacion", nodo.ChildNodes[0].FindToken());
+                           Form1.errores.addError(er);
+                       }
 
-                       */
                        break;
 
                     }
@@ -385,50 +448,6 @@ namespace Proyecto2_201122872.Generacion3D
                                                        c3d.addCodigo(l9);
                                                        c3d.addCodigo(l10);
                                                        c3d.addCodigo(l11);
-                                                       
-                                                       
-                                                       
-                                                       /* string temp1 = c3d.getTemporal();
-                                                       string l1 = temp1 + "= P + " + posObjInstanciar + "; //pos del obj " + nombreObjetoInstanciar;
-                                                       string temp2 = c3d.getTemporal();
-                                                       string l2 = temp2 + " = STACK[" + temp1 + "];";
-                                                       string temp3 = c3d.getTemporal();
-                                                       int tamanhoFuncActual = tablaSimbolos.sizeFuncion(nombreClase, nombreMetodo);
-                                                       string l3 = temp3 + " = P + " + tamanhoFuncActual + ";";
-                                                       int posThis = tablaSimbolos.getPosicion("this", ambitos);
-                                                       string firmaLlamada = tablaSimbolos.getFirmaMetodo(nombreClase, cad, tipoInstacia2);
-                                                       string temp4 = c3d.getTemporal();
-                                                       string l4 = temp4 + " = " + temp3 + " + " + posThis + "; //posicion del this";
-                                                       string l5 = "STACK[" + temp4 + "] = " + temp2 + ";";
-                                                       String lParametros = "";
-
-                                                       for (int i = 0; i < nodoInstancia.ChildNodes[1].ChildNodes.Count; i++)
-                                                       {
-                                                           Object temp = resolverExpresiones(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambitos, nombreClase, nombreMetodo);
-                                                           String tempT = c3d.getTemporal();
-                                                           string lTemp = tempT + " = P + " + tamanhoFuncActual + ";\n";
-                                                           string tempT2 = c3d.getTemporal();
-                                                           int val = 1 + i;
-                                                           string lTemp2 = tempT2 + " = " + tempT + " + " +val + ";\n";
-                                                           string lTemp3 = "STACK[" + tempT2 + "] = " + temp + "; // asignamos al parametro\n";
-                                                           lParametros += lTemp;
-                                                           lParametros += lTemp2;
-                                                           lParametros += lTemp3;
-                                                       }
-
-
-                                                       string l6 = "P = P + " + tamanhoFuncActual + ";";
-                                                       string l7 = "call " + firmaLlamada + "();";
-                                                       string l8 = "P = P - " + tamanhoFuncActual + ";";
-                                                       c3d.addCodigo(l1);
-                                                       c3d.addCodigo(l2);
-                                                       c3d.addCodigo(l3);
-                                                       c3d.addCodigo(l4);
-                                                       c3d.addCodigo(l5);
-                                                       c3d.addCodigo(lParametros);
-                                                       c3d.addCodigo(l6);
-                                                       c3d.addCodigo(l7);
-                                                       c3d.addCodigo(l8);*/
                                                    }
                                                    else
                                                    {
@@ -2756,6 +2775,10 @@ namespace Proyecto2_201122872.Generacion3D
          */
 
 
+        private Boolean esValidaLlamada()
+        {
+            return false;
+        }
 
         public object resolverExpresiones(ParseTreeNode nodo, Ambitos ambiente, String nombreClase, String nommbreMetodo)
         {
@@ -2770,8 +2793,67 @@ namespace Proyecto2_201122872.Generacion3D
                     }
 
 
-                #region int, double, char, bool
-                case Constantes.tipoEntero:
+                    #region this
+                    case "THIS":
+                    {
+                        /* Pasos de verificacion:
+                         * 1. Verificar que existan tanto las llamadas a funciones como los objetos y atributos que se hacen referencia
+                         
+                         */
+                        string temp1 = c3d.getTemporal();
+                        string l1 = temp1 + " = P + 0; //pos this";
+                        string temp2 = c3d.getTemporal();
+                        string l2 = temp2 + " = STACK[" + temp1 + "]; //apuntador del this en el heap";
+                        int noHijos = nodo.ChildNodes.Count;
+                        if (noHijos == 1)
+                        {
+                            string id = nodo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                            int posId = tablaSimbolos.getPosicionDeClase(id, ambiente);
+                            string tipoId = tablaSimbolos.getTipo(id, ambiente);
+                            if (posId != -1)
+                            {
+                                if(tipoId.Equals(Constantes.tipoBool, StringComparison.OrdinalIgnoreCase) ||
+                                   tipoId.Equals(Constantes.tipoCadena, StringComparison.OrdinalIgnoreCase) ||
+                                    tipoId.Equals(Constantes.tipoChar, StringComparison.OrdinalIgnoreCase) ||
+                                    tipoId.Equals(Constantes.tipoDecimal, StringComparison.OrdinalIgnoreCase)||
+                                    tipoId.Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    string temp1_1 = c3d.getTemporal();
+                                    string l1_1 = temp1_1 + " = " + temp2 + " + " + posId + "; //pos de " + id;
+                                    string temp2_1 = c3d.getTemporal();
+                                    string l1_2 = temp2_1 + " = HEAP[ " + temp1_1 + "];//valor de " + id;
+                                    c3d.addCodigo(l1);
+                                    c3d.addCodigo(l2);
+                                    c3d.addCodigo(l1_1);
+                                    c3d.addCodigo(l1_2);
+                                    return temp2_1;
+                                }
+                                else
+                                {
+                                    //es un objeto
+                                }
+                            }
+                            else
+                            {
+                                ErrorA er = new ErrorA(Constantes.errorSemantico, "El atributo " + id + ", no existe", nodo.FindToken());
+                                Form1.errores.addError(er);
+                            }
+                        }
+                        else if (noHijos > 1)
+                        {//asegurar que sea valida la expresion
+
+
+                        }
+                        
+
+                        return "nulo";
+
+                    }
+
+                    #endregion
+
+                    #region int, double, char, bool
+                    case Constantes.tipoEntero:
                     {
                         return int.Parse(nodo.ChildNodes[0].Token.ValueString);
                     }
@@ -2984,7 +3066,274 @@ namespace Proyecto2_201122872.Generacion3D
 
                 #endregion
 
+                #region operaciones Aritmeticas
 
+                case Constantes.suma:
+                    {
+                        
+                        object val1 = resolverExpresiones(nodo.ChildNodes[0],ambiente,nombreClase,nommbreMetodo);
+                        object val2 = resolverExpresiones(nodo.ChildNodes[1], ambiente, nombreClase, nommbreMetodo);
+                        string temp = c3d.getTemporal();
+                        string cod = temp + " = " + val1 + " + " + val2 + ";";
+                        c3d.addCodigo(cod);
+                        return temp;
+                    }
+
+                case Constantes.resta:
+                    {
+
+                        object val1 = resolverExpresiones(nodo.ChildNodes[0], ambiente, nombreClase, nommbreMetodo);
+                        object val2 = resolverExpresiones(nodo.ChildNodes[1], ambiente, nombreClase, nommbreMetodo);
+                        string temp = c3d.getTemporal();
+                        string cod = temp + " = " + val1 + " - " + val2 + ";";
+                        c3d.addCodigo(cod);
+                        return temp;
+                    }
+
+                case Constantes.multiplicacion:
+                    {
+
+                        object val1 = resolverExpresiones(nodo.ChildNodes[0], ambiente, nombreClase, nommbreMetodo);
+                        object val2 = resolverExpresiones(nodo.ChildNodes[1], ambiente, nombreClase, nommbreMetodo);
+                        string temp = c3d.getTemporal();
+                        string cod = temp + " = " + val1 + " * " + val2 + ";";
+                        c3d.addCodigo(cod);
+                        return temp;
+                    }
+
+                case Constantes.division:
+                    {
+
+                        object val1 = resolverExpresiones(nodo.ChildNodes[0], ambiente, nombreClase, nommbreMetodo);
+                        object val2 = resolverExpresiones(nodo.ChildNodes[1], ambiente, nombreClase, nommbreMetodo);
+                        string temp = c3d.getTemporal();
+                        string cod = temp + " = " + val1 + " / " + val2 + ";";
+                        c3d.addCodigo(cod);
+                        return temp;
+                    }
+
+                case Constantes.potencia:
+                    {
+
+                        object val1 = resolverExpresiones(nodo.ChildNodes[0], ambiente, nombreClase, nommbreMetodo);
+                        object val2 = resolverExpresiones(nodo.ChildNodes[1], ambiente, nombreClase, nommbreMetodo);
+                        string temp = c3d.getTemporal();
+                        string cod = temp + " = " + val1 + " ^ " + val2 + ";";
+                        c3d.addCodigo(cod);
+                        return temp;
+                    }
+
+
+
+                #endregion
+
+                #region operaciones relacionales 
+
+                case Constantes.mayor:
+                    {
+                        Object val1 = evaluarExp(nodo.ChildNodes[0]);
+                        Object val2 = evaluarExp(nodo.ChildNodes[1]);
+                        string etV = c3d.getEtiqueta();
+                        string etF = c3d.getEtiqueta();
+                        string codigo = "if ( " + val1 + " > " + val2 + ") goto " + etV + "\n goto " + etF;
+                        //c3d.addCodigo(codigo);
+                        nodoCondicion cond = new nodoCondicion(codigo);
+                        cond.addEtiquetaFalsa(etF);
+                        cond.addEtiquetaVerdadera(etV);
+                        return cond;
+                    }
+
+                case Constantes.menor:
+                    {
+                        Object val1 = evaluarExp(nodo.ChildNodes[0]);
+                        Object val2 = evaluarExp(nodo.ChildNodes[1]);
+                        string etV = c3d.getEtiqueta();
+                        string etF = c3d.getEtiqueta();
+                        string codigo = "if ( " + val1 + " < " + val2 + ") goto " + etV + "\n goto " + etF;
+                        //c3d.addCodigo(codigo);
+                        nodoCondicion cond = new nodoCondicion(codigo);
+                        cond.addEtiquetaFalsa(etF);
+                        cond.addEtiquetaVerdadera(etV);
+                        return cond;
+                    }
+
+                case Constantes.mayorIgual:
+                    {
+                        Object val1 = evaluarExp(nodo.ChildNodes[0]);
+                        Object val2 = evaluarExp(nodo.ChildNodes[1]);
+                        string etV = c3d.getEtiqueta();
+                        string etF = c3d.getEtiqueta();
+                        string codigo = "if ( " + val1 + " >= " + val2 + ") goto " + etV + "\n goto " + etF;
+                        //c3d.addCodigo(codigo);
+                        nodoCondicion cond = new nodoCondicion(codigo);
+                        cond.addEtiquetaFalsa(etF);
+                        cond.addEtiquetaVerdadera(etV);
+                        return cond;
+                    }
+
+                case Constantes.menorIgual:
+                    {
+                        Object val1 = evaluarExp(nodo.ChildNodes[0]);
+                        Object val2 = evaluarExp(nodo.ChildNodes[1]);
+                        string etV = c3d.getEtiqueta();
+                        string etF = c3d.getEtiqueta();
+                        string codigo = "if ( " + val1 + " <= " + val2 + ") goto " + etV + "\n goto " + etF;
+                        //c3d.addCodigo(codigo);
+                        nodoCondicion cond = new nodoCondicion(codigo);
+                        cond.addEtiquetaFalsa(etF);
+                        cond.addEtiquetaVerdadera(etV);
+                        return cond;
+                    }
+
+                case Constantes.igualIgual:
+                    {
+                        Object val1 = evaluarExp(nodo.ChildNodes[0]);
+                        Object val2 = evaluarExp(nodo.ChildNodes[1]);
+                        string etV = c3d.getEtiqueta();
+                        string etF = c3d.getEtiqueta();
+                        string codigo = "if ( " + val1 + " == " + val2 + ") goto " + etV + "\n goto " + etF;
+                        //c3d.addCodigo(codigo);
+                        nodoCondicion cond = new nodoCondicion(codigo);
+                        cond.addEtiquetaFalsa(etF);
+                        cond.addEtiquetaVerdadera(etV);
+                        return cond;
+                    }
+
+                case Constantes.distintoA:
+                    {
+                        Object val1 = evaluarExp(nodo.ChildNodes[0]);
+                        Object val2 = evaluarExp(nodo.ChildNodes[1]);
+                        string etV = c3d.getEtiqueta();
+                        string etF = c3d.getEtiqueta();
+                        string codigo = "if ( " + val1 + " != " + val2 + ") goto " + etV + "\n goto " + etF;
+                        //c3d.addCodigo(codigo);
+                        nodoCondicion cond = new nodoCondicion(codigo);
+                        cond.addEtiquetaFalsa(etF);
+                        cond.addEtiquetaVerdadera(etV);
+                        return cond;
+                    }
+
+
+
+                #endregion
+
+                #region operaciones logicas
+
+                case Constantes.andJava:
+                    {
+                        Object val1 = resolverExpresiones(nodo.ChildNodes[0],ambiente,nombreClase,nommbreMetodo);
+                        Object val2 = resolverExpresiones(nodo.ChildNodes[1], ambiente, nombreClase, nommbreMetodo);
+                        if (val1 is nodoCondicion)
+                        {
+                            if (val2 is nodoCondicion)
+                            {
+                                nodoCondicion oper1 = (nodoCondicion)val1;
+                                nodoCondicion oper2 = (nodoCondicion)val2;
+                                string codigoAnd = oper1.codigo + "\n" +
+                                                  oper1.getEtiquetasVerdaderas() + "\n" +
+                                                  oper2.codigo + "\n";
+                                nodoCondicion resultadoAnd = new nodoCondicion(codigoAnd);
+                                resultadoAnd.addEtiquetasVerdaderas(oper2.etiquetasVerdaderas);
+                                resultadoAnd.addEtiquetasFalsas(oper1.etiquetasFalsas);
+                                resultadoAnd.addEtiquetasFalsas(oper2.etiquetasFalsas);
+                                return resultadoAnd;
+                            }
+                            else
+                            {
+                                ErrorA n = new ErrorA("Semantico", "El segundo operando para la operacion logica and debe ser una operacion relacional", nodo.ChildNodes[0].FindToken());
+                                Form1.errores.addError(n);
+                                return "nulo";
+
+                            }
+
+                        }
+                        else
+                        {
+                            ErrorA n = new ErrorA("Semantico", "El primer operando para la operacion logica and debe ser una operacion relacional", nodo.ChildNodes[0].FindToken());
+                            Form1.errores.addError(n);
+                            return "nulo";
+
+                        }
+                    }
+
+                case Constantes.orJava:
+                    {
+                        Object val1 = resolverExpresiones(nodo.ChildNodes[0], ambiente, nombreClase, nommbreMetodo);
+                        Object val2 = resolverExpresiones(nodo.ChildNodes[1], ambiente, nombreClase, nommbreMetodo);
+                        if (val1 is nodoCondicion)
+                        {
+                            if (val2 is nodoCondicion)
+                            {
+                                nodoCondicion oper1 = (nodoCondicion)val1;
+                                nodoCondicion oper2 = (nodoCondicion)val2;
+                                string codigoOr = oper1.codigo + "\n" +
+                                                  oper1.getEtiquetasFalsas() + "\n" +
+                                                  oper2.codigo + "\n";
+                                nodoCondicion resultadoOr = new nodoCondicion(codigoOr);
+                                resultadoOr.addEtiquetasVerdaderas(oper1.etiquetasVerdaderas);
+                                resultadoOr.addEtiquetasVerdaderas(oper2.etiquetasVerdaderas);
+                                resultadoOr.addEtiquetasFalsas(oper2.etiquetasFalsas);
+                                return resultadoOr;
+                            }
+                            else
+                            {
+                                ErrorA n = new ErrorA("Semantico", "El segundo operando para la operacion logica or debe ser una operacion relacional", nodo.ChildNodes[0].FindToken());
+                                Form1.errores.addError(n);
+                                return "nulo";
+
+                            }
+
+                        }
+                        else
+                        {
+                            ErrorA n = new ErrorA("Semantico", "El primer operando para la operacion logica or debe ser una operacion relacional", nodo.ChildNodes[0].FindToken());
+                            Form1.errores.addError(n);
+                            return "nulo";
+
+                        }
+
+                    }
+
+                case Constantes.xorJava:
+                    {
+                        Object val1 = resolverExpresiones(nodo.ChildNodes[0], ambiente, nombreClase, nommbreMetodo);
+                        Object val2 = resolverExpresiones(nodo.ChildNodes[1], ambiente, nombreClase, nommbreMetodo);
+                        if (val1 is nodoCondicion)
+                        {
+                            if (val2 is nodoCondicion)
+                            {
+                                nodoCondicion oper1 = (nodoCondicion)val1;
+                                nodoCondicion oper2 = (nodoCondicion)val2;
+                                
+                                string codigoOr = oper1.codigo + "\n" +
+                                                  oper1.getEtiquetasFalsas() + "\n" +
+                                                  oper2.codigo + "\n";
+                                nodoCondicion resultadoOr = new nodoCondicion(codigoOr);
+                                resultadoOr.addEtiquetasVerdaderas(oper1.etiquetasVerdaderas);
+                                resultadoOr.addEtiquetasVerdaderas(oper2.etiquetasVerdaderas);
+                                resultadoOr.addEtiquetasFalsas(oper2.etiquetasFalsas);
+                                return resultadoOr;
+                            }
+                            else
+                            {
+                                ErrorA n = new ErrorA("Semantico", "El segundo operando para la operacion logica xor debe ser una operacion relacional", nodo.ChildNodes[0].FindToken());
+                                Form1.errores.addError(n);
+                                return "nulo";
+
+                            }
+
+                        }
+                        else
+                        {
+                            ErrorA n = new ErrorA("Semantico", "El primer operando para la operacion logica xor debe ser una operacion relacional", nodo.ChildNodes[0].FindToken());
+                            Form1.errores.addError(n);
+                            return "nulo";
+
+                        }
+
+                    }
+
+                #endregion
 
 
 

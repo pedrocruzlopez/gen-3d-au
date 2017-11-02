@@ -19,6 +19,11 @@ clase Persona{
 		imprimir(185);
 		imprimir(4.4);
 		imprimir('a');
+		entero temp = 89;
+		imprimir(temp);
+		este.edad=56;
+		temp= este.edad+3;
+		imprimir(edad);
 		Persona pablo = new Persona(5,10);
 		//print(pablo.edad);
 		//pablo.crecer(2);

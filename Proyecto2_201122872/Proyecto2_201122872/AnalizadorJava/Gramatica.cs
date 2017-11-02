@@ -145,6 +145,11 @@ namespace Proyecto2_201122872.AnalizadorJava
             NonTerminal OR = new NonTerminal(Constantes.orJava);
             NonTerminal INSTANCIA = new NonTerminal(Constantes.instancia);
 
+            NonTerminal THIS = new NonTerminal("THIS");
+            NonTerminal SUPER = new NonTerminal("SUPER");
+            NonTerminal LLAMADAOBJETO = new NonTerminal("LLAMADA_OBJETO");
+
+          
 
 
 
@@ -289,10 +294,11 @@ namespace Proyecto2_201122872.AnalizadorJava
                 | TIPO + identificador + ToTerm("=") + EXPRESION + ";"
                 | TIPO + identificador + LPOSICIONES + ToTerm(";")
                 | TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";"
-                | TIPO + identificador + ToTerm("=") + INSTANCIA + ";"; 
+                | TIPO + identificador + ToTerm("=") + INSTANCIA + ";";
 
 
-            ASIGNACION.Rule = EXPRESION + ToTerm("=") + EXPRESION + ";";
+            ASIGNACION.Rule = EXPRESION + ToTerm("=") + EXPRESION + ";"
+                | EXPRESION + ToTerm("=") + INSTANCIA;
 
 
 
@@ -391,10 +397,11 @@ namespace Proyecto2_201122872.AnalizadorJava
                 | UNARIO
                 | ToTerm("(") + TERMINO + ")"//no es necesario en python
                 | NEGATIVO
-                | "{" + LFILAS + "}";//no existe en python;
+                | "{" + LFILAS + "}"
+                | THIS;//no existe en python;
                // | INSTANCIA;//
 
-
+            THIS.Rule = ToTerm(Constantes.este) + "." + ID;
 
             LLAMADA.Rule = identificador + ToTerm("(") + LEXPRESIONES + ")"
                 | identificador + ToTerm("(") + ")";
@@ -406,8 +413,8 @@ namespace Proyecto2_201122872.AnalizadorJava
 
 
             LEXPRESIONES.Rule = MakePlusRule(LEXPRESIONES, ToTerm(","), EXPRESION);
-            EXPRESION.Rule = MakePlusRule(EXPRESION, ToTerm("."), TERMINO);
-
+           // EXPRESION.Rule = MakePlusRule(EXPRESION, ToTerm("."), TERMINO);
+            EXPRESION.Rule = TERMINO;
             
 
             
@@ -433,7 +440,7 @@ namespace Proyecto2_201122872.AnalizadorJava
 
 
 
-            MarkPunctuation(",", "(", ")", ";", "=", "@", "{","}","clase","[","]",Constantes.nuevo,".","si","sino",
+            MarkPunctuation(Constantes.este,",", "(", ")", ";", "=", "@", "{","}","clase","[","]",Constantes.nuevo,".","si","sino",
                 "mientras","hacer","para","x","repetir","return","imprimir",Constantes.masmas, Constantes.menosmenos,
                 Constantes.menor, Constantes.mayor, Constantes.menorIgual, Constantes.mayorIgual, Constantes.igualIgual, Constantes.distintoA,
                 Constantes.principal,Constantes.orJava, Constantes.andJava, Constantes.xorJava, Constantes.notJavaPython,sobreescribir,"*","^","+","-","/");

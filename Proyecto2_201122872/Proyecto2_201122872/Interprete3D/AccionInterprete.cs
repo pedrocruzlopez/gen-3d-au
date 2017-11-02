@@ -344,7 +344,7 @@ namespace Proyecto2_201122872.Interprete3D
                             }
                             if (parametro.Equals("d",StringComparison.OrdinalIgnoreCase))
                             {//Entero
-                                int aux = (int)val;
+                                int aux = int.Parse(val.ToString());
                                 Imprimir += aux + "\n";
                             }
                             if (parametro.Equals("f",StringComparison.OrdinalIgnoreCase))
