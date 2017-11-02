@@ -3,7 +3,9 @@ clase Persona{
 	cadena nombre = "pablo";
 
 	 Persona(entero a, entero b){
-		//entero temp = 25;
+		 entero temp = 25;
+		 imprimir("hola mundo");
+		 imprimir(185);
 		//this.edad = temp;
 	}
 	
@@ -13,6 +15,10 @@ clase Persona{
 	}
 
 	publico void main(){
+		imprimir("hola mundo");
+		imprimir(185);
+		imprimir(4.4);
+		imprimir('a');
 		Persona pablo = new Persona(5,10);
 		//print(pablo.edad);
 		//pablo.crecer(2);

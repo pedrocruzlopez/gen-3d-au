@@ -90,7 +90,7 @@ namespace Proyecto2_201122872.AnalizadorPython
                 CHAR = new NonTerminal(Constantes.tipoChar),
                 POSICION = new NonTerminal(Constantes.posicion),
                 POSICIONES = new NonTerminal(Constantes.lposiciones),
-                OUT_STRING = new NonTerminal(Constantes.out_string),
+                OUT_STRING = new NonTerminal(Constantes.imprimir),
                 PARSEINT = new NonTerminal(Constantes.parseint),
                 PARSEDOUBLE = new NonTerminal(Constantes.parsedouble),
                 INTTOSTR = new NonTerminal(Constantes.inttostr),

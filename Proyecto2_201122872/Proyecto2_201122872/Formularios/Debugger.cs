@@ -1,19 +1,11 @@
 ﻿using FastColoredTextBoxNS;
-using Irony.Parsing;
-using Proyecto2_201122872.AnalizadorJava;
 using Proyecto2_201122872.Generacion3D;
 using Proyecto2_201122872.Generacion3D.TablaSimbolos;
 using Proyecto2_201122872.Interprete3D;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Proyecto2_201122872.Formularios
@@ -291,7 +283,7 @@ namespace Proyecto2_201122872.Formularios
 
         private void toolStripButton7_Click(object sender, EventArgs e)
         {
-            Arbol analizadorJava = new Arbol();
+           /* Arbol analizadorJava = new Arbol();
             generador = new GeneracionCodigo();
             String contenido = getCadenaArchivo(@"C:\Users\Alina\Documents\Repositorios\CompiProyecto2\ArchivosEntrada\ejemplo2.txt");
             //clasesDiagrama uml = analizadorPython.parseConvertirUML2(contenido);
@@ -302,12 +294,19 @@ namespace Proyecto2_201122872.Formularios
                 g = generador.evaluarExp(raiz);
 
             }
-
+            */
             Console.WriteLine("------ Inicio codigo -------");
-            Console.WriteLine(g);
-            Console.WriteLine(generador.c3d.codigo3D);
-            analizador3D.parse(generador.c3d.codigo3D);
+           // Console.WriteLine(g);
+            //Console.WriteLine(generador.c3d.codigo3D);
+            String contenido = getCadenaArchivo(@"C:\Test.txt");
+            analizador3D = new Arbol3D();
+            analizador3D.nombreMain = "Persona_void_main";
+            analizador3D.parse(contenido);
             Console.WriteLine("------ fin codigo  -------");
+            Console.WriteLine(analizador3D.accion.imprimir_heap());
+            Console.WriteLine("stack================");
+           Console.WriteLine( analizador3D.accion.imprimir_pila());
+           Console.WriteLine(analizador3D.accion.Imprimir);
             
 
         }
@@ -361,6 +360,20 @@ namespace Proyecto2_201122872.Formularios
 
         private void tabPage3_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void toolStripButton8_Click_1(object sender, EventArgs e)
+        {
+            double b = 5.678;
+            string g = b.ToString();
+            for (int i = 0; i < g.Length; i++)
+            {
+                char caracter = g.ElementAt(i).ToString()[0];
+                int ascii = (int)caracter;
+                Console.WriteLine(caracter + "->" + ascii);
+            }
+
 
         }
 

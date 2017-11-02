@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Irony.Parsing;
-using Irony.Interpreter;
-using Irony.Ast;
-using Proyecto2_201122872.Interprete3D.Ejecucion3D;
+﻿using Irony.Parsing;
 using Proyecto2_201122872.Errores;
-using Proyecto2_201122872.AnalizadorJava;
+using Proyecto2_201122872.Interprete3D.Ejecucion3D;
+using System;
 
 namespace Proyecto2_201122872.Interprete3D
 {
@@ -30,7 +23,7 @@ namespace Proyecto2_201122872.Interprete3D
         {
             this.temporales = new ListaTemporales();
             Pila = new double[10000];
-            Heap = new double[30000];
+            Heap = new double[20000];
             Imprimir = "";
             ir_a = "";
             etiqueta = "";
@@ -46,31 +39,12 @@ namespace Proyecto2_201122872.Interprete3D
             this.metodoInicio = val;
         }
 
-        /* Pasos de ejecucuin:
-         * 1. Buscar el metodo princiapl el cual sera indicado por el usuario
-         * 
-         
-         */
-
-
-
-         /*for (int i = 0; i < Raiz.jjtGetNumChildren(); i++) {
-                SimpleNode aux = (SimpleNode) Raiz.jjtGetChild(i);
-                if (aux.toString().equalsIgnoreCase("MAIN")) {
-                    Actual = (SimpleNode) aux.jjtGetChild(0);
-                    for (int j = 0; j < Actual.jjtGetNumChildren(); j++) {
-                        if (bandera == 1) {
-                            break;
-                        }
-                        Instruccion((SimpleNode) aux.jjtGetChild(0).jjtGetChild(j));
-                    }
-                }
-            }*/
+       
 
         public void ejecutarCodigo()
         {
             Temporal p = new Temporal("P", 0);
-            Temporal H = new Temporal("h", 0);
+            Temporal H = new Temporal("H", 0);
             temporales.agregarTemp(p);
             temporales.agregarTemp(H);
 
@@ -80,7 +54,7 @@ namespace Proyecto2_201122872.Interprete3D
                 metodoTemporal = raiz3D.ChildNodes[i];
                 if (metodoTemporal.ChildNodes[0].Token.ValueString.Equals(metodoInicio, StringComparison.OrdinalIgnoreCase))
                 {
-                    Console.WriteLine("entre");
+                    Console.WriteLine("entre al principal ");
                     cuerpoTemporal = metodoTemporal.ChildNodes[1];
                     for (int j = 0; j <cuerpoTemporal.ChildNodes.Count; j++)
                     {
@@ -106,9 +80,10 @@ namespace Proyecto2_201122872.Interprete3D
         }
 
 
+        #region imprimir stack y heap
         public string imprimir_pila() {
         for (int i = 50; i >= 0; i--) {
-            Console.Write(i + ": " + Pila[i]);
+            //Console.Write(i + ": " + Pila[i]);
             IMPRIMIR_STACK += (i + ":      " + Pila[i] + "\n");
         }
         return IMPRIMIR_STACK;
@@ -116,21 +91,12 @@ namespace Proyecto2_201122872.Interprete3D
 
         public  string imprimir_heap() {
         for (int i = 50; i >= 0; i--) {
-            Console.Write(i + ": " + Heap[i]);
+            ///Console.Write(i + ": " + Heap[i]);
             IMPRIMIR_HEAP += (i + ":      " + Heap[i] + "\n");
         }
         return IMPRIMIR_HEAP;
     }
-
-        public void Evaluar(ParseTreeNode raiz, String nombreMain)
-        {
-            Temporal p = new Temporal("P", 0);
-            Temporal H = new Temporal("h", 0);
-            //buscamos principal
-
-
-
-        }
+        #endregion
 
 
         private bool esNula(Object val)
@@ -166,7 +132,7 @@ namespace Proyecto2_201122872.Interprete3D
                     temporales.agregarTemp(new Temporal(id, Pila[aux]));
                 else
                 {
-                    ErrorA er = new ErrorA("Semantico", "Ocurrio un error a realizar la opeacino", nodo.FindToken());
+                    ErrorA er = new ErrorA("Semantico", "Ocurrio un error a realizar la operacion", nodo.FindToken());
                     Form1.errores.addError(er);
                 }
             }
@@ -178,12 +144,16 @@ namespace Proyecto2_201122872.Interprete3D
                     !indice.ToString().Equals("nulo"))
                 {
                     int ind = (int)indice;
-                    Pila[ind] = (double)valor;
+                    if (valor is Double)
+                        Pila[ind] = (double)valor;
+                    else if (valor is int)
+                        Pila[ind] = (int)valor;
+
 
                 }
                 else
                 {
-                    ErrorA er = new ErrorA("Semantico", "Ocurrio un error a realizar la opeacino", nodo.FindToken());
+                    ErrorA er = new ErrorA("Semantico", "Ocurrio un error a realizar la operacion", nodo.FindToken());
                     Form1.errores.addError(er);
                 }
 
@@ -208,7 +178,7 @@ namespace Proyecto2_201122872.Interprete3D
                 }
                 else
                 {
-                    ErrorA er = new ErrorA("Semantico", "Ocurrio un error a realizar la opeacino", nodo.FindToken());
+                    ErrorA er = new ErrorA("Semantico", "Ocurrio un error a realizar la operacion", nodo.FindToken());
                     Form1.errores.addError(er);
 
                 }
@@ -220,15 +190,19 @@ namespace Proyecto2_201122872.Interprete3D
             {//heap.Rule = ToTerm("HEAP") + "[" + EXPRESION + "]" + "=" + EXPRESION + ";";
                 object objIndice = resolverExp(nodo.ChildNodes[0]);
                 object valor = resolverExp(nodo.ChildNodes[1]);
-                if (esNula(objIndice) && !esNula(valor))
+                if (!esNula(objIndice) && !esNula(valor))
                 {
                     int indice = (int)objIndice;
-                    double res = (double)valor;
-                    Heap[indice] = res;
+                    
+
+                    if (valor is Double)
+                        Heap[indice] = (double)valor;
+                    else if (valor is int)
+                        Heap[indice] = (int)valor;
                 }
                 else
                 {
-                    ErrorA er = new ErrorA("Semantico", "Ocurrio un error a realizar la opeacino", nodo.FindToken());
+                    ErrorA er = new ErrorA("Semantico", "Ocurrio un error a realizar la operacion", nodo.FindToken());
                     Form1.errores.addError(er);
 
                 }
@@ -359,6 +333,38 @@ namespace Proyecto2_201122872.Interprete3D
                 case ConstantesInterprete.print:
                     {
 
+                        if (esIrAEtiqueta())
+                        {
+                            String parametro = nodo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                            Object val = resolverExp(nodo.ChildNodes[1]);
+                            if (parametro.Equals("C",StringComparison.OrdinalIgnoreCase))
+                            {//Caracter
+                                int aux = (int)val;
+                                Imprimir += (char)aux + "\n";
+                            }
+                            if (parametro.Equals("d",StringComparison.OrdinalIgnoreCase))
+                            {//Entero
+                                int aux = (int)val;
+                                Imprimir += aux + "\n";
+                            }
+                            if (parametro.Equals("f",StringComparison.OrdinalIgnoreCase))
+                            {//Float
+                                double aux = Double.Parse(val + "");
+                                Imprimir += aux + "\n";
+                            }
+                            if (parametro.Equals("s",StringComparison.OrdinalIgnoreCase))
+                            {//String
+                                String cadena = imprimir_str(val);
+                                //System.out.println("PRINT_STR --> " + cadena);
+                                Imprimir += (cadena + "\n");
+                            }
+
+                        }
+                        else
+                        {
+                            break;
+                        }
+
                         break;
                     }
 
@@ -369,7 +375,27 @@ namespace Proyecto2_201122872.Interprete3D
 
 
 
-
+        public String imprimir_str(Object pos)
+        {
+            String cadena = "";
+            //int ascii = (int)pos; 
+            int posicion = (int)pos;
+            double h;
+            while (true)
+            {
+                h = Heap[posicion];
+                if (h == -1)
+                {
+                    break;
+                }
+                else
+                {
+                    cadena += (char)h;
+                    posicion++;
+                }
+            }
+            return cadena;
+        }
 
 
 

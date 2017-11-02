@@ -44,13 +44,13 @@ namespace Proyecto2_201122872.Interprete3D
 
             if (s_tree.Root != null)
             {
-                Console.WriteLine("========ACCIONES AL EVVALUAR EL ARBOL=============");
+                //Console.WriteLine("========ACCIONES AL EVVALUAR EL ARBOL=============");
                 accion = new AccionInterprete(s_tree.Root);
                 accion.setMetodoInicio(nombreMain);
                 accion.ejecutarCodigo();
                  //accion.Evaluar(s_tree.Root, nombreMain);//EVALUO EL ARBOL
-                Console.WriteLine("==================================================");
-                dispTree(s_tree.Root, 0);//IMPRIMO EL ARBOL
+               // Console.WriteLine("==================================================");
+               // dispTree(s_tree.Root, 0);//IMPRIMO EL ARBOL
                 graficarArbol(s_tree.Root);//GRAFICO EL ARBOL
                 return s_tree.Root;
             }

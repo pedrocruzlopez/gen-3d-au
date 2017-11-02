@@ -1,17 +1,13 @@
-﻿using Proyecto2_201122872.Generacion3D.TablaSimbolos;
+﻿using Irony.Parsing;
+using Proyecto2_201122872.AnalizadorJava;
+using Proyecto2_201122872.AnalizadorPython;
+using Proyecto2_201122872.Errores;
+using Proyecto2_201122872.Generacion3D.TablaSimbolos;
 using Proyecto2_201122872.UML;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Irony.Ast;
-using Irony.Interpreter;
-using Irony.Parsing;
-using Proyecto2_201122872.AnalizadorJava;
-using Proyecto2_201122872.AnalizadorPython;
 using System.IO;
-using Proyecto2_201122872.Errores;
+using System.Linq;
 
 
 namespace Proyecto2_201122872.Generacion3D
@@ -87,7 +83,8 @@ namespace Proyecto2_201122872.Generacion3D
 
 
         /*------------------------------------- Generacion de codigo -------------------------------------*/
-        
+
+        #region escribirC3D clases
         public void escribirC3DClases()
         {
             Ambitos ambito = new Ambitos();
@@ -156,13 +153,16 @@ namespace Proyecto2_201122872.Generacion3D
             }
         }
 
+        #endregion
+
+
 
 
 
 
         #region generacion c3d cuerpo
 
-        
+
         private bool sonNulos(List<String> tipos)
         {
             bool res = true;
@@ -272,7 +272,7 @@ namespace Proyecto2_201122872.Generacion3D
                 | TIPO + identificador + ToTerm("=") + EXPRESION + ";"
                 | TIPO + identificador + LPOSICIONES + ToTerm(";") no se hace
                 | TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";"
-                | TIPO + identificador + ToTerm("=") + INSTANCIA + ";"; */
+                 */
                            
                            int noHijos = nodo.ChildNodes.Count;
                            if (noHijos == 3)
@@ -556,7 +556,7 @@ namespace Proyecto2_201122872.Generacion3D
 #endregion
 
 
-                               #region instancias
+                               #region Arreglos
                               
                                
                                 
@@ -588,7 +588,12 @@ namespace Proyecto2_201122872.Generacion3D
                                            {
                                                Object val = resolverExpresiones(nodoExpresion, ambitos, nombreClase, nombreMetodo);
                                                string l2 = "STACK[" + temp1 + "] = " + val.ToString() + ";";
-
+                                               c3d.addCodigo(l1);
+                                               c3d.addCodigo(l2);
+                                           }
+                                           else
+                                           {
+                                               //error no coinciden los tipos
                                            }
                                        }
                                        else
@@ -688,10 +693,36 @@ namespace Proyecto2_201122872.Generacion3D
                        }
 #endregion
 
-                   case Constantes.llamada:
+                #region imprimir:
+
+                   case Constantes.imprimir:
                        {
+                           //IMPRIMIR.Rule = ToTerm(Constantes.imprimir) + "(" + EXPRESION + ")"+";";
+                           // OUT_STRING.Rule = ToTerm(Constantes.out_string) + "[" + EXPRESION + "]";
+                           Object tipoImpresion = validarTipo(nodo.ChildNodes[0], ambitos);
+                           Object val = resolverExpresiones(nodo.ChildNodes[0], ambitos, nombreClase, nombreMetodo);
+                           if(tipoImpresion.ToString().Equals(Constantes.tipoBool, StringComparison.OrdinalIgnoreCase) ||
+                               tipoImpresion.ToString().Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase))
+                           {
+                               c3d.addCodigo("print(\"%d\" , " + val + ");");
+                           }
+                           else if (tipoImpresion.ToString().Equals(Constantes.tipoDecimal, StringComparison.OrdinalIgnoreCase))
+                           {
+                               c3d.addCodigo("print(\"%f\" , " + val + ");");
+                           }
+                           else if (tipoImpresion.ToString().Equals(Constantes.tipoChar, StringComparison.OrdinalIgnoreCase))
+                           {
+                               c3d.addCodigo("print(\"%c\" , " + val + ");");
+                           }
+                           else if (tipoImpresion.ToString().Equals(Constantes.tipoCadena, StringComparison.OrdinalIgnoreCase))
+                           {
+                               c3d.addCodigo("print(\"%s\" , " + val + ");");
+                           }
+
                            break;
                        }
+
+                #endregion
 
 
 
@@ -708,6 +739,22 @@ namespace Proyecto2_201122872.Generacion3D
 
 
         #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

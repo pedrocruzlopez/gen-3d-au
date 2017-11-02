@@ -45,7 +45,7 @@ namespace Proyecto2_201122872.AnalizadorJava
                 Console.WriteLine("========ACCIONES AL EVVALUAR EL ARBOL=============");
                 uml = accion.generarUML2(s_tree.Root);//EVALUO EL ARBOL
                 Console.WriteLine("==================================================");
-                dispTree(s_tree.Root, 0);//IMPRIMO EL ARBOL
+                //dispTree(s_tree.Root, 0);//IMPRIMO EL ARBOL
                 graficarArbol(s_tree.Root);//GRAFICO EL ARBOL
                 return uml;
             }

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Irony.Ast;
-using Irony.Parsing;
+﻿using Irony.Parsing;
 using Proyecto2_201122872.UML;
+using System;
+using System.Windows.Forms;
 
 namespace Proyecto2_201122872.AnalizadorPython
 {
@@ -69,7 +64,7 @@ namespace Proyecto2_201122872.AnalizadorPython
                 Console.WriteLine("========ACCIONES AL EVVALUAR EL ARBOL=============");
                 uml=accion.generarUML2(s_tree.Root);//EVALUO EL ARBOL
                 Console.WriteLine("==================================================");
-                dispTree(s_tree.Root, 0);//IMPRIMO EL ARBOL
+                //dispTree(s_tree.Root, 0);//IMPRIMO EL ARBOL
                 graficarArbol(s_tree.Root);//GRAFICO EL ARBOL
                 return uml;
             }

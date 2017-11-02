@@ -96,7 +96,7 @@ namespace Proyecto2_201122872.Interprete3D
 
              heap.Rule = ToTerm("HEAP") + "[" + EXPRESION + "]" + "=" + EXPRESION + ";";
 
-             imprimir.Rule = ToTerm(ConstantesInterprete.print) + ToTerm("(") + "'" + "%" + parametro + "'" + "," + EXPRESION + ")" + ";";
+             imprimir.Rule = ToTerm(ConstantesInterprete.print) + ToTerm("(") + "\"" + "%" + parametro + "\"" + "," + EXPRESION + ")" + ";";
 
              instruccion.Rule = GLOBAL
                  | salto
@@ -135,11 +135,11 @@ namespace Proyecto2_201122872.Interprete3D
              DECIMAL.Rule = doble;
              ID.Rule = identificador;
 
-             NEGATIVO.Rule = DECIMAL
-                 | ENTERO
-                 | ID;
+             NEGATIVO.Rule = ToTerm("-") + DECIMAL
+                 | ToTerm("-") + ENTERO
+                 | ToTerm("-") + ID;
 
-             TERMINO.Rule = ToTerm("-") + NEGATIVO
+             TERMINO.Rule = NEGATIVO
                  | DECIMAL
                  | ID
                  | ENTERO;
@@ -167,11 +167,11 @@ namespace Proyecto2_201122872.Interprete3D
              this.Root = cuerpoArchivo;
 
 
-             MarkPunctuation("call","=", "STACK", "HEAP", "[", "]", ";", ":", "(", ")", "goto", "if", "'", "%", ",", ConstantesInterprete.print, Constantes.tipoVoid, "{", "}");
+             MarkPunctuation("call","=", "STACK", "HEAP", "[", "]", ";", ":", "(", ")", "goto", "if", "\"", "%", ",", ConstantesInterprete.print, Constantes.tipoVoid, "{", "}");
 
 
 
-             MarkTransient(instruccion,EXPRESION,nueva);
+             MarkTransient(instruccion,EXPRESION,nueva,TERMINO);
 
 
 
