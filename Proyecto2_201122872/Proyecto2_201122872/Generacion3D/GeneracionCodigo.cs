@@ -305,6 +305,8 @@ namespace Proyecto2_201122872.Generacion3D
                                ParseTreeNode nodoExpThis = nodo.ChildNodes[1];
                                string nombreId = opIzq.ChildNodes[0].Token.ValueString;
 
+
+
                                #endregion
                            }
                        }
@@ -2060,6 +2062,23 @@ namespace Proyecto2_201122872.Generacion3D
 
         #region validacionTipos Retorna de que tipo es la expresion
 
+
+        private Boolean esObjeto(String tipo)
+        {
+            if (tipo.Equals(Constantes.tipoBool, StringComparison.OrdinalIgnoreCase) ||
+                tipo.Equals(Constantes.tipoCadena, StringComparison.OrdinalIgnoreCase) ||
+                tipo.Equals(Constantes.tipoChar, StringComparison.OrdinalIgnoreCase) ||
+                tipo.Equals(Constantes.tipoDecimal, StringComparison.OrdinalIgnoreCase) ||
+                tipo.Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         private object validarTipo(ParseTreeNode nodo, Ambitos ambito)
         {
             switch (nodo.Term.Name)
@@ -2193,6 +2212,39 @@ namespace Proyecto2_201122872.Generacion3D
                     }
                 #endregion
 
+                #region this
+
+                case "THIS":
+                    {
+                        //tipoAtributoClase(string nombreClase, String nombreAtributo)
+                        int noHijos = nodo.ChildNodes.Count;
+                        string nombreAtributo = nodo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                        string tipoAtributo = tablaSimbolos.getTipo(nombreAtributo,ambito);
+                        if(noHijos>1){
+                            if(esObjeto(tipoAtributo)){
+                                for (int i = 1; i < nodo.ChildNodes.Count; i++)
+                                {
+                                    nombreAtributo = nodo.ChildNodes[i].ChildNodes[0].Token.ValueString;
+                                    tipoAtributo = uml.tipoAtributoClase(tipoAtributo, nombreAtributo);
+
+                                }
+                                return tipoAtributo;
+                            }
+                            else
+                            {
+                                ErrorA nuevo = new ErrorA(Constantes.errorSemantico, "Elemento de tipo " + tipoAtributo + ", no posee atributos", nodo.FindToken());
+                                Form1.errores.addError(nuevo);
+                            }
+                        }else{
+                            return tipoAtributo;
+                        }
+                        
+
+                        return "nulo";
+
+
+                    }
+                #endregion
 
                 #region Logicas
 
@@ -2775,10 +2827,7 @@ namespace Proyecto2_201122872.Generacion3D
          */
 
 
-        private Boolean esValidaLlamada()
-        {
-            return false;
-        }
+      
 
         public object resolverExpresiones(ParseTreeNode nodo, Ambitos ambiente, String nombreClase, String nommbreMetodo)
         {

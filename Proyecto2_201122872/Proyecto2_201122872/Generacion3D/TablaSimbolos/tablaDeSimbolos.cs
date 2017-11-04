@@ -153,9 +153,7 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
 
         public string getFirmaMetodo(String nombreClase, String cadenaParametros, string nombreMetodo)
         {
-            Console.WriteLine("kkkkkkkkkkkkkkkkkkkkkkk");
-            Console.WriteLine(nombreClase + "   " + cadenaParametros + "  " + nombreMetodo);
-            Console.WriteLine("kkkkkkkkkkkkkkkkkkkkkkk");
+           
             foreach (Simbolo item in tabla)
             {
                

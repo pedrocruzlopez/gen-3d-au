@@ -71,7 +71,18 @@ namespace Proyecto2_201122872.UML
             return this.nombre;
         }
 
-       
+
+        public string tipoAtributo(String nombreAtributo)
+        {
+            foreach (Atributo item in this.atributos.atributos)
+            {
+                if (item.getNombre().Equals(nombreAtributo, StringComparison.OrdinalIgnoreCase))
+                {
+                    return item.tipo;
+                }
+            }
+            return "nulo";
+        }
 
         /*------------ Atibutos ----------------------*/
 

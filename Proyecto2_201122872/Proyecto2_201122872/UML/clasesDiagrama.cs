@@ -33,6 +33,20 @@ namespace Proyecto2_201122872.UML
         }
 
 
+       public string tipoAtributoClase(string nombreClase, String nombreAtributo){
+
+           foreach (Clase item in listaClases)
+           {
+               if (nombreClase.Equals(item.getNombre(), StringComparison.OrdinalIgnoreCase))
+               {
+                   return item.tipoAtributo(nombreAtributo);
+               }
+
+           }
+           return "nulo";
+       }
+
+
         public Boolean insertarClase(Clase nueva)
         {
             if(!existeClase(nueva.getNombre()))
