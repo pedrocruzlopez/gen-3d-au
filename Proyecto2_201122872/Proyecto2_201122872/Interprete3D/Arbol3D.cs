@@ -51,7 +51,7 @@ namespace Proyecto2_201122872.Interprete3D
                  //accion.Evaluar(s_tree.Root, nombreMain);//EVALUO EL ARBOL
                // Console.WriteLine("==================================================");
                // dispTree(s_tree.Root, 0);//IMPRIMO EL ARBOL
-                graficarArbol(s_tree.Root);//GRAFICO EL ARBOL
+               // graficarArbol(s_tree.Root);//GRAFICO EL ARBOL
                 return s_tree.Root;
             }
             else

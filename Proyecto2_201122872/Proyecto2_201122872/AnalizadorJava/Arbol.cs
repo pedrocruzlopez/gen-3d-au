@@ -46,7 +46,7 @@ namespace Proyecto2_201122872.AnalizadorJava
                 uml = accion.generarUML2(s_tree.Root);//EVALUO EL ARBOL
                 Console.WriteLine("==================================================");
                 //dispTree(s_tree.Root, 0);//IMPRIMO EL ARBOL
-                graficarArbol(s_tree.Root);//GRAFICO EL ARBOL
+               // graficarArbol(s_tree.Root);//GRAFICO EL ARBOL
                 return uml;
             }
             else
@@ -75,8 +75,8 @@ namespace Proyecto2_201122872.AnalizadorJava
                 Console.WriteLine("========ACCIONES AL EVVALUAR EL ARBOL=============");
                  accion.generarUML(s_tree.Root);//EVALUO EL ARBOL
                 Console.WriteLine("==================================================");
-                dispTree(s_tree.Root, 0);//IMPRIMO EL ARBOL
-                graficarArbol(s_tree.Root);//GRAFICO EL ARBOL
+               // dispTree(s_tree.Root, 0);//IMPRIMO EL ARBOL
+               // graficarArbol(s_tree.Root);//GRAFICO EL ARBOL
             }
             else
                 MessageBox.Show(null, "Entrada posee errores", "Error", 0);
@@ -99,8 +99,8 @@ namespace Proyecto2_201122872.AnalizadorJava
                 Console.WriteLine("========ACCIONES AL EVVALUAR EL ARBOL=============");
                // accion.Evaluar(s_tree.Root);//EVALUO EL ARBOL
                 Console.WriteLine("==================================================");
-                dispTree(s_tree.Root, 0);//IMPRIMO EL ARBOL
-                graficarArbol(s_tree.Root);//GRAFICO EL ARBOL
+               // dispTree(s_tree.Root, 0);//IMPRIMO EL ARBOL
+               // graficarArbol(s_tree.Root);//GRAFICO EL ARBOL
                 return s_tree.Root;
             }
             else

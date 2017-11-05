@@ -173,7 +173,7 @@ namespace Proyecto2_201122872.Interprete3D
                 if (!esNula(val))
                 {
                     int indice = (int)val;
-                    temporales.agregarTemp(new Temporal(id, indice));
+                    temporales.agregarTemp(new Temporal(id,Heap[ indice]));
 
                 }
                 else
@@ -290,6 +290,31 @@ namespace Proyecto2_201122872.Interprete3D
 
                 case "llamada":
                     {
+                        Console.WriteLine("entre en una llamada");
+                        ParseTreeNode metodoTemporal, cuerpoTemporal;
+                        string nombreLlamada = nodo.ChildNodes[0].Token.ValueString;
+                        for (int i = 0; i < raiz3D.ChildNodes.Count; i++)
+                        {
+                            metodoTemporal = raiz3D.ChildNodes[i];
+                            if (metodoTemporal.ChildNodes[0].Token.ValueString.Equals(nombreLlamada, StringComparison.OrdinalIgnoreCase))
+                            {
+                                Console.WriteLine("entre al cuerpo de la llamada ");
+                                cuerpoTemporal = metodoTemporal.ChildNodes[1];
+                                for (int j = 0; j < cuerpoTemporal.ChildNodes.Count; j++)
+                                {
+                                    if (bandera == 1)
+                                    {
+                                        break;
+                                    }
+                                    ejecutarInstruccion(cuerpoTemporal.ChildNodes[j]);
+
+                                }
+                                break;
+
+                            }
+
+                        }
+
 
                         break;
                     }
@@ -378,8 +403,14 @@ namespace Proyecto2_201122872.Interprete3D
         public String imprimir_str(Object pos)
         {
             String cadena = "";
-            //int ascii = (int)pos; 
-            int posicion = (int)pos;
+            //int ascii = (int)pos;
+            int posicion;// = (int)pos;
+           // if (pos is Double)
+                posicion = int.Parse(pos.ToString());
+           // else if (valor is int)
+               // Pila[ind] = (int)valor;
+            
+
             double h;
             while (true)
             {

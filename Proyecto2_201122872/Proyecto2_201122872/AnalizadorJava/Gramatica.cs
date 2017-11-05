@@ -149,7 +149,8 @@ namespace Proyecto2_201122872.AnalizadorJava
             NonTerminal SUPER = new NonTerminal("SUPER");
             NonTerminal LLAMADAOBJETO = new NonTerminal("LLAMADA_OBJETO");
 
-          
+            NonTerminal tipoLista = new NonTerminal("tipoElemento");
+            
 
 
 
@@ -216,7 +217,9 @@ namespace Proyecto2_201122872.AnalizadorJava
                 | VISIBILIDAD + TIPO + identificador + LPOSICIONES + ToTerm(";")
                 | VISIBILIDAD + TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";"
                 | TIPO + identificador + LPOSICIONES + ToTerm(";")
-                | TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";";
+                | TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";"
+                | TIPO + identificador + ToTerm("=") + INSTANCIA + ";"
+                | VISIBILIDAD + TIPO + identificador + ToTerm("=") + INSTANCIA + ";";
 
 
             L_IDS.Rule = MakePlusRule(L_IDS, ToTerm(","), identificador);
@@ -398,9 +401,16 @@ namespace Proyecto2_201122872.AnalizadorJava
                 | ToTerm("(") + TERMINO + ")"//no es necesario en python
                 | NEGATIVO
                 | "{" + LFILAS + "}"
-                | THIS;//no existe en python;
+                | THIS
+                | LLAMADAOBJETO;//no existe en python;
                // | INSTANCIA;//
 
+            
+            
+            tipoLista.Rule = ID
+                | LLAMADA;
+
+            LLAMADAOBJETO.Rule = MakePlusRule(LLAMADAOBJETO, ToTerm("."), tipoLista);
             THIS.Rule = ToTerm(Constantes.este) + "." + ID;
 
             LLAMADA.Rule = identificador + ToTerm("(") + LEXPRESIONES + ")"
@@ -443,12 +453,12 @@ namespace Proyecto2_201122872.AnalizadorJava
             MarkPunctuation(Constantes.este,",", "(", ")", ";", "=", "@", "{","}","clase","[","]",Constantes.nuevo,".","si","sino",
                 "mientras","hacer","para","x","repetir","return","imprimir",Constantes.masmas, Constantes.menosmenos,
                 Constantes.menor, Constantes.mayor, Constantes.menorIgual, Constantes.mayorIgual, Constantes.igualIgual, Constantes.distintoA,
-                Constantes.principal,Constantes.orJava, Constantes.andJava, Constantes.xorJava, Constantes.notJavaPython,sobreescribir,"*","^","+","-","/");
+                Constantes.principal,Constantes.orJava, Constantes.andJava, Constantes.xorJava, Constantes.notJavaPython,sobreescribir,"*","^","+","-","/", Constantes.retorno);
 
 
            
            MarkTransient(L_ELEMENTOS, ELEMENTO,POSICION,SIMB_ARIT,SIMB_LOG,SIMB_REL,DECLAPARA, INSTRUCCION, INSTRUCCIONES,
-               ARITMETICA,LOGICA,RELACIONAL,UNARIO,INSTRUCCIONES,TERMINO,CUERPO_CLASE);
+               ARITMETICA,LOGICA,RELACIONAL,UNARIO,INSTRUCCIONES,TERMINO,CUERPO_CLASE, tipoLista);
 
 
 

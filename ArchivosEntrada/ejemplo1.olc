@@ -1,34 +1,57 @@
 clase Persona{
 	entero edad = 15;
-	cadena nombre = "pablo";
-	persona nuevaPersona;
+	cadena nombre = "oli";
+	//persona nuevaPersona= new Persona();
 
 	 Persona(entero a, entero b){
-		 entero temp = 25;
-		 imprimir("hola mundo");
-		 imprimir(185);
+		// entero temp = 25+5;
+		// imprimir(temp);
+		 //imprimir(este.edad);
+		 //imprimir("hola mundo");
+		 //imprimir(185);
+		 //este.nombre="Pedrito lindo";
+		 //este.edad=este.edad+temp;
+		 //imprimir(este.edad);
+		 //imprimir(este.nombre);
+		 //imprimir(a);
+		 //imprimir('b');
+		 este.edad = a + valor(55,2)+val2()+val3();
+		 imprimir(este.edad);
+		 imprimir(a);
+		 imprimir(a+2+b);
 		//this.edad = temp;
 	}
 	
-
-	publico void crecer (entero anios){
-		//this.edad = this.edad + anios;
+	publico entero valor(entero val, entero val2){
+	
+		return (val*val2);
+	}
+	
+	publico entero val2(){
+	return (13);
+	}
+	
+	publico entero val3(){
+	  return (100*2);
 	}
 
-	publico void main(){
+	/*publico void crecer (entero anios){
+		this.edad = this.edad + valor();
+	}*/
+
+	principal(){
 		//imprimir(este.nuevaPersona);
 		//imprimir("hola mundo");
 		//imprimir(185);
 		//imprimir(4.4);
 		//imprimir('a');
-		entero temp = 89;
+		//entero temp = 89;
 		//imprimir(temp);
-		imprimir(este.edad);
-		este.edad=56;
-		imprimir(este.edad);
-		temp= este.edad+3;
-		imprimir(edad);
-		Persona pablo = new Persona(5,10);
+		
+		
+		
+		//imprimir(temp);
+		Persona pablo = new Persona(888,12);
 		//print(pablo.edad);
 		//pablo.crecer(2);
 	}

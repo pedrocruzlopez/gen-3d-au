@@ -206,8 +206,29 @@ namespace Proyecto2_201122872.AnalizadorJava
             Atributo nuevo;
             int noHijos = nodoAtributo.ChildNodes.Count;
             string tipo, nombre, visibilidad;
+       
+            
+            if(noHijos == 3  && nodoAtributo.ChildNodes[2].Term.Name.Equals(Constantes.instancia, StringComparison.OrdinalIgnoreCase) ){
+                ////TIPO + identificador + ToTerm("=") + INSTANCIA + ";"
+                visibilidad = Constantes.publico;
+                tipo = nodoAtributo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                nombre = nodoAtributo.ChildNodes[1].Token.ValueString;
 
-            if (noHijos == 5)
+                nuevo = new Atributo(visibilidad, nombre, tipo, getTipoAtributo(tipo));
+                nuevo.setExpresionAtributo(nodoAtributo.ChildNodes[2]);
+                lista.Add(nuevo);
+            }
+
+            else if (noHijos == 4 && nodoAtributo.ChildNodes[3].Term.Name.Equals(Constantes.instancia, StringComparison.OrdinalIgnoreCase))
+            {//VISIBILIDAD + TIPO + identificador + ToTerm("=") + INSTANCIA
+                visibilidad = nodoAtributo.ChildNodes[0].ChildNodes[0].Token.ValueString;
+                tipo = nodoAtributo.ChildNodes[1].ChildNodes[0].Token.ValueString;
+                nombre = nodoAtributo.ChildNodes[2].Token.ValueString;
+                nuevo = new Atributo(visibilidad, nombre, tipo, getTipoAtributo(tipo));
+                nuevo.setExpresionAtributo(nodoAtributo.ChildNodes[3]);
+                lista.Add(nuevo);
+            }
+            else if (noHijos == 5)
             {//arreglo con filas declaradas y visibilidad
                 // VISIBILIDAD + TIPO + identificador + LPOSICIONES + ToTerm("=") + "{" + LFILAS + "}" + ";"
                 visibilidad = nodoAtributo.ChildNodes[0].ChildNodes[0].Token.ValueString;

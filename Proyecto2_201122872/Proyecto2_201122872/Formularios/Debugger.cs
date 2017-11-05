@@ -206,6 +206,7 @@ namespace Proyecto2_201122872.Formularios
             guardarComo();
         }
 
+
         private void toolStripButton6_Click(object sender, EventArgs e)
         {
             //ejecutar
@@ -241,7 +242,7 @@ namespace Proyecto2_201122872.Formularios
             Console.WriteLine("------- fin codigo --------------");
             Console.WriteLine("------ Inicio ejecucion 3d--------");
             fastColoredTextBox1.Text = generador.c3d.codigo3D;
-            analizador3D.nombreMain="depos2_void_depos2_entero_entero";
+            //analizador3D.nombreMain="depos2_void_depos2_entero_entero";
            //analizador3D.parse(generador.c3d.codigo3D);
            Console.WriteLine("------- fin ejecucion 3d------");
           // Console.WriteLine("------- heap ------");
@@ -300,13 +301,14 @@ namespace Proyecto2_201122872.Formularios
             //Console.WriteLine(generador.c3d.codigo3D);
             String contenido = getCadenaArchivo(@"C:\Test.txt");
             analizador3D = new Arbol3D();
-            analizador3D.nombreMain = "Persona_void_main";
+            analizador3D.nombreMain = "Principal";
             analizador3D.parse(contenido);
             Console.WriteLine("------ fin codigo  -------");
             Console.WriteLine(analizador3D.accion.imprimir_heap());
             Console.WriteLine("stack================");
-           Console.WriteLine( analizador3D.accion.imprimir_pila());
-           Console.WriteLine(analizador3D.accion.Imprimir);
+            Console.WriteLine( analizador3D.accion.imprimir_pila());
+            fastColoredTextBox2.Text = analizador3D.accion.Imprimir;
+           
             
 
         }
@@ -374,6 +376,38 @@ namespace Proyecto2_201122872.Formularios
                 Console.WriteLine(caracter + "->" + ascii);
             }
 
+
+        }
+
+        private void cArpetaRaizToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            seleccionarRutaProyecto();
+        }
+
+
+        private void seleccionarRutaProyecto()
+        {
+
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    string[] files = Directory.GetFiles(fbd.SelectedPath);
+                    for (int i = 0; i <files.Length; i++)
+                    {
+                        Console.WriteLine(files[i]);
+                    }
+                    System.Windows.Forms.MessageBox.Show("Files found: " + files.Length.ToString(), "Message");
+                }
+            }
+        }
+
+        private void erroresToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Reportes g = new Reportes();
+            g.Show();
 
         }
 

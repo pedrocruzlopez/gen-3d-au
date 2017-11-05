@@ -53,7 +53,7 @@ namespace Proyecto2_201122872
             Object g = "";
             if (raiz != null)
             {
-                g = generador.evaluarExp(raiz);
+                //g = generador.evaluarExp(raiz);
 
             }
 

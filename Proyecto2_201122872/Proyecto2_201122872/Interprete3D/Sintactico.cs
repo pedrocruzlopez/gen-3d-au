@@ -107,7 +107,7 @@ namespace Proyecto2_201122872.Interprete3D
 
              instrucciones.Rule = MakeStarRule(instrucciones, instruccion);
 
-             main.Rule = ToTerm("principal") + identificador + "(" + ")" + "{" + instrucciones + "}";
+             main.Rule = ToTerm("principal")  + "(" + ")" + "{" + instrucciones + "}";
              metodo.Rule = ToTerm(Constantes.tipoVoid) + identificador + "(" + ")" + "{" + instrucciones + "}";
 
              

@@ -109,6 +109,7 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
         }
         public int getPosicion(string id, Ambitos ambito) //busca la posicion de un id dentro de un ambiente local
         {
+            bool bandera = false;
             for (int i = 0; i < ambito.ambitos.Count; i++)
             {
                 if (i != ambito.ambitos.Count - 1)
@@ -119,9 +120,12 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
                         if (simb.ambito.Equals(amb, StringComparison.OrdinalIgnoreCase) &&
                             simb.nombreReal.Equals(id, StringComparison.OrdinalIgnoreCase))
                         {
+                            bandera = true;
                             return simb.apuntador;
                         }
                     }
+                    if (bandera)
+                        break;
 
                 }
                     
@@ -167,6 +171,31 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
                 
             }
             return "";
+        }
+
+
+        public string getFirmaMetodoFuncion(String nombreClase, String cadenaParametros, string nombreMetodo)
+        {
+
+            foreach (Simbolo item in tabla)
+            {
+
+                Console.WriteLine(item.ambito + " " + item.tipoParametrosCadena + "  " + item.nombreFuncion);
+                if (item.ambito.Equals(nombreClase, StringComparison.OrdinalIgnoreCase) &&
+                    item.tipoParametrosCadena.ToUpper().Equals(cadenaParametros.ToUpper(), StringComparison.OrdinalIgnoreCase) &&
+                    item.nombreFuncion.Equals(nombreMetodo, StringComparison.OrdinalIgnoreCase))
+                {
+                    return item.nombreReal;
+                }
+
+            }
+            return "";
+        }
+
+
+        public string getTipoFuncion(String nombreClase, string cadenaParametros, String nombreMetodo)
+        {
+            return "nulo";
         }
 
         public string getTipo(string id, Ambitos ambito) //obtiene el tipo de una variable

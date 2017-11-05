@@ -44,6 +44,8 @@
             this.reportesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tablaDeSimbolosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.erroresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.cArpetaRaizToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
@@ -55,6 +57,7 @@
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton7 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton8 = new System.Windows.Forms.ToolStripButton();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tabControl2 = new System.Windows.Forms.TabControl();
@@ -68,7 +71,6 @@
             this.fastColoredTextBox3 = new FastColoredTextBoxNS.FastColoredTextBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.toolStripButton8 = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -96,7 +98,8 @@
             this.toolStripMenuItem1,
             this.depurarToolStripMenuItem,
             this.codigoCompartidoToolStripMenuItem,
-            this.reportesToolStripMenuItem});
+            this.reportesToolStripMenuItem,
+            this.toolStripMenuItem2});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1151, 24);
@@ -187,6 +190,22 @@
             this.erroresToolStripMenuItem.Name = "erroresToolStripMenuItem";
             this.erroresToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.erroresToolStripMenuItem.Text = "Errores";
+            this.erroresToolStripMenuItem.Click += new System.EventHandler(this.erroresToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cArpetaRaizToolStripMenuItem});
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(125, 20);
+            this.toolStripMenuItem2.Text = "toolStripMenuItem2";
+            // 
+            // cArpetaRaizToolStripMenuItem
+            // 
+            this.cArpetaRaizToolStripMenuItem.Name = "cArpetaRaizToolStripMenuItem";
+            this.cArpetaRaizToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.cArpetaRaizToolStripMenuItem.Text = "CArpeta Raiz";
+            this.cArpetaRaizToolStripMenuItem.Click += new System.EventHandler(this.cArpetaRaizToolStripMenuItem_Click);
             // 
             // toolStrip1
             // 
@@ -293,6 +312,16 @@
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
+            // toolStripButton8
+            // 
+            this.toolStripButton8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton8.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton8.Image")));
+            this.toolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton8.Name = "toolStripButton8";
+            this.toolStripButton8.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton8.Text = "toolStripButton8";
+            this.toolStripButton8.Click += new System.EventHandler(this.toolStripButton8_Click_1);
+            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -347,7 +376,7 @@
             this.fastColoredTextBox2.Paddings = new System.Windows.Forms.Padding(0);
             this.fastColoredTextBox2.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fastColoredTextBox2.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fastColoredTextBox2.ServiceColors")));
-            this.fastColoredTextBox2.Size = new System.Drawing.Size(1123, 271);
+            this.fastColoredTextBox2.Size = new System.Drawing.Size(1123, 438);
             this.fastColoredTextBox2.TabIndex = 0;
             this.fastColoredTextBox2.Zoom = 100;
             // 
@@ -408,7 +437,7 @@
             this.fastColoredTextBox1.Paddings = new System.Windows.Forms.Padding(0);
             this.fastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fastColoredTextBox1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fastColoredTextBox1.ServiceColors")));
-            this.fastColoredTextBox1.Size = new System.Drawing.Size(1107, 258);
+            this.fastColoredTextBox1.Size = new System.Drawing.Size(1107, 429);
             this.fastColoredTextBox1.TabIndex = 0;
             this.fastColoredTextBox1.Zoom = 100;
             // 
@@ -448,7 +477,7 @@
             this.fastColoredTextBox3.Paddings = new System.Windows.Forms.Padding(0);
             this.fastColoredTextBox3.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fastColoredTextBox3.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fastColoredTextBox3.ServiceColors")));
-            this.fastColoredTextBox3.Size = new System.Drawing.Size(1123, 274);
+            this.fastColoredTextBox3.Size = new System.Drawing.Size(1123, 445);
             this.fastColoredTextBox3.TabIndex = 0;
             this.fastColoredTextBox3.Zoom = 100;
             // 
@@ -471,16 +500,6 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(1113, 435);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // toolStripButton8
-            // 
-            this.toolStripButton8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton8.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton8.Image")));
-            this.toolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton8.Name = "toolStripButton8";
-            this.toolStripButton8.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton8.Text = "toolStripButton8";
-            this.toolStripButton8.Click += new System.EventHandler(this.toolStripButton8_Click_1);
             // 
             // Debugger
             // 
@@ -554,5 +573,7 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton toolStripButton8;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem cArpetaRaizToolStripMenuItem;
     }
 }
