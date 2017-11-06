@@ -1,6 +1,12 @@
+clase estudiante{
+	cadena nombre="alina";
+	
+	
+}
 clase Persona{
 	entero edad = 15;
 	cadena nombre = "oli";
+	estudiante alis = new estudiante();
 	//persona nuevaPersona= new Persona();
 
 	 Persona(entero a, entero b){
@@ -15,16 +21,25 @@ clase Persona{
 		 //imprimir(este.nombre);
 		 //imprimir(a);
 		 //imprimir('b');
+		 imprimir(este.nombre);
 		 este.edad = a + valor(55,2)+val2()+val3();
+		 este.nombre= getNombre();
+		 imprimir(este.nombre);
 		 imprimir(este.edad);
 		 imprimir(a);
 		 imprimir(a+2+b);
+		 //imprimir(este.pablo.alis.nombre);
 		//this.edad = temp;
 	}
 	
 	publico entero valor(entero val, entero val2){
 	
 		return (val*val2);
+	}
+	
+	privado cadena getNombre(){
+		
+		return("alina bonita");
 	}
 	
 	publico entero val2(){
@@ -47,9 +62,6 @@ clase Persona{
 		//imprimir('a');
 		//entero temp = 89;
 		//imprimir(temp);
-		
-		
-		
 		//imprimir(temp);
 		Persona pablo = new Persona(888,12);
 		//print(pablo.edad);

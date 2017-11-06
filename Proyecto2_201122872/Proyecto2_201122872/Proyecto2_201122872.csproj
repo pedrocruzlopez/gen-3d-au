@@ -116,6 +116,7 @@
     <Compile Include="Interprete3D\Ejecucion3D\ListaTemporales.cs" />
     <Compile Include="Interprete3D\Ejecucion3D\Temporal.cs" />
     <Compile Include="Interprete3D\Sintactico.cs" />
+    <Compile Include="Persona.cs" />
     <Compile Include="Principal.cs">
       <SubType>Form</SubType>
     </Compile>

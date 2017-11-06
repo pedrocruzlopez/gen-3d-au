@@ -193,6 +193,24 @@ namespace Proyecto2_201122872.Generacion3D.TablaSimbolos
         }
 
 
+        public string getTipoMetodoFuncion(String nombreClase, String cadenaParametros, string nombreMetodo)
+        {
+
+            foreach (Simbolo item in tabla)
+            {
+
+                Console.WriteLine(item.ambito + " " + item.tipoParametrosCadena + "  " + item.nombreFuncion);
+                if (item.ambito.Equals(nombreClase, StringComparison.OrdinalIgnoreCase) &&
+                    item.tipoParametrosCadena.ToUpper().Equals(cadenaParametros.ToUpper(), StringComparison.OrdinalIgnoreCase) &&
+                    item.nombreFuncion.Equals(nombreMetodo, StringComparison.OrdinalIgnoreCase))
+                {
+                    return item.tipo;
+                }
+
+            }
+            return "";
+        }
+
         public string getTipoFuncion(String nombreClase, string cadenaParametros, String nombreMetodo)
         {
             return "nulo";

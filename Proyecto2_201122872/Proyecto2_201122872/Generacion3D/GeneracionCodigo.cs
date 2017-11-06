@@ -80,8 +80,6 @@ namespace Proyecto2_201122872.Generacion3D
         }
 
 
-
-
         /*------------------------------------- Generacion de codigo -------------------------------------*/
 
         #region escribirC3D clases
@@ -184,7 +182,7 @@ namespace Proyecto2_201122872.Generacion3D
                 case Constantes.retorno:
                     {
 
-                        string tipoExpresion = validarTipo(nodo.ChildNodes[0], ambitos).ToString();
+                        string tipoExpresion = validarTipo(nodo.ChildNodes[0], ambitos, nombreClase, nombreMetodo).ToString();
                         Console.WriteLine("retornor de tipo " + tipoExpresion);
 
                         string temp1 = c3d.getTemporal();
@@ -278,7 +276,7 @@ namespace Proyecto2_201122872.Generacion3D
 
                                             if (!nodo.ChildNodes[1].Term.Name.Equals(Constantes.instancia))
                                             {
-                                                Object tipoExpresion = validarTipo(nodoExpThis, ambitos);
+                                                Object tipoExpresion = validarTipo(nodoExpThis, ambitos,nombreClase,nombreMetodo);
                                                 if (tipoExpresion.ToString().Equals(tipoId, StringComparison.OrdinalIgnoreCase))
                                                 {
                                                     c3d.addCodigo(l1);
@@ -392,7 +390,7 @@ namespace Proyecto2_201122872.Generacion3D
                                                 string cad = "";
                                                 for (int i = 0; i < nodoInstancia.ChildNodes[1].ChildNodes.Count; i++)
                                                 {
-                                                    cad += validarTipo(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambitos);//resolverExpresiones(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambitos, nombreClase, nombreMetodo);
+                                                    cad += validarTipo(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambitos,nombreClase,nombreMetodo);//resolverExpresiones(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambitos, nombreClase, nombreMetodo);
                                                 }
 
                                                 string firmaMetodo = tablaSimbolos.getFirmaMetodo(nombreClase, cad, nombreMetodo);
@@ -416,7 +414,7 @@ namespace Proyecto2_201122872.Generacion3D
                                                     {
                                                         if (item.expresionAtributo != null)
                                                         {//genero el codigo3d para el atributo
-                                                            Object tipoExpAtributo = validarTipo(item.expresionAtributo, ambitos);
+                                                            Object tipoExpAtributo = validarTipo(item.expresionAtributo, ambitos,nombreClase,nombreMetodo);
                                                             if (tipoExpAtributo.ToString().Equals(item.tipo, StringComparison.OrdinalIgnoreCase))
                                                             {
                                                                 string temp1_1 = c3d.getTemporal();
@@ -525,7 +523,7 @@ namespace Proyecto2_201122872.Generacion3D
                                                 {
                                                     if (item.expresionAtributo != null)
                                                     {//genero el codigo3d para el atributo
-                                                        Object tipoExpAtributo = validarTipo(item.expresionAtributo, ambitos);
+                                                        Object tipoExpAtributo = validarTipo(item.expresionAtributo, ambitos,nombreClase,nombreMetodo);
                                                         if (tipoExpAtributo.ToString().Equals(item.tipo, StringComparison.OrdinalIgnoreCase))
                                                         {
                                                             string temp1_1 = c3d.getTemporal();
@@ -632,7 +630,7 @@ namespace Proyecto2_201122872.Generacion3D
                                         //es una variabel local
                                         string temp1 = c3d.getTemporal();
                                         string l1 = temp1 + " = P + " + posId + "; //pos de " + nombreDeclaracion;
-                                        Object tipoExp = validarTipo(nodoExpresion, ambitos);
+                                        Object tipoExp = validarTipo(nodoExpresion, ambitos,nombreClase,nombreMetodo);
                                         if (tipoExp.ToString().Equals(tipo, StringComparison.OrdinalIgnoreCase))
                                         {
                                             Object val = resolverExpresiones(nodoExpresion, ambitos, nombreClase, nombreMetodo);
@@ -748,7 +746,7 @@ namespace Proyecto2_201122872.Generacion3D
                     {
                         //IMPRIMIR.Rule = ToTerm(Constantes.imprimir) + "(" + EXPRESION + ")"+";";
                         // OUT_STRING.Rule = ToTerm(Constantes.out_string) + "[" + EXPRESION + "]";
-                        Object tipoImpresion = validarTipo(nodo.ChildNodes[0], ambitos);
+                        Object tipoImpresion = validarTipo(nodo.ChildNodes[0], ambitos,nombreClase,nombreMetodo);
                         Object val = resolverExpresiones(nodo.ChildNodes[0], ambitos, nombreClase, nombreMetodo);
                         if (tipoImpresion.ToString().Equals(Constantes.tipoBool, StringComparison.OrdinalIgnoreCase) ||
                             tipoImpresion.ToString().Equals(Constantes.tipoEntero, StringComparison.OrdinalIgnoreCase))
@@ -784,6 +782,9 @@ namespace Proyecto2_201122872.Generacion3D
 
 
         }
+
+
+
 
 
 
@@ -842,31 +843,53 @@ namespace Proyecto2_201122872.Generacion3D
             }
         }
 
-        private object validarTipo(ParseTreeNode nodo, Ambitos ambito)
+        private object validarTipo(ParseTreeNode nodo, Ambitos ambito, string nombreClase, string nombreMetodo)
         {
             switch (nodo.Term.Name)
             {
 
                 case Constantes.llamada:
                     {
-                        return Constantes.tipoEntero;
+                        int noHijos = nodo.ChildNodes.Count;
+                        string firmaLlamada = "nulo";
+                        String nombreLlamada = nodo.ChildNodes[0].Token.ValueString;
+                        if (noHijos == 1)
+                        {
+                             firmaLlamada = tablaSimbolos.getTipoMetodoFuncion(nombreClase, "", nombreLlamada);
+                            return firmaLlamada;
+
+                        }
+                        else
+                        {
+                            string cad = "";
+                            for (int i = 0; i < nodo.ChildNodes[1].ChildNodes.Count; i++)
+                            {
+                                cad += validarTipo(nodo.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambito,nombreClase,nombreMetodo);//resolverExpresiones(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambitos, nombreClase, nombreMetodo);
+                            }
+                             firmaLlamada = tablaSimbolos.getTipoMetodoFuncion(nombreClase, cad, nombreLlamada);
+                            return firmaLlamada;
+                        }
+
+                        return "nulo";
                     }
 
+                #region instancia
                 case Constantes.instancia:
                     {
-                        /*INSTANCIA.Rule = Constantes.nuevo + identificador + "(" + LEXPRESIONES + ")"
-                | Constantes.nuevo + identificador + "(" + ")";*/
                         return nodo.ChildNodes[0].Token.ValueString;
                     }
+                #endregion
 
+                #region globales expresion
                 case Constantes.termino:
                     {
-                        return validarTipo(nodo.ChildNodes[0], ambito);
+                        return validarTipo(nodo.ChildNodes[0], ambito,nombreClase, nombreMetodo);
                     }
                 case Constantes.expresion:
                     {
-                        return validarTipo(nodo.ChildNodes[0], ambito);
+                        return validarTipo(nodo.ChildNodes[0], ambito, nombreClase, nombreMetodo);
                     }
+                #endregion
 
                 #region valores primitivos y Id (leer la i en ingles jaja asi no se lee y i)
 
@@ -912,35 +935,35 @@ namespace Proyecto2_201122872.Generacion3D
 
                 case Constantes.suma:
                     {
-                        object tipo1 = validarTipo(nodo.ChildNodes[0], ambito);
-                        object tipo2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        object tipo1 = validarTipo(nodo.ChildNodes[0], ambito, nombreClase, nombreMetodo);
+                        object tipo2 = validarTipo(nodo.ChildNodes[1], ambito, nombreClase, nombreMetodo);
                         return validarSuma(tipo1, tipo2);
                     }
                 case Constantes.resta:
                     {
-                        object tipo1 = validarTipo(nodo.ChildNodes[0], ambito);
-                        object tipo2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        object tipo1 = validarTipo(nodo.ChildNodes[0], ambito, nombreClase, nombreMetodo);
+                        object tipo2 = validarTipo(nodo.ChildNodes[1], ambito, nombreClase, nombreMetodo);
                         return validarResta(tipo1, tipo2);
                     }
 
                 case Constantes.multiplicacion:
                     {
-                        object tipo1 = validarTipo(nodo.ChildNodes[0], ambito);
-                        object tipo2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        object tipo1 = validarTipo(nodo.ChildNodes[0], ambito, nombreClase, nombreMetodo);
+                        object tipo2 = validarTipo(nodo.ChildNodes[1], ambito, nombreClase, nombreMetodo);
                         return validarMultiplicacion(tipo1, tipo2);
                     }
 
                 case Constantes.division:
                     {
-                        object tipo1 = validarTipo(nodo.ChildNodes[0], ambito);
-                        object tipo2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        object tipo1 = validarTipo(nodo.ChildNodes[0], ambito, nombreClase, nombreMetodo);
+                        object tipo2 = validarTipo(nodo.ChildNodes[1], ambito, nombreClase, nombreMetodo);
                         return validarDivision(tipo1, tipo2);
                     }
 
                 case Constantes.potencia:
                     {
-                        object tipo1 = validarTipo(nodo.ChildNodes[0], ambito);
-                        object tipo2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        object tipo1 = validarTipo(nodo.ChildNodes[0], ambito, nombreClase, nombreMetodo);
+                        object tipo2 = validarTipo(nodo.ChildNodes[1], ambito, nombreClase, nombreMetodo);
                         return validarPotencia(tipo1, tipo2);
                     }
 
@@ -950,44 +973,44 @@ namespace Proyecto2_201122872.Generacion3D
 
                 case Constantes.mayor:
                     {
-                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito);
-                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito, nombreClase, nombreMetodo);
+                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito, nombreClase, nombreMetodo);
                         return validarRelacional(val1, val2);
                     }
 
                 case Constantes.menor:
                     {
-                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito);
-                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito, nombreClase, nombreMetodo);
+                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito, nombreClase, nombreMetodo);
                         return validarRelacional(val1, val2);
                     }
 
                 case Constantes.mayorIgual:
                     {
-                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito);
-                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito, nombreClase, nombreMetodo);
+                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito, nombreClase, nombreMetodo);
                         return validarRelacional(val1, val2);
                     }
 
 
                 case Constantes.menorIgual:
                     {
-                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito);
-                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito, nombreClase, nombreMetodo);
+                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito, nombreClase, nombreMetodo);
                         return validarRelacional(val1, val2);
                     }
 
                 case Constantes.distintoA:
                     {
-                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito);
-                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito, nombreClase, nombreMetodo);
+                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito, nombreClase, nombreMetodo);
                         return validarRelacional(val1, val2);
                     }
 
                 case Constantes.igualIgual:
                     {
-                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito);
-                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito, nombreClase, nombreMetodo);
+                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito, nombreClase, nombreMetodo);
                         return validarRelacional(val1, val2);
                     }
                 #endregion
@@ -1030,31 +1053,32 @@ namespace Proyecto2_201122872.Generacion3D
                     }
                 #endregion
 
+
                 #region Logicas
 
                 case Constantes.andJava:
                     {
-                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito);
-                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito, nombreClase, nombreMetodo);
+                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito, nombreClase, nombreMetodo);
                         return validarLogica(val1, val2);
                     }
                 case Constantes.orJava:
                     {
-                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito);
-                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito, nombreClase, nombreMetodo);
+                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito, nombreClase, nombreMetodo);
                         return validarLogica(val1, val2);
                     }
                 case Constantes.xorJava:
                     {
-                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito);
-                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito);
+                        Object val1 = validarTipo(nodo.ChildNodes[0], ambito, nombreClase, nombreMetodo);
+                        Object val2 = validarTipo(nodo.ChildNodes[1], ambito, nombreClase, nombreMetodo);
                         return validarLogica(val1, val2);
                         //return validarUnario(validarTipo(nodo.ChildNodes[0],ambito));
                     }
 
                 case Constantes.notJavaPython:
                     {
-                        return validarNot(validarTipo(nodo.ChildNodes[0], ambito));
+                        return validarNot(validarTipo(nodo.ChildNodes[0], ambito,nombreClase, nombreMetodo));
                     }
                 #endregion
 
@@ -1062,17 +1086,17 @@ namespace Proyecto2_201122872.Generacion3D
 
                 case Constantes.masmas:
                     {
-                        return validarUnario(validarTipo(nodo.ChildNodes[0], ambito));
+                        return validarUnario(validarTipo(nodo.ChildNodes[0], ambito,nombreClase, nombreMetodo));
                     }
 
                 case Constantes.menosmenos:
                     {
-                        return validarUnario(validarTipo(nodo.ChildNodes[0], ambito));
+                        return validarUnario(validarTipo(nodo.ChildNodes[0], ambito,nombreClase, nombreMetodo));
                     }
 
                 case Constantes.negativo:
                     {
-                        return validarUnario(validarTipo(nodo.ChildNodes[0], ambito));
+                        return validarUnario(validarTipo(nodo.ChildNodes[0], ambito,nombreClase, nombreMetodo));
                     }
 
                 #endregion
@@ -1675,7 +1699,7 @@ namespace Proyecto2_201122872.Generacion3D
                 string cad = "";
                 for (int i = 0; i < nodoLlamada.ChildNodes[1].ChildNodes.Count; i++)
                 {
-                    cad += validarTipo(nodoLlamada.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambiente);//resolverExpresiones(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambitos, nombreClase, nombreMetodo);
+                    cad += validarTipo(nodoLlamada.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambiente,nombreClase,nommbreMetodo).ToString();//resolverExpresiones(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambitos, nombreClase, nombreMetodo);
                 }
 
                 firmaLlamada = tablaSimbolos.getFirmaMetodoFuncion(nombreClase, cad, nombreLlamada);
@@ -2339,7 +2363,7 @@ namespace Proyecto2_201122872.Generacion3D
                                     string cad = "";
                                     for (int i = 0; i < nodoInstancia.ChildNodes[1].ChildNodes.Count; i++)
                                     {
-                                        cad += validarTipo(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambiente);//resolverExpresiones(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambitos, nombreClase, nombreMetodo);
+                                        cad += validarTipo(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambiente,nombreClase,nommbreMetodo);//resolverExpresiones(nodoInstancia.ChildNodes[1].ChildNodes[i].ChildNodes[0], ambitos, nombreClase, nombreMetodo);
                                     }
 
                                     string firmaMetodo = tablaSimbolos.getFirmaMetodo(nombreClase, cad, nommbreMetodo);
@@ -2365,7 +2389,7 @@ namespace Proyecto2_201122872.Generacion3D
                                         {
                                             if (item.expresionAtributo != null)
                                             {//genero el codigo3d para el atributo
-                                                Object tipoExpAtributo = validarTipo(item.expresionAtributo, ambiente);
+                                                Object tipoExpAtributo = validarTipo(item.expresionAtributo, ambiente,nombreClase,nommbreMetodo);
                                                 if (tipoExpAtributo.ToString().Equals(item.tipo, StringComparison.OrdinalIgnoreCase))
                                                 {
                                                     string temp1_1 = c3d.getTemporal();
@@ -2473,7 +2497,7 @@ namespace Proyecto2_201122872.Generacion3D
                                     {
                                         if (item.expresionAtributo != null)
                                         {//genero el codigo3d para el atributo
-                                            Object tipoExpAtributo = validarTipo(item.expresionAtributo, ambiente);
+                                            Object tipoExpAtributo = validarTipo(item.expresionAtributo, ambiente,nombreClase,nommbreMetodo);
                                             if (tipoExpAtributo.ToString().Equals(item.tipo, StringComparison.OrdinalIgnoreCase))
                                             {
                                                 string temp1_1 = c3d.getTemporal();
