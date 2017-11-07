@@ -178,7 +178,7 @@ namespace Proyecto2_201122872.Generacion3D
             switch (nodo.Term.Name)
             {
 
-
+                #region retorno
                 case Constantes.retorno:
                     {
 
@@ -201,6 +201,7 @@ namespace Proyecto2_201122872.Generacion3D
                         c3d.addCodigo(l4);
                         break;
                     }
+                #endregion
 
                 #region inicialesCuerpo
                 case Constantes.cuerpo:
@@ -344,7 +345,6 @@ namespace Proyecto2_201122872.Generacion3D
                     }
 
                 #endregion
-
 
                 #region Declaraciones
 
@@ -870,7 +870,6 @@ namespace Proyecto2_201122872.Generacion3D
                             return firmaLlamada;
                         }
 
-                        return "nulo";
                     }
 
                 #region instancia

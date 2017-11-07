@@ -12,7 +12,6 @@ C:\Users\Alina\Documents\Repositorios\Proyecto2\Proyecto2_201122872\Proyecto2_20
 C:\Users\Alina\Documents\Repositorios\Proyecto2\Proyecto2_201122872\Proyecto2_201122872\obj\Debug\Proyecto2_201122872.exe
 C:\Users\Alina\Documents\Repositorios\Proyecto2\Proyecto2_201122872\Proyecto2_201122872\obj\Debug\Proyecto2_201122872.pdb
 C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\obj\Debug\Proyecto2_201122872.pdb
-C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\obj\Debug\Proyecto2_201122872.csprojResolveAssemblyReference.cache
 C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\obj\Debug\Proyecto2_201122872.Form1.resources
 C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\obj\Debug\Proyecto2_201122872.Formularios.crearClase.resources
 C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\obj\Debug\Proyecto2_201122872.Formularios.Debugger.resources
@@ -27,4 +26,5 @@ C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyect
 C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\bin\Debug\Irony.dll
 C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\bin\Debug\Irony.Interpreter.dll
 C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\bin\Debug\TabStrip.dll
+C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\obj\Debug\Proyecto2_201122872.csprojResolveAssemblyReference.cache
 C:\Users\Alina\Documents\Repositorios\CompiProyecto2\Proyecto2_201122872\Proyecto2_201122872\obj\Debug\Proyecto2_201122872.exe

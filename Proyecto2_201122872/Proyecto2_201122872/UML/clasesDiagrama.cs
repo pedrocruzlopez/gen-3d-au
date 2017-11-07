@@ -196,7 +196,39 @@ namespace Proyecto2_201122872.UML
             return null;
         }
 
+        private Atributo esPadreValidoAtriHerencia(Atributo atr, String nombreClase)
+        {
+            Atributo atr_ret;
+            if (atr.visibilidad.Equals(Constantes.publico, StringComparison.OrdinalIgnoreCase) ||
+                atr.visibilidad.Equals(Constantes.protegido, StringComparison.OrdinalIgnoreCase))
+            {
+                /*
+                 *  public ParseTreeNode expresionAtributo = null; 
+        public string visibilidad;
+        public string nombre;
+        public string tipo;
+        public string tipoAtributo;
+        public int valLinealizado;
+        public int noDimensiones;
+        public ParseTreeNode[] expresionesDimensiones;
+        public Boolean esHeredado = false;
+                 * 
+                 */
+                atr_ret = new Atributo();
+                atr_ret.expresionAtributo = atr.expresionAtributo;
+                atr_ret.visibilidad = atr.visibilidad;
+                atr_ret.nombre = "super"+atr.nombre;
+                atr_ret.tipo = atr.tipo;
+                atr_ret.tipoAtributo = atr.tipoAtributo;
+                atr_ret.valLinealizado = atr.valLinealizado;
+                atr_ret.noDimensiones = atr.noDimensiones;
+                atr_ret.expresionesDimensiones = atr.expresionesDimensiones;
+                atr_ret.esHeredado = true;
+                return atr_ret;
 
+            }
+            return null;
+        }
 
         private Funcion esValidoFuncHerencia(Funcion func, String nombreClase)
         {
@@ -212,6 +244,23 @@ namespace Proyecto2_201122872.UML
             return null;
 
         }
+       
+
+        private Funcion esPadreValidoFuncHerencia(Funcion func, String nombreClase)
+        {
+            if ((func.visibilidad.Equals(Constantes.publico, StringComparison.OrdinalIgnoreCase) ||
+                func.visibilidad.Equals(Constantes.protegido, StringComparison.OrdinalIgnoreCase)) &&
+                !func.esPrincipal)
+            {
+                Funcion nueva = new Funcion(nombreClase,"super"+func.nombre, func.tipo, func.parametros, func.visibilidad, func.cuerpo);
+                nueva.esHeredada = true;
+                nueva.firma = nueva.generarFirma();
+                return nueva;
+            }
+            return null;
+
+        }
+       
 
 
 
@@ -241,8 +290,11 @@ namespace Proyecto2_201122872.UML
                         foreach (Atributo atrTemp in clasePadre.atributos.atributos)
                         {
                             Atributo nuevo = esValidoAtriHerencia(atrTemp, temporal.nombre);
-                            if (nuevo != null)
+                           Atributo nuevoSuper = esPadreValidoAtriHerencia(atrTemp, temporal.nombre);
+
+                            if (nuevo != null && nuevoSuper!=null)
                             {
+                                temporal.addAtributo(nuevoSuper);
                                 temporal.addAtributo(nuevo);
                             }
                             
@@ -259,8 +311,10 @@ namespace Proyecto2_201122872.UML
                         foreach (Funcion item in clasePadre.funciones.funciones)
                         {
                             Funcion funcNueva = esValidoFuncHerencia(item, temporal.nombre);
-                            if (funcNueva != null)
+                            Funcion funcNuevaPadre = esPadreValidoFuncHerencia(item, temporal.nombre);
+                            if (funcNueva != null && funcNuevaPadre!=null)
                             {
+                                temporal.addFuncion(funcNuevaPadre);
                                 temporal.addFuncion(funcNueva);
                             }
 
@@ -292,9 +346,6 @@ namespace Proyecto2_201122872.UML
             }
 
             return umlRetorno;
-
-
-
         }
 
 

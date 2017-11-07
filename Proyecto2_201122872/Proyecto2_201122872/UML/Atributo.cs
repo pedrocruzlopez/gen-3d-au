@@ -21,6 +21,10 @@ namespace Proyecto2_201122872.UML
         public ParseTreeNode[] expresionesDimensiones;
         public Boolean esHeredado = false;
 
+        public Atributo()
+        {
+
+        }
         public Atributo(string visibiliad, string nombre, string tipo, string tipoAtributo)
         {
             this.visibilidad = visibiliad;

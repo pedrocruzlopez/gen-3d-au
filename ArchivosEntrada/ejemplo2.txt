@@ -22,7 +22,7 @@ publico void setNombre(cadena nombre){
 este.nombre= nombre;
 }
 
-}
+
 clase estudiante persona{
 
 entero carnet;
